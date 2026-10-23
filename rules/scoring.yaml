@@ -1,0 +1,35 @@
+# 서류 매칭 점수 (휴리스틱). 합격 확률이 아니다. "기계가 이 서류를 이 공고에 얼마나 근거 있게 맞춰 읽는가"의 근사치.
+weights:
+  parse: 15 # 텍스트 층, 섹션 인식, 날짜, 읽기 순서
+  title: 15 # 헤드라인·최근 직함 ↔ 공고 직군 정규화 일치
+  required: 35 # 공고 자격요건 개념 커버리지 (경력 bullet 안 근거면 만점, 스킬 목록에만 있으면 절반)
+  preferred: 10 # 우대사항 개념 커버리지
+  seniority: 10 # 공고 최소 연차 ↔ 서류 총 경력
+  impact: 15 # 숫자 성과 bullet 비율, 전후 비교 표현
+coverage:
+  in_experience: 1.0 # 경력·프로젝트 문장 안에서 발견
+  in_summary: 0.8 # 요약에서만 발견
+  in_skills_only: 0.5 # 스킬 목록에서만 발견
+  related_only: 0.3 # 관련 개념만 발견
+seniority:
+  full_if_years_gte_min: true
+  partial_per_missing_year: 0.25 # 모자란 1년마다 25% 감점
+title:
+  exact_family: 1.0 # 같은 직군
+  target_family: 0.7 # 다른 목표 직군 (예: 공고 UX Designer, 서류 Product Designer)
+  adjacent_family: 0.4
+  off_target: 0.0
+impact:
+  min_quantified_ratio_for_full: 0.6
+  before_after_bonus: 0.1
+penalty_cap: 30
+warn_penalty_factor: 0.5 # warn 결과는 같은 severity 감점의 이 비율
+penalties:
+  high: 10
+  med: 4
+  low: 1
+bands:
+  - { min: 80, label: "강함" }
+  - { min: 65, label: "경쟁권" }
+  - { min: 50, label: "보완 필요" }
+  - { min: 0, label: "낮음" }

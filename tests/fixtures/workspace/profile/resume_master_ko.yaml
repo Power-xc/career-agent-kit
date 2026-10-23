@@ -1,0 +1,42 @@
+# 테스트용 기준 이력서 (가상 인물). 모든 bullet은 facts.yaml의 fact id를 가리킨다.
+meta:
+  lang: ko
+  variant: master
+  target: { company: null, title: null, jd: null }
+  created: "2026-10-23"
+
+header:
+  name: "가나다"
+  title: "Senior Product Designer · B2B"
+  tagline: null
+  location: "서울"
+  links: [portfolio, github]
+
+summary:
+  - text: "경력 8년의 Senior Product Designer입니다. 관리자 콘솔의 설정 이탈률을 40%에서 10%로 낮췄습니다."
+    facts: [f_years, f_dropoff]
+
+experience:
+  - ref: exp_now
+    title_display: "Senior Product Designer"
+    bullets:
+      - { text: "관리자 콘솔 30화면을 공통 컴포넌트와 디자인 시스템으로 표준화", facts: [f_console_ds] }
+      - { text: "설정 이탈률 40% → 10% (내부 사용자 20명)", facts: [f_dropoff] }
+  - ref: leave_service
+    bullets:
+      - { text: "군 복무 휴직 (총 경력 산정에서 제외)", facts: [] }
+  - ref: exp_early
+    title_display: "UI/UX Designer"
+    bullets:
+      - { text: "대학 · 기업 포털 웹 구축 10건의 UX/UI와 퍼블리싱 수행", facts: [f_early_builds] }
+
+skills:
+  - { group: "디자인", items: ["Figma", "Design System"] }
+
+certifications: [cert_sample]
+education: [edu_sample]
+
+strengths:
+  - title: "문제를 좁히고, 결과로 검증"
+    text: "사용자 인터뷰 6명과 사용성 테스트로 원인을 좁히고 설정 이탈률 40% → 10%로 검증했습니다."
+    facts: [f_interviews, f_dropoff]

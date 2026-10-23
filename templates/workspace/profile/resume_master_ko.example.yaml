@@ -1,0 +1,36 @@
+# 마스터 이력서 (한국어) 예시. 회사별 맞춤본(tailor)의 기본 출발점이다. 스키마: docs/contract.md 3.2
+# 모든 bullet의 facts는 profile/facts.yaml의 id여야 하고, 숫자는 그 사실의 numbers 안에 있어야 한다.
+meta:
+  lang: ko
+  variant: master
+  target: { company: null, title: "Product Designer", jd: null }
+  created: "2026-01-01"
+
+header:
+  name: "샘플"
+  title: "Product Designer · B2B SaaS"
+  tagline: "사용 데이터로 개선하는 B2B 제품을 만듭니다"
+  location: "서울"
+  links: [portfolio]
+
+summary:
+  - text: "경력 5년의 Product Designer입니다. B2B SaaS에서 정보구조, 대시보드 설계, 디자인 시스템을 맡아 왔습니다."
+    facts: [f_years, f_dashboard_task, f_design_system]
+
+experience:
+  - ref: exp_recent
+    title_display: "Product Designer"
+    bullets:
+      - { text: "분석 대시보드 필터 구조를 개편해 핵심 과업 완료 시간 30% 단축", facts: [f_dashboard_task] }
+      - { text: "디자인 시스템 컴포넌트를 정리하고 개발 핸드오프를 표준화", facts: [f_design_system] }
+  - ref: exp_first
+    title_display: "UI/UX Designer"
+    bullets:
+      - { text: "기업 웹사이트 구축 프로젝트의 UX/UI 설계와 디자인 QA 수행", facts: [f_first_builds] }
+
+skills:
+  - { group: "디자인", items: ["Figma", "Design System"] }
+
+awards: []
+certifications: [cert_sample]
+education: [edu_sample]

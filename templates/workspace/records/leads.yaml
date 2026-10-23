@@ -1,0 +1,12 @@
+# 먼저 연락 온 제안(리크루터, 지인 소개). 답을 기다리는 건은 career-status가 보여 준다.
+# 키: company, role, via, received(YYYY-MM-DD), status(awaiting_reply|replied|declined|closed), note
+# 연락처는 적지 않는다.
+#
+# 예시:
+# - company: 샘플상사
+#   role: UX Designer
+#   via: 플랫폼 메시지
+#   received: "2026-01-10"
+#   status: awaiting_reply
+#   note: ""
+[]

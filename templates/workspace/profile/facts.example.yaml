@@ -1,0 +1,105 @@
+# 사실 은행 (fact bank) 예시. 가상의 인물 "Sample Person"의 자료다.
+# onboard 스킬이 이 파일을 본인의 서류 내용으로 바꿔 쓴다. 스키마: docs/contract.md 3.1
+# 하네스가 만드는 모든 서류의 상한선이다. 여기 없는 경력·숫자·스킬·자격은 쓰지 않는다.
+# sources: resume = 이력서 PDF, portfolio:pN = 포트폴리오 N쪽, linkedin = 프로필
+# confidence: verified = 1차 서류와 일치 / reported = 본인 말에만 있음 / check = 확인 필요 → 확인 전 사용 금지
+version: 1
+updated: "2026-01-01"
+
+person:
+  name: { ko: "샘플", en: "Sample Person" }
+  headline:
+    ko: "사용 데이터로 개선하는 B2B 제품을 만드는 Product Designer"
+    en: "Product Designer building B2B products that improve through usage data"
+  target_titles:
+    - "Product Designer"
+    - "UX Designer"
+  years_stated: 5
+  location: "서울"
+  links:
+    - { id: portfolio, label: "Portfolio", url: "https://example.com/portfolio", public: true }
+
+experience:
+  - id: exp_recent
+    kind: job
+    company: { ko: "예시회사", en: "Example Co" }
+    unit: { ko: "제품디자인팀", en: "Product Design Team" }
+    title: { ko: "Product Designer", en: "Product Designer" }
+    title_aliases: ["프로덕트 디자이너"]
+    track: "B2B SaaS"
+    rank: ""
+    start: "2023.03"
+    end: null
+    family: product_designer
+  - id: exp_first
+    kind: job
+    company: { ko: "샘플스튜디오", en: "Sample Studio" }
+    unit: { ko: "디자인팀", en: "Design Team" }
+    title: { ko: "UI/UX Designer", en: "UI/UX Designer" }
+    title_aliases: ["UX/UI 디자이너"]
+    track: "Agency"
+    rank: ""
+    start: "2021.03"
+    end: "2023.02"
+    family: ux_designer
+
+projects:
+  - { id: prj_dashboard, name: { ko: "샘플 대시보드", en: "Sample Dashboard" }, exp: exp_recent, period: "2024.01 – 2024.08", domain: "B2B SaaS · 데이터 분석", role: "Product Designer", public_name: true }
+
+facts:
+  - id: f_years
+    exp: null
+    project: null
+    ko: "Product Designer로 경력 5년"
+    en: "5 years of experience as a Product Designer"
+    numbers: ["5년"]
+    sources: [resume]
+    concepts: [product_design]
+    confidence: verified
+    attribution: solo
+  - id: f_dashboard_task
+    exp: exp_recent
+    project: prj_dashboard
+    ko: "분석 대시보드의 필터 구조를 개편해 핵심 과업 완료 시간을 단축"
+    en: "Restructured the filters of an analytics dashboard and shortened the time to complete the core task"
+    numbers: ["30%"]
+    basis: "예시 값. 실제 사실로 바꿀 때 표본과 기간을 적는다"
+    sources: [resume]
+    concepts: [product_design, ux_design]
+    confidence: verified
+    attribution: lead
+  - id: f_design_system
+    exp: exp_recent
+    project: null
+    ko: "디자인 시스템 컴포넌트를 정리해 개발 핸드오프를 표준화"
+    en: "Organized design system components and standardized developer handoff"
+    numbers: []
+    sources: [resume]
+    concepts: [design_system]
+    confidence: verified
+    attribution: team
+  - id: f_first_builds
+    exp: exp_first
+    project: null
+    ko: "기업 웹사이트 구축 프로젝트의 UX/UI 설계와 디자인 QA 수행"
+    en: "Handled UX/UI design and design QA for corporate website builds"
+    numbers: []
+    sources: [resume]
+    concepts: [ux_design]
+    confidence: reported
+    attribution: team
+
+skills:
+  - { concept: figma, display: { ko: "Figma", en: "Figma" }, level: core, evidence: [f_dashboard_task, f_design_system] }
+  - { concept: design_system, display: { ko: "Design System", en: "Design Systems" }, aliases: ["디자인 시스템"], level: core, evidence: [f_design_system] }
+
+certifications:
+  - { id: cert_sample, name: "예시 자격증", issuer: "예시 기관", date: "2022.06", status: acquired, seen: { resume: "2022.06" }, confidence: verified }
+
+awards: []
+
+education:
+  - { id: edu_sample, school: "예시대학교", school_aliases: [], degree: "학사 (졸업)", major: "시각디자인학과", major_seen: { resume: "시각디자인학과" }, start: "2016.03", end: "2021.02", gpa: "", confidence: verified }
+
+canonical:
+  - { field: person.name.en, value: "Sample Person", variants: ["Sample Persn"], note: "표기가 서류마다 다르면 한 가지로 통일" }

@@ -1,0 +1,16 @@
+# 지원 기록. log-application 스킬이 항목을 추가한다. career-status와 targets가 읽는다.
+# 키: company(필수), aliases(목록), scope("company" 기본 | "group" = 계열사 공용 채용 포털이라 그룹 전체를 지원한 것으로 본다),
+#     role, applied(YYYY-MM-DD), channel, status(pending|rejected|interview|offer|withdrawn|unknown), source, note
+# 연락처(이메일, 전화번호)는 적지 않는다.
+#
+# 예시 (실제 항목은 아래에 추가한다):
+# - company: 예시회사
+#   aliases: [Example Co]
+#   scope: company
+#   role: Product Designer
+#   applied: "2026-01-15"
+#   channel: 회사 채용 사이트
+#   status: pending
+#   source: 지원 완료 메일 캡처
+#   note: ""
+[]

@@ -1,0 +1,25 @@
+# 테스트용 Figma 슬롯 지도 (가상). 스키마는 docs/contract.md 3.3
+file_key: SAMPLEFILEKEY0000000000
+resume:
+  page: "1:1"
+  frames: ["1:2"]
+  original_page: "1:0"
+portfolio:
+  page: "2:1"
+  frames: ["2:2"]
+  original_page: "2:0"
+  replaces:
+    "2:2": 1
+slots:
+- id: resume.header.title
+  node: "1:3"
+  doc: resume
+  max_chars: 50
+  lines: 1
+  base: Senior Product Designer · 경력 8년
+- id: resume.about.lead
+  node: "1:4"
+  doc: resume
+  max_chars: 190
+  lines: 3
+  base: 경력 8년의 Senior Product Designer입니다.

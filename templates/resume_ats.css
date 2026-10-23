@@ -1,0 +1,61 @@
+/* ATS 친화 이력서: A4 한 단, 실제 텍스트만, 레이아웃용 표 없음, DOM 순서 = 읽기 순서 */
+@page { size: A4; margin: 13mm 15mm; }
+
+:root {
+  --ink: #1a1a1a;
+  --muted: #4a4a4a;
+  --rule: #c9c9c9;
+  --accent: #1f3a5f;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: "Pretendard", "Pretendard Variable", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-size: 9.4pt;
+  line-height: 1.55;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  letter-spacing: -0.005em;
+}
+
+.masthead { margin-bottom: 4mm; }
+.name { margin: 0; font-size: 21pt; line-height: 1.2; font-weight: 700; letter-spacing: -0.02em; }
+.headline { margin: 1mm 0 0; font-size: 11.5pt; font-weight: 600; color: var(--accent); }
+.tagline { margin: 1mm 0 0; font-size: 9.6pt; color: var(--muted); }
+.contact { margin: 2mm 0 0; font-size: 8.6pt; color: var(--muted); }
+.contact span + span::before { content: " · "; }
+.contact a { color: inherit; text-decoration: none; white-space: nowrap; }
+
+.section { margin-top: 4.2mm; }
+.section h2 {
+  margin: 0 0 1.6mm;
+  padding-bottom: 0.8mm;
+  border-bottom: 0.6pt solid var(--rule);
+  font-size: 10.6pt;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.entry { margin-top: 2.6mm; break-inside: avoid-page; }
+.entry:first-of-type { margin-top: 0; }
+.entry h3 { margin: 0; font-size: 10pt; font-weight: 700; }
+.entry .meta { margin: 0.2mm 0 0.8mm; color: var(--muted); font-size: 8.8pt; }
+
+/* 글머리표를 실제 글자("• ")로 넣는다: 추출 텍스트에서 항목 경계가 보인다. 걸친 들여쓰기로 모양은 기존과 같다 */
+ul { margin: 0; padding-left: 0; list-style: none; }
+li { margin: 0.5mm 0; padding-left: 4.2mm; text-indent: -3.4mm; }
+li::before { content: "• "; }
+p { margin: 0 0 1mm; }
+
+.summary p { margin: 0 0 1.4mm; }
+.skills p { margin: 0 0 0.8mm; }
+.skills .group { font-weight: 600; }
+.strength h3 { margin: 0; font-size: 9.6pt; font-weight: 600; }
+.strength p { margin: 0.2mm 0 1.4mm; }
+.nobr { white-space: nowrap; }

@@ -1,0 +1,78 @@
+# 플랫폼별 파일 제한 (v0). 조사 결과로 갱신한다. max_file_mb: null = 미확인
+# observed_ok_mb: 이 하네스 사용자가 실제로 올려 본 크기
+platforms:
+  - {
+      id: default,
+      name: "기본값 (보수적)",
+      max_file_mb: 10,
+      types: [pdf],
+      notes: "제한을 모를 때 쓰는 값",
+      source: "orchestrator v0",
+    }
+  - {
+      id: wanted,
+      name: "원티드",
+      max_file_mb: null,
+      observed_ok_mb: 20.4,
+      types: [pdf, docx],
+      notes: "첨부 이력서·포트폴리오. 2026-10-22 20.4MB PDF 업로드 성공",
+      source: "직접 확인",
+    }
+  - {
+      id: remember,
+      name: "리멤버",
+      max_file_mb: null,
+      observed_ok_mb: 20.4,
+      types: [pdf],
+      notes: "2026-10-22 20.4MB PDF 업로드 성공",
+      source: "직접 확인",
+    }
+  - {
+      id: linkedin_featured,
+      name: "LinkedIn 추천 항목",
+      max_file_mb: null,
+      observed_ok_mb: 20.4,
+      types: [pdf],
+      notes: "2026-10-22 20.4MB PDF 업로드 성공",
+      source: "직접 확인",
+    }
+  - {
+      id: workday,
+      name: "Workday",
+      max_file_mb: null,
+      types: [pdf, docx],
+      notes: "회사 설정에 따라 다름",
+      source: "조사 예정",
+    }
+  - {
+      id: greenhouse,
+      name: "Greenhouse",
+      max_file_mb: null,
+      types: [pdf, docx, txt],
+      notes: "",
+      source: "조사 예정",
+    }
+  - {
+      id: lever,
+      name: "Lever",
+      max_file_mb: null,
+      types: [pdf, docx],
+      notes: "",
+      source: "조사 예정",
+    }
+  - {
+      id: greetinghr,
+      name: "그리팅",
+      max_file_mb: null,
+      types: [pdf],
+      notes: "",
+      source: "조사 예정",
+    }
+  - {
+      id: ninehire,
+      name: "나인하이어",
+      max_file_mb: null,
+      types: [pdf],
+      notes: "",
+      source: "조사 예정",
+    }

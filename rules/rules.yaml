@@ -1,0 +1,192 @@
+# 서류 검사 규칙 (v0: 초기값. docs/research 조사 결과로 source·confidence를 채우고 보강한다)
+# type별 params는 docs/contract.md 3.7 참조. severity: high = 탈락·오분류 위험, med = 점수 손실, low = 권장
+rules:
+  # ---------- 파싱 ----------
+  - id: R-PARSE-01
+    title: "모든 페이지에 추출 가능한 텍스트가 있다 (이미지 PDF 금지)"
+    type: text_layer
+    params: { min_chars_per_page: 200 }
+    severity: high
+    applies_to: [resume]
+    source: "orchestrator v0"
+    confidence: 상
+  - id: R-PARSE-02
+    title: "포트폴리오 페이지의 텍스트 층 (이미지만 있는 페이지 비율)"
+    type: text_layer
+    params: { min_chars_per_page: 40 }
+    severity: med
+    applies_to: [portfolio]
+    source: "orchestrator v0"
+    confidence: 중
+  - id: R-PARSE-03
+    title: "표준 섹션 제목을 기계가 인식한다"
+    type: section_present
+    params:
+      {
+        sections: [summary, experience, skills, education],
+        recommended: [projects, certifications, awards, links],
+      }
+    severity: high
+    applies_to: [resume]
+    source: "orchestrator v0"
+    confidence: 상
+  - id: R-PARSE-04
+    title: "날짜를 한 가지 형식(YYYY.MM)으로 쓴다"
+    type: date_format
+    params: { pattern: "^(19|20)\\d{2}\\.(0[1-9]|1[0-2])$" }
+    severity: med
+    applies_to: [resume]
+    source: "orchestrator v0"
+    confidence: 중
+  - id: R-PARSE-05
+    title: "기하 순서와 추출 순서가 어긋나는 줄이 없다 (숫자·단위 분리 등)"
+    type: reading_order
+    params: {}
+    severity: med
+    applies_to: [resume, portfolio]
+    source: "orchestrator v0 (포트폴리오 50쪽 '관리자 43화면'이 '관리자 3화면'으로 추출됨)"
+    confidence: 상
+  - id: R-PARSE-06
+    title: "이력서는 2쪽 이내"
+    type: max_pages
+    params: { pages: 2 }
+    severity: low
+    applies_to: [resume]
+    source: "orchestrator v0"
+    confidence: 중
+
+  - id: R-PARSE-07
+    title: "추출기마다 같은 단어가 나온다"
+    type: extractor_agreement
+    params: { min_share: 0.95 }
+    severity: med
+    applies_to: [resume, portfolio]
+    source: "e2e 실행 2026-10-23 (Figma 내보내기 변경으로 Poppler가 포트폴리오 2쪽 단어를 쪼갬: 88%)"
+    confidence: 중
+
+  # ---------- 분류 ----------
+  - id: R-CLASS-01
+    title: "헤드라인과 최근 직함이 목표 직군으로 정규화된다"
+    type: title_alignment
+    params:
+      {
+        target_families:
+          [
+            product_designer,
+            ai_product_designer,
+            ux_designer,
+            ux_lead,
+            service_designer,
+          ],
+      }
+    severity: high
+    applies_to: [resume]
+    source: "orchestrator v0 (원티드 AI 리뷰 '적합 직무 UI,GUI 98%')"
+    confidence: 상
+  - id: R-CLASS-02
+    title: "비목표 직군(UI·GUI, 퍼블리셔, 그래픽) 신호 비중이 낮다"
+    type: family_balance
+    params:
+      {
+        off_target: [ui_gui_designer, web_publisher, visual_brand_designer],
+        max_share: 0.25,
+      }
+    severity: med
+    applies_to: [resume, portfolio]
+    source: "orchestrator v0"
+    confidence: 중
+  - id: R-CLASS-03
+    title: "첫 페이지(포트폴리오는 첫 2쪽)에 직함·연차·대표 성과 숫자가 텍스트로 있다"
+    type: first_page_signals
+    params: { must_include: [title, years, metric], portfolio_pages: 2 }
+    severity: high
+    applies_to: [resume, portfolio]
+    source: "orchestrator v0"
+    confidence: 중
+
+  # ---------- 진실성 · 조작 ----------
+  - id: R-TRUTH-01
+    title: "숨김 텍스트가 없다 (흰 글씨, 초소형, 페이지 밖, 투명)"
+    type: hidden_text_none
+    params: { min_font_pt: 4, min_contrast: 1.5 }
+    severity: high
+    applies_to: [resume, portfolio]
+    source: "orchestrator v0"
+    confidence: 상
+  - id: R-TRUTH-02
+    title: "AI에게 지시하는 문장(프롬프트 인젝션)이 없다"
+    type: forbidden_patterns
+    params:
+      patterns:
+        - "(?i)ignore (all|any|previous|prior) (instructions|prompts)"
+        - "(?i)(you are|act as) (an? )?(ai|assistant|recruiter|screener)"
+        - "(?i)(rank|rate|score) (this|the) (candidate|resume|applicant) (as|at|highly)"
+        - "(?i)system prompt"
+        - "이전 (지시|지침|명령)(을|는)? 무시"
+        - "(이 )?지원자를 (합격|최고|1순위)"
+        - "(AI|에이아이)(는|야|에게).{0,20}(평가|점수|합격)"
+    severity: high
+    applies_to: [resume, portfolio]
+    source: "orchestrator v0"
+    confidence: 상
+  - id: R-TRUTH-03
+    title: "모든 숫자가 사실 은행에 있다"
+    type: claims_supported
+    params: { mode: loose }
+    severity: high
+    applies_to: [resume, portfolio]
+    source: "AGENTS.md 절대 규칙 1"
+    confidence: 상
+  - id: R-TRUTH-04
+    title: "키워드를 반복·나열하지 않는다"
+    type: keyword_density
+    params: { max_per_1000_chars: 6, max_list_terms_outside_skills: 8 }
+    severity: med
+    applies_to: [resume]
+    source: "orchestrator v0"
+    confidence: 중
+
+  # ---------- 일관성 · 정보 ----------
+  - id: R-CONS-01
+    title: "전공·자격 날짜·수치 표기가 정본과 같다"
+    type: consistency
+    params:
+      {
+        fields:
+          [
+            education.major,
+            cert.cert_dbx_genai.date,
+            cert.cert_dbx_de.date,
+            cert.cert_ncs_l5.date,
+            step.languages,
+            experience.total,
+          ],
+      }
+    severity: med
+    applies_to: [resume, portfolio]
+    source: "facts.yaml canonical"
+    confidence: 상
+  - id: R-CONS-02
+    title: "공개용 PDF에 전화번호가 없고 이메일은 있다"
+    type: contact_policy
+    params: { email: required, phone: forbid }
+    severity: med
+    applies_to: [resume]
+    source: "사용자 방침 (2026-10-21)"
+    confidence: 상
+  - id: R-IMPACT-01
+    title: "경력 bullet의 절반 이상에 결과 숫자가 있다"
+    type: quantified_ratio
+    params: { min_ratio: 0.5 }
+    severity: low
+    applies_to: [resume]
+    source: "orchestrator v0"
+    confidence: 중
+  - id: R-SIZE-01
+    title: "플랫폼 용량 제한 이하"
+    type: max_file_mb
+    params: { platform: default }
+    severity: med
+    applies_to: [resume, portfolio]
+    source: "rules/platforms.yaml"
+    confidence: 중
