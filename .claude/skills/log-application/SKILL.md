@@ -17,8 +17,9 @@ description: 낸 지원을 records/applications.yaml에 기록한다. 지원 완
 2. **빠진 값.** 날짜가 없으면 사용자에게 묻고, 모르면 `applied`를 비운다. 회사나 직무를 읽지 못했으면 지어내지 말고 묻는다. 상대 날짜("어제")는 절대 날짜 `YYYY-MM-DD`로 바꿔 쓴다.
 3. **scope 정하기.** 계열사가 한 채용 포털을 같이 쓰는 곳(그룹 공용 채용 사이트 등)이면 `scope: group`을 쓰고 회사에 그룹 이름을 적는다. 그 외는 `scope: company`(기본).
 4. **중복 확인.** `records/applications.yaml`에서 회사(또는 aliases)와 직무가 같은 항목이 있으면 새로 추가하지 말고 그 항목을 보여 주며 갱신할지 묻는다. 같은 회사의 다른 직무는 별개 항목이다.
-5. **추가.** 파일 끝에 항목을 덧붙인다. 키: `company, aliases, scope, role, applied, channel, status, source, note`. `status` 기본값은 `pending`, `source`에는 "지원 완료 화면 캡처"처럼 근거 종류만 적는다. 기존 항목과 주석은 건드리지 않는다. 파일이 `[]`뿐이면 목록으로 바꿔 쓴다.
-6. **확인.** `python3 -c "import yaml; yaml.safe_load(open('records/applications.yaml'))"`처럼 YAML이 읽히는지 본다. 추가한 항목을 사용자에게 보여 준다.
+5. **추가.** 파일 끝에 항목을 덧붙인다. 키: `company, aliases, scope, role, applied, channel, status, source, documents, note`. `status` 기본값은 `pending`, `source`에는 "지원 완료 화면 캡처"처럼 근거 종류만 적는다. 기존 항목과 주석은 건드리지 않는다. 파일이 `[]`뿐이면 목록으로 바꿔 쓴다.
+6. **서류 보관.** 워크스페이스 `CLAUDE.md`가 정한 서류 보관함(없으면 `documents/`)의 `회사별/<YYYY-MM-DD>_<회사>_<직무>/`를 만들고, 실제로 낸 이력서·포트폴리오를 그대로 복사한다. 어떤 파일을 냈는지 모르면 묻고, 모르면 비워 둔다. 그 폴더 경로를 `documents`에 적는다.
+7. **확인.** `python3 -c "import yaml; yaml.safe_load(open('records/applications.yaml'))"`처럼 YAML이 읽히는지 본다. 추가한 항목을 사용자에게 보여 준다.
 
 ## 안전
 

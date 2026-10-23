@@ -238,8 +238,11 @@ warn 결과의 감점은 같은 severity 감점에 `scoring.yaml`의 `warn_penal
   channel: str
   status: pending | rejected | interview | offer | withdrawn | unknown   # 기본 pending
   source: str                   # 기록 근거 종류 (예: 지원 완료 화면 캡처)
+  documents: str                # 낸 서류를 복사해 둔 폴더 (서류 보관함의 회사별/<날짜>_<회사>_<직무>/)
   note: str
 ```
+
+서류 보관함: 워크스페이스 `CLAUDE.md`가 정한 폴더(없으면 `documents/`)에 `최신/`(지금 내는 기본본, 날짜 없는 이름), `회사별/<YYYY-MM-DD>_<회사>_<직무>/`(낸 그대로), `보관/<YYYY-MM-DD>_<설명>/`(교체된 이전 최신본)을 둔다. PDF는 `out/`에서 만들고 보관함 파일을 직접 고치지 않는다.
 
 `records/leads.yaml` (먼저 연락 온 제안): `company, role, via, received(YYYY-MM-DD), status(awaiting_reply|replied|declined|closed), note`. `records/open_items.md`는 미결 사항 체크리스트다.
 

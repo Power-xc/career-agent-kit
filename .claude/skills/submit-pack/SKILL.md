@@ -8,7 +8,7 @@ description: 지원에 필요한 파일을 out/<slug>/pack/에 모은다. 최종
 ## 입력
 
 - `slug`, 공고 파일, 지원 플랫폼 id (`rules/platforms.yaml`의 id, 모르면 `default`)
-- `out/<slug>/resume_<lang>.yaml`과 PDF, 선택: Figma 내보낸 PDF(`resume_<lang>_figma.pdf`), 포트폴리오: `out/<slug>/portfolio_<slug>.pdf`(figma-apply가 쪽을 바꿔 끼운 회사별 버전)가 있으면 그것, 없으면 `profile/figma_map.yaml`의 `portfolio.base_pdf`(AI 최적화본)
+- `out/<slug>/resume_<lang>.yaml`과 PDF, 선택: Figma 내보낸 PDF(`resume_<lang>_figma.pdf`), 포트폴리오: `out/<slug>/portfolio_<slug>.pdf`(figma-apply가 쪽을 바꿔 끼운 회사별 버전)가 있으면 그것, 없으면 `profile/figma_map.yaml`의 `portfolio.base_pdf`, 그것도 없으면 서류 보관함 `최신/`의 포트폴리오
 - 자기소개서 문항과 글자 수 제한 (공고 `## Documents` 또는 dossier에 있으면 그대로, 없으면 사용자에게 묻는다)
 
 ## 출력
@@ -58,6 +58,8 @@ description: 지원에 필요한 파일을 out/<slug>/pack/에 모은다. 최종
    - PII: 공개 PDF에 전화번호 없음, 이메일은 의도한 것만, 비공개 링크 없음
    - 사용자가 확인할 것: `confidence: check` 항목 중 이 서류에 영향을 주는 것, 취득 예정 자격 표기, 자기소개서 주석 제거
    - 제출 경로: 플랫폼 업로드 칸 이름과 순서 (제출은 사용자가 직접 한다)
+
+6. **제출 뒤.** 사용자가 직접 제출했다고 알려 주면 `log-application`으로 기록한다. 낸 파일은 서류 보관함 `회사별/<YYYY-MM-DD>_<회사>_<직무>/`에 그대로 복사된다. `out/<slug>/pack/`은 작업본이고 보관함이 제출 기록이다.
 
 ## 중단 조건
 
