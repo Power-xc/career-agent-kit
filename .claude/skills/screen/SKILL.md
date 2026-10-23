@@ -9,7 +9,7 @@ description: 맞춤 이력서(와 포트폴리오)를 공고 기준으로 심사
 
 - 이력서: `out/<slug>/resume_<lang>.yaml`과 렌더링한 `out/<slug>/resume_<lang>.pdf` (없으면 `python tools/render_resume.py out/<slug>/resume_<lang>.yaml --out out/<slug>/resume_<lang>.pdf`)
 - 공고: `jd/<tier>/<slug>__<role>.md`
-- 선택: 포트폴리오 PDF. `out/<slug>/portfolio_<slug>.pdf`가 있으면 그것, 없으면 `profile/figma_map.yaml`의 `portfolio.base_pdf`. 원본 `portfolio_pdf/`의 PDF는 쓰지 않는다.
+- 선택: 포트폴리오 PDF (포트폴리오가 있는 직군·사람만). `out/<slug>/portfolio_<slug>.pdf`가 있으면 그것, 없으면 `profile/figma_map.yaml`의 `portfolio.base_pdf`. 원본 `portfolio_pdf/`의 PDF는 쓰지 않는다.
 
 ## 출력
 

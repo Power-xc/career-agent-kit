@@ -1,13 +1,13 @@
 ---
 name: tailor
-description: 회사 조사 결과(companies/<slug>/)와 선택한 공고로 사실만 쓴 맞춤 이력서(resume_<lang>.yaml)와 Figma 이력서·포트폴리오 텍스트 슬롯 문구(figma_text.yaml)를 만든다. "예시회사 맞춤 이력서", "이 공고에 맞게 고쳐줘"처럼 회사·공고별 이력서가 필요할 때 쓴다.
+description: 회사 조사 결과(companies/<slug>/)와 선택한 공고로 사실만 쓴 맞춤 이력서(resume_<lang>.yaml)와 (Figma 이력서가 있는 사람만) Figma 이력서·포트폴리오 텍스트 슬롯 문구(figma_text.yaml)를 만든다. "예시회사 맞춤 이력서", "이 공고에 맞게 고쳐줘"처럼 회사·공고별 이력서가 필요할 때 쓴다.
 ---
 
 # tailor: 공고에 맞춘 이력서와 포트폴리오 텍스트
 
 ## 입력
 
-- `slug`: `companies/<slug>/`의 폴더 이름 (예: `toss`)
+- `slug`: `companies/<slug>/`의 폴더 이름 (예: `example-co`)
 - 공고 파일: `jd/<tier>/<slug>__<role>.md` (없으면 `jd-intake` 스킬을 먼저 쓴다)
 - 읽는 파일: `companies/<slug>/dossier.md`, `vocab.yaml`, `profile/facts.yaml`, `profile/resume_master_<lang>.yaml`(있으면, 없으면 `profile/resume_base.yaml`), `profile/figma_map.yaml`, `taxonomy/job_families.yaml`, `rules/rules.yaml`, `rules/scoring.yaml`
 
@@ -23,7 +23,7 @@ description: 회사 조사 결과(companies/<slug>/)와 선택한 공고로 사�
 2. `confidence: check`인 fact, 자격, 학력 항목은 쓰지 않는다. 쓰고 싶으면 사용자에게 확인을 요청하고 멈춘다.
 3. 공고·회사 용어는 그 용어를 뒷받침하는 fact가 있을 때만, 경험을 설명하는 문장 안에서만 쓴다. 용어 나열, 반복으로 밀도를 올리지 않는다 (`rules.yaml`의 `keyword_density`).
 4. 직함 정규화는 `experience.title` 또는 `title_aliases`에 있는 표기만 쓴다 (`title_display`). 없는 직함을 만들지 않는다.
-5. 그래픽 직군 신호가 되는 항목(facts.yaml의 `note`에 "그래픽·GUI/편집 직군 신호, 기본 제외"가 적힌 자격·수상)은 Product/UX 지원에서 넣지 않는다.
+5. 지원 직군과 다른 직군의 신호가 되는 항목(facts.yaml의 `note`에 "기본 제외"가 적힌 자격·수상. 예: "그래픽·GUI/편집 직군 신호, 기본 제외")은 그 직군 지원 서류에 넣지 않는다.
 6. 숨김 텍스트, "AI에게 지시하는" 문장, 메타데이터 키워드 채우기는 만들지 않는다.
 7. 비공개 정보(`public: false` 링크, 연봉, 확정되지 않은 직책·TF)는 쓰지 않는다.
 
@@ -49,7 +49,7 @@ description: 회사 조사 결과(companies/<slug>/)와 선택한 공고로 사�
 
 3. **복사.** `profile/resume_master_<lang>.yaml`이 있으면 그것을, 없으면 `profile/resume_base.yaml`을 `out/<slug>/resume_<lang>.yaml`로 복사하고 `meta.variant: <slug>`, `meta.target: {company, title, jd}`, `meta.created`를 채운다. 공고 `language`가 `en`이면 `meta.lang: en`으로 하고 fact의 `en` 문장과 `display.en`을 기준으로 쓴다.
 
-4. **헤드라인과 직함.** 공고 직군(`jd` 출력의 family)에 맞춰 `header.title`을 `taxonomy/job_families.yaml`의 `titles` 중 사실과 맞는 것으로 정한다. 최근 두 경력의 `title_display`는 `experience.title`/`title_aliases` 안에서 고른다. `header.tagline`은 한 줄, 공고 직무와 맞는 사실 기반 문장으로 쓰거나 null로 둔다.
+4. **헤드라인과 직함.** 공고 직군(`jd` 출력의 family, 예: 백엔드 개발, 데이터 분석, 프로덕트 매니저, 프로덕트 디자인, 마케팅)에 맞춰 `header.title`을 `taxonomy/job_families.yaml`의 `titles` 중 사실과 맞는 것으로 정한다. 최근 두 경력의 `title_display`는 `experience.title`/`title_aliases` 안에서 고른다. `header.tagline`은 한 줄, 공고 직무와 맞는 사실 기반 문장으로 쓰거나 null로 둔다.
 
 5. **요약 3줄.** 누구인가 (연차는 `years_stated`, 직군) / 증거 (숫자는 fact의 값 그대로) / 이 회사·직무와의 접점. 각 줄에 `facts`를 단다. 길어도 두 문장이다.
 
@@ -57,7 +57,7 @@ description: 회사 조사 결과(companies/<slug>/)와 선택한 공고로 사�
 
 7. **스킬·자격·수상.** `skills.items`는 facts.yaml의 `display`/`aliases` 값만 쓴다. 공고와 맞는 그룹을 앞에 둔다. 자격은 `status: planned`면 "취득 예정"으로만 표시되며 렌더러가 처리한다.
 
-8. **Figma 슬롯.** `profile/figma_map.yaml`의 `slots`가 비어 있으면 이 단계를 건너뛰고 로그에 "슬롯 없음"이라고 적는다. 있으면 슬롯마다 `base`(현재 Figma 문구)를 이 회사·공고에 맞게 바꿀지 정하고, 바꿀 슬롯만 `figma_text.yaml`에 쓴다 (`doc: resume`과 `doc: portfolio` 모두).
+8. **Figma 슬롯 (선택).** Figma 이력서가 있는 사람만 해당한다. `profile/figma_map.yaml`이 없거나 `slots`가 비어 있으면 이 단계를 건너뛰고 로그에 "슬롯 없음"이라고 적는다. 있으면 슬롯마다 `base`(현재 Figma 문구)를 이 회사·공고에 맞게 바꿀지 정하고, 바꿀 슬롯만 `figma_text.yaml`에 쓴다 (`doc: resume`과 `doc: portfolio` 모두).
    - 우선순위: `resume.header.title`, `resume.about.lead`, `resume.motivation.*`(지원 동기는 dossier의 접점으로), 경력 라벨(`*.track`), 스킬 묶음, `portfolio.cover.role`, `portfolio.competency.*`. 바꿀 이유가 없으면 그대로 둔다.
    - 각 항목에 `facts`와 `reason`을 단다. 숫자는 그 fact의 `numbers` 값만 쓴다 (원문 표기 그대로).
    - `max_chars`와 `lines`를 넘기지 않는다. 직접 세지 말고 9번의 `figma-check`로 확인한다. 줄 구성은 `base`를 따른다: 줄바꿈 위치와 첫 줄 묶음 이름(스킬)은 유지한다. 하이픈 단어(Human-in-the-Loop)는 줄 끝에 두지 않는다.

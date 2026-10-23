@@ -1,4 +1,4 @@
-"""새 사람의 작업 폴더(워크스페이스)를 템플릿에서 만든다. 엔진은 심볼릭 링크로 공유한다."""
+"""사용자의 작업 폴더(워크스페이스)를 템플릿에서 만든다. 엔진은 심볼릭 링크로 공유한다."""
 from __future__ import annotations
 
 import shutil
@@ -9,7 +9,7 @@ from .extract import InputError
 from .paths import ENGINE_ROOT
 
 TEMPLATE_DIR = ENGINE_ROOT / "templates" / "workspace"
-RENAMES = {"CLAUDE.friend.md": "CLAUDE.md", "gitignore": ".gitignore",
+RENAMES = {"CLAUDE.workspace.md": "CLAUDE.md", "gitignore": ".gitignore",
            "profile/facts.example.yaml": "profile/facts.yaml",
            "profile/resume_master_ko.example.yaml": "profile/resume_master_ko.yaml"}
 NAME_PLACEHOLDER = "{{name}}"

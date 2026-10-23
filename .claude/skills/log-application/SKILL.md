@@ -1,6 +1,6 @@
 ---
 name: log-application
-description: 낸 지원을 records/applications.yaml에 기록한다. 지원 완료 화면 캡처, 확인 메일, 또는 한 문장("어제 예시회사 Product Designer에 지원했어")에서 회사, 직무, 날짜, 경로를 뽑아 중복 없이 추가한다. "지원했어", "지원 기록해줘"에 쓴다.
+description: 낸 지원을 records/applications.yaml에 기록한다. 지원 완료 화면 캡처, 확인 메일, 또는 한 문장("어제 예시회사 Backend Engineer에 지원했어")에서 회사, 직무, 날짜, 경로를 뽑아 중복 없이 추가한다. "지원했어", "지원 기록해줘"에 쓴다.
 ---
 
 # log-application

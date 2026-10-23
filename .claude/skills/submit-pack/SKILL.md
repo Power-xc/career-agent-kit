@@ -8,12 +8,12 @@ description: 지원에 필요한 파일을 out/<slug>/pack/에 모은다. 최종
 ## 입력
 
 - `slug`, 공고 파일, 지원 플랫폼 id (`rules/platforms.yaml`의 id, 모르면 `default`)
-- `out/<slug>/resume_<lang>.yaml`과 PDF, 선택: Figma 내보낸 PDF(`resume_<lang>_figma.pdf`), 포트폴리오: `out/<slug>/portfolio_<slug>.pdf`(figma-apply가 쪽을 바꿔 끼운 회사별 버전)가 있으면 그것, 없으면 `profile/figma_map.yaml`의 `portfolio.base_pdf`, 그것도 없으면 서류 보관함 `최신/`의 포트폴리오
+- `out/<slug>/resume_<lang>.yaml`과 PDF, 선택: (Figma 이력서를 쓰는 경우) Figma 내보낸 PDF(`resume_<lang>_figma.pdf`), 포트폴리오: `out/<slug>/portfolio_<slug>.pdf`(figma-apply가 쪽을 바꿔 끼운 회사별 버전)가 있으면 그것, 없으면 `profile/figma_map.yaml`의 `portfolio.base_pdf`, 그것도 없으면 서류 보관함 `최신/`의 포트폴리오
 - 자기소개서 문항과 글자 수 제한 (공고 `## Documents` 또는 dossier에 있으면 그대로, 없으면 사용자에게 묻는다)
 
 ## 출력
 
-`out/<slug>/pack/`: `resume_<lang>.pdf`, `portfolio.pdf` (전체 또는 lite), `cover_letter.md`, `checklist.md`, `README.md` (사용한 용량 한도와 출처).
+`out/<slug>/pack/`: `resume_<lang>.pdf`, `portfolio.pdf` (포트폴리오가 있을 때만, 전체 또는 lite), `cover_letter.md`, `checklist.md`, `README.md` (사용한 용량 한도와 출처).
 
 ## 절대 규칙
 
@@ -37,7 +37,7 @@ description: 지원에 필요한 파일을 out/<slug>/pack/에 모은다. 최종
    python tools/portfolio_subset.py <입력 포트폴리오 PDF> --pages <공고에 맞는 쪽 범위> --out out/<slug>/pack/portfolio.pdf --max-mb <한도>
    ```
 
-   쪽 선택은 공고 직무와 맞는 프로젝트 위주로 앞 2쪽(표지·소개)을 포함한다. 확신이 없으면 `--pages`를 생략해 기본 표본으로 만들고 어떤 쪽이 들어갔는지 체크리스트에 적는다. 한도를 넘으면 쪽을 줄여 다시 한다.
+   포트폴리오가 없는 직군이면 이 단계를 건너뛴다. 쪽 선택은 공고 직무와 맞는 프로젝트 위주로 앞 2쪽(표지·소개)을 포함한다. 확신이 없으면 `--pages`를 생략해 기본 표본으로 만들고 어떤 쪽이 들어갔는지 체크리스트에 적는다. 한도를 넘으면 쪽을 줄여 다시 한다.
 
 3. **자기소개서·커버레터 초안.** `cover_letter.md`에 문항별로 쓴다. 문항이 없으면 지원동기·직무 적합성·협업 방식의 짧은 3개 항목으로 쓴다. 한국어는 담백하고 구체적으로, 접속어와 미사여구를 줄이고 "열정", "귀사", "성장하는 인재" 같은 틀에 박힌 말을 피한다. 글자 수 제한이 있으면 공백 포함 글자 수를 세어 제한 이하로 쓰고 문항 옆에 `(글자 수/제한)`을 적는다. 각 문단 끝에 근거 fact id를 주석(`<!-- facts: f_... -->`)으로 남긴다. 제출 때 이 주석은 지운다고 체크리스트에 적는다.
 
