@@ -133,7 +133,8 @@ def classify_doc(ctx: RuleContext) -> dict:
 
 
 def _title_alignment(ctx, params):
-    targets, info = set(params.get("target_families", [])), classify_doc(ctx)
+    info = classify_doc(ctx)
+    targets = set(params.get("target_families") or ctx.taxonomy.target_family_ids())  # 값이 없으면 택소노미의 target 직군 전체
     aligned = [info[k] in targets for k in ("headline_family", "recent_family")]
     detail = f"헤드라인 '{info['headline']}'→{info['headline_family']}, 최근 직함 '{info['recent_title']}'→{info['recent_family']}"
     if all(aligned):

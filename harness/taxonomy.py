@@ -42,6 +42,15 @@ def load_yaml(path: Path):
         raise InputError(f"YAML 형식이 잘못됐습니다: {path} ({exc})") from exc
 
 
+@lru_cache(maxsize=None)
+def _latin_term_regex(term: str) -> re.Pattern:
+    """영문 용어 정규식. 용어가 수백 개라 re 내부 캐시(512)가 넘치므로 직접 캐시한다."""
+    if SHORT_ACRONYM_RE.fullmatch(term):
+        return re.compile(r"(?<![A-Za-z0-9])" + re.escape(term) + r"(?![A-Za-z0-9])")
+    pieces = [re.escape(piece) for piece in term.split()]
+    return re.compile(r"(?<![A-Za-z0-9])" + r"\s+".join(pieces) + r"(?![A-Za-z0-9])", re.I)
+
+
 class Haystack:
     """한 번 정규화해 두고 여러 용어를 찾는 검색 대상 텍스트."""
 
@@ -58,12 +67,7 @@ class Haystack:
         if HANGUL_RE.search(term):
             needle = compact(term)
             return self.compact.count(needle) if needle else 0
-        if SHORT_ACRONYM_RE.fullmatch(term):
-            pattern = r"(?<![A-Za-z0-9])" + re.escape(term) + r"(?![A-Za-z0-9])"
-            return len(re.findall(pattern, self.text))
-        pieces = [re.escape(piece) for piece in term.split()]
-        pattern = r"(?<![A-Za-z0-9])" + r"\s+".join(pieces) + r"(?![A-Za-z0-9])"
-        return len(re.findall(pattern, self.text, re.I))
+        return len(_latin_term_regex(term).findall(self.text))
 
     def has(self, term: str) -> bool:
         return self.find(term) > 0
@@ -73,6 +77,7 @@ class Haystack:
 class Taxonomy:
     families: list[dict] = field(default_factory=list)
     concepts: list[dict] = field(default_factory=list)
+    levels: dict[str, list[str]] = field(default_factory=dict)
 
     @property
     def family_by_id(self) -> dict[str, dict]:
@@ -81,6 +86,30 @@ class Taxonomy:
     @property
     def concept_by_id(self) -> dict[str, dict]:
         return {c["id"]: c for c in self.concepts}
+
+    @property
+    def seniority_levels(self) -> dict[str, list[str]]:
+        return self.levels
+
+    def group_of(self, family_id: str | None) -> str | None:
+        """직군 묶음(design, dev, ...). 묶음이 없는 직군은 id 자체를 묶음으로 본다."""
+        family = self.family_by_id.get(family_id or "")
+        return (family.get("group") or family["id"]) if family else None
+
+    def portfolio_expected(self, family_id: str | None) -> bool:
+        """포트폴리오가 기대되는 직군인가. 직군을 모르거나 값이 없으면 기대한다 (기존 동작)."""
+        family = self.family_by_id.get(family_id or "")
+        return True if family is None else bool(family.get("portfolio_expected", True))
+
+    def seniority_of(self, title: str, family_id: str | None = None) -> str | None:
+        """직함에 든 직급어 → 단계(intern, junior, mid, senior, lead). 높은 단계가 우선."""
+        extra = self.family_by_id.get(family_id or "", {}).get("seniority_words", [])
+        hay = Haystack(title)
+        for level in reversed(list(self.levels)):
+            words = list(self.levels[level]) + (extra if level == "lead" else [])
+            if any(hay.has(w) for w in words):
+                return level
+        return None
 
     def target_family_ids(self) -> list[str]:
         return [f["id"] for f in self.families if f.get("target")]
@@ -127,4 +156,5 @@ def load_taxonomy() -> Taxonomy:
     concepts = load_yaml(ENGINE_ROOT / "taxonomy/skills.yaml") or {}
     loaded = concepts.get("concepts", [])
     known = {c["id"] for c in loaded}
-    return Taxonomy(families.get("families", []), loaded + [c for c in BUILTIN_CONCEPTS if c["id"] not in known])
+    return Taxonomy(families.get("families", []), loaded + [c for c in BUILTIN_CONCEPTS if c["id"] not in known],
+                    families.get("seniority_levels") or {})

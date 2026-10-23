@@ -7,6 +7,7 @@ from pathlib import Path
 import yaml
 
 from .extract import InputError, require_file
+from .family import infer_family
 from .taxonomy import Haystack, Taxonomy, parse_yaml
 from .textio import normalize_text
 
@@ -71,9 +72,12 @@ def parse_jd(taxonomy: Taxonomy, path: Path) -> dict:
         concepts[name] = found
     title = str(meta.get("title", ""))
     family = taxonomy.normalize_title(re.sub(r"\(.*?\)", "", title))
+    if family is None:  # 제목이 낯설면 업무·자격 요건 본문의 신호로 직군을 추정한다
+        scope = "\n".join(sections.get(name, "") for name in CONCEPT_SECTIONS)
+        family = infer_family(scope, taxonomy)
     return {
         "file": path.name, "company": meta.get("company"), "title": title, "family": family,
-        "language": meta.get("language", "ko"), "seniority": meta.get("seniority"),
+        "language": meta.get("language", "ko"), "seniority": meta.get("seniority") or taxonomy.seniority_of(title, family),
         "years_min": years_min(sections), "meta": meta,
         "sections": {k: v.strip() for k, v in sections.items()},
         "concepts": {name: sorted(found) for name, found in concepts.items()},
