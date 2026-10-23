@@ -1,0 +1,25 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="shared.css"><style>
+body{width:1600px;height:600px;padding:64px 64px 0}
+.top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:44px}
+h2{font-size:34px;font-weight:800;letter-spacing:-.02em}h2 em{font-style:normal;color:var(--accent)}
+.top span{color:var(--muted);font-size:20px}
+.flow{display:flex;align-items:stretch;gap:0}
+.start{width:150px;flex:none;background:var(--accent);color:#16140F;border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:800;font-size:28px;line-height:1.3;text-align:center}
+.start small{font-size:16px;font-weight:600;opacity:.7;margin-top:8px}
+.arrow{width:34px;flex:none;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:26px;font-weight:700}
+.step{flex:1;background:var(--card);border:1px solid var(--line2);border-radius:20px;padding:26px 22px;display:flex;flex-direction:column}
+.n{width:38px;height:38px;border-radius:50%;background:var(--accent);color:#16140F;font-family:Inter;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.t{font-size:24px;font-weight:700;line-height:1.3;letter-spacing:-.02em;margin-bottom:10px;min-height:62px}
+.d{font-size:17px;color:var(--muted);line-height:1.5;margin-bottom:22px;flex:1}
+.o{font-family:"SF Mono",Menlo,monospace;font-size:14.5px;color:var(--accent);background:#16140F;border-radius:10px;padding:10px 12px;line-height:1.45;word-break:break-all;min-height:76px}
+.o small{display:block;font-family:Pretendard;color:var(--muted);font-size:12px;margin-bottom:2px}
+</style></head><body>
+<div class="top"><h2>회사 이름 하나로 <em>제출 패키지</em>까지</h2><span>/apply 예시회사</span></div>
+<div class="flow">
+<div class="start">회사 이름<small>입력 한 줄</small></div><div class="arrow">→</div>
+<div class="step"><div class="n">1</div><div class="t">회사<br>딥리서치</div><div class="d">채용·블로그·사업·채용 절차를 공개 자료로</div><div class="o"><small>출력</small>companies/&lt;slug&gt;/</div></div><div class="arrow">→</div>
+<div class="step"><div class="n">2</div><div class="t">공고<br>저장</div><div class="d">공고 요건을 구조화해 보관</div><div class="o"><small>출력</small>jd/</div></div><div class="arrow">→</div>
+<div class="step"><div class="n">3</div><div class="t">사실 안에서<br>맞춤</div><div class="d">제목·키워드·문장을 내 사실로만</div><div class="o"><small>출력</small>out/&lt;slug&gt;/<br>resume_*.yaml</div></div><div class="arrow">→</div>
+<div class="step"><div class="n">4</div><div class="t">ATS·LLM·<br>리크루터 심사</div><div class="d">세 관점으로 읽고 고칠 점 5개 정리</div><div class="o"><small>출력</small>out/&lt;slug&gt;/<br>screening.md</div></div><div class="arrow">→</div>
+<div class="step"><div class="n">5</div><div class="t">제출<br>패키지</div><div class="d">PDF·자소서 초안·체크리스트 (제출은 직접)</div><div class="o"><small>출력</small>out/&lt;slug&gt;/pack/</div></div>
+</div></body></html>
