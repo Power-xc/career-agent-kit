@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """전체 포트폴리오 PDF에서 지정한 쪽만 뽑아 용량이 작은 lite 버전을 만든다 (링크 주석 유지).
 
-사용: python tools/portfolio_subset.py <full.pdf> --pages 1-3,8,15-20 --out out/base/portfolio_lite.pdf
+사용: bin/kit-python tools/portfolio_subset.py <full.pdf> --pages 1-3,8,15-20 --out out/base/portfolio_lite.pdf
       --pages를 생략하면 앞 2쪽 + 균등 간격으로 고른 쪽을 합쳐 KEY_PAGE_COUNT쪽을 고른다.
 종료 코드: 0 정상, 2 입력·환경 오류. 쪽 번호는 1부터 센다.
 """

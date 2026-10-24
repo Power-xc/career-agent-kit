@@ -13,7 +13,7 @@ RENAMES = {"CLAUDE.workspace.md": "CLAUDE.md", "gitignore": ".gitignore",
            "profile/facts.example.yaml": "profile/facts.yaml",
            "profile/resume_master_ko.example.yaml": "profile/resume_master_ko.yaml"}
 NAME_PLACEHOLDER = "{{name}}"
-LINKS = {"bin/harness": "bin/harness", ".claude/skills": ".claude/skills", ".claude/agents": ".claude/agents"}
+LINKS = {"bin/harness": "bin/harness", "bin/kit-python": "bin/kit-python", "tools": "tools", ".claude/skills": ".claude/skills", ".claude/agents": ".claude/agents"}
 MADE_DIRS = ("jd", "companies", "out", "research/targets")
 
 

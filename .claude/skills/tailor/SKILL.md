@@ -39,9 +39,9 @@ description: 회사 조사 결과(companies/<slug>/)와 선택한 공고로 사�
 2. **기준 점수.** 기본(base)과 마스터(master) 이력서를 각각 렌더링해 비교용 점수를 남긴다. master가 없으면 base만 남기고 master 칸에 "없음"이라고 쓴다.
 
    ```bash
-   python tools/render_resume.py profile/resume_base.yaml --out out/<slug>/base_ref.pdf
+   bin/kit-python tools/render_resume.py profile/resume_base.yaml --out out/<slug>/base_ref.pdf
    bin/harness run --jd jd/<tier>/<slug>__<role>.md --resume profile/resume_base.yaml --out out/<slug>/before/
-   python tools/render_resume.py profile/resume_master_ko.yaml --out out/<slug>/master_ref.pdf
+   bin/kit-python tools/render_resume.py profile/resume_master_ko.yaml --out out/<slug>/master_ref.pdf
    bin/harness run --jd jd/<tier>/<slug>__<role>.md --resume profile/resume_master_ko.yaml --out out/<slug>/before_master/
    ```
 

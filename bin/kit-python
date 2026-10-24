@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# 키트의 python으로 파일을 실행한다 (bin/harness와 같은 순서: $HARNESS_PYTHON, 키트 .venv, python3).
+set -eu
+src="${BASH_SOURCE[0]}"
+while [ -L "$src" ]; do
+  dir="$(cd -P "$(dirname "$src")" && pwd)"
+  src="$(readlink "$src")"
+  case "$src" in /*) ;; *) src="$dir/$src" ;; esac
+done
+ENGINE="$(cd -P "$(dirname "$src")/.." && pwd)"
+if [ -n "${HARNESS_PYTHON:-}" ]; then py="$HARNESS_PYTHON"
+elif [ -x "$ENGINE/.venv/bin/python" ]; then py="$ENGINE/.venv/bin/python"
+else py=python3; fi
+export PYTHONPATH="$ENGINE${PYTHONPATH:+:$PYTHONPATH}"
+exec "$py" "$@"

@@ -44,16 +44,16 @@ Figma 새 페이지 `<회사명> 지원본 (YYYY-MM-DD)` (포트폴리오 슬롯
 7. **dry run.** `apply_text.js`에 `allowedPageIds: [새 페이지 id들]`, 3번 목록의 `id`를 `idMap`으로 사본 id로 바꾼 `edits`, `dryRun: true`를 넣어 실행한다. `planned`/`skipped` 결과를 사용자에게 요약해 보여 주고 진행 여부를 확인한다 (이 단계는 파일 밖 시스템에 쓰기가 일어나기 직전이므로 확인한다).
 8. **적용.** 같은 `edits`로 `dryRun: false`를 실행한다. 한 번에 약 20개 이하로 나눠 실행한다. `reverted`, `skipped`, `error`는 `figma_log.md`에 이유와 함께 적는다. 되돌려진 슬롯은 문구를 줄여 한 번만 다시 시도한다.
 9. **눈으로 확인.** Figma MCP `get_screenshot`으로 새 페이지의 각 프레임을 본다. 줄바꿈, 넘침, 겹침, 굵기·색 혼합 스타일이 유지됐는지 확인한다. 문제가 있으면 해당 슬롯만 `apply_text.js`로 고치거나 원문으로 되돌린다.
-10. **PDF 내보내기.** 다른 터미널에서 `python tools/figma/recv_server.py --dir out/<slug>`를 켜고(Bash 백그라운드), `export_pdf.js`로 사본 프레임을 `resume_<lang>_figma_p1.pdf`, `_p2.pdf`로 보낸 뒤 합친다.
+10. **PDF 내보내기.** 다른 터미널에서 `bin/kit-python tools/figma/recv_server.py --dir out/<slug>`를 켜고(Bash 백그라운드), `export_pdf.js`로 사본 프레임을 `resume_<lang>_figma_p1.pdf`, `_p2.pdf`로 보낸 뒤 합친다.
 
    ```bash
-   python tools/figma/recv_server.py --merge out/<slug>/resume_<lang>_figma.pdf out/<slug>/resume_<lang>_figma_p1.pdf out/<slug>/resume_<lang>_figma_p2.pdf
+   bin/kit-python tools/figma/recv_server.py --merge out/<slug>/resume_<lang>_figma.pdf out/<slug>/resume_<lang>_figma_p1.pdf out/<slug>/resume_<lang>_figma_p2.pdf
    ```
 
    포트폴리오 슬롯을 바꿨다면 사본 슬라이드를 `figma_map.yaml`의 `portfolio.replaces` 쪽 번호로 이름 붙여 내보내고(`portfolio_s01.pdf`, `portfolio_s02.pdf`), 기준 전체 PDF에서 그 쪽만 바꿔 끼운다.
 
    ```bash
-   python tools/portfolio_replace.py --base <figma_map.yaml의 portfolio.base_pdf> \
+   bin/kit-python tools/portfolio_replace.py --base <figma_map.yaml의 portfolio.base_pdf> \
        --page 1=out/<slug>/portfolio_s01.pdf --page 2=out/<slug>/portfolio_s02.pdf --out out/<slug>/portfolio_<slug>.pdf
    ```
 

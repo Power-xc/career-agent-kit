@@ -141,7 +141,7 @@ class OnboardTests(unittest.TestCase):
             self.assertEqual("# 테스터 의 작업 폴더\n", (dest / "CLAUDE.md").read_text(encoding="utf-8"))
             self.assertTrue((dest / ".gitignore").is_file() and (dest / "profile/facts.yaml").is_file())
             self.assertFalse((dest / "CLAUDE.workspace.md").exists() or (dest / "gitignore").exists())
-            for link in ("bin/harness", ".claude/skills", ".claude/agents"):
+            for link in ("bin/harness", "bin/kit-python", "tools", ".claude/skills", ".claude/agents"):
                 self.assertTrue((dest / link).is_symlink(), link)
                 self.assertTrue((dest / link).resolve().exists(), link)
             for folder in ("jd", "companies", "out", "research/targets"):

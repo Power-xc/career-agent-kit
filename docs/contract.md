@@ -30,19 +30,19 @@
 
 - Python 3.11+. 의존성: `pyyaml>=6`, `pymupdf>=1.24`(선택 기능: 숨김 텍스트, 링크, 폰트 정보, `tools/`의 PDF 도구). pymupdf가 없으면 해당 검사는 `skipped`로 보고하고 나머지는 동작한다.
 - 외부 도구(선택): poppler `pdftotext`, `pdfinfo`. `PATH`에서 찾고, 없으면 pymupdf 텍스트로 대체한다.
-- PDF 렌더: Google Chrome headless (`--headless=new --no-pdf-header-footer --print-to-pdf=<out> <html>`). 폰트는 Pretendard를 권장한다 (없으면 시스템 기본 폰트로 대체된다).
+- PDF 렌더: Chrome headless. 브라우저는 `$CHROME`, macOS Chrome 앱, PATH의 `google-chrome`·`chromium`·`microsoft-edge` 등, Windows 설치 경로 순으로 찾는다. 못 찾으면 `CHROME`에 실행 파일 경로를 지정한다 (`--headless=new --no-pdf-header-footer --print-to-pdf=<out> <html>`). 폰트는 Pretendard를 권장한다 (없으면 시스템 기본 폰트로 대체된다).
 - 네트워크: 코어(`harness/`)는 네트워크를 쓰지 않는다. 회사 조사 스킬만 공개 웹을 읽는다 (WebSearch, WebFetch).
 
 ### 2.1 엔진 루트와 워크스페이스 루트
 
 - **엔진 루트**: `harness/` 패키지가 있는 폴더 (`Path(harness.__file__).resolve().parents[1]`). `rules/`, `taxonomy/`, `templates/` 같은 엔진 자원은 여기서 읽는다.
 - **워크스페이스 루트**: 한 사람의 데이터(`profile/`, `jd/`, `companies/`, `out/`, `records/`, `research/`)가 있는 폴더. `--root`가 없으면 현재 폴더에서 위로 올라가 `profile/facts.yaml`이 있는 첫 폴더를 쓴다.
-- 한 폴더에서 엔진과 데이터를 함께 쓰면 두 루트가 같은 폴더다. 사용자 워크스페이스(예: `~/career-workspaces/<slug>/`)는 엔진 루트(키트 폴더, 예: `~/career-agent-kit`)와 다르고, `bin/harness`, `.claude/skills`, `.claude/agents`가 엔진의 것으로 링크된다.
-- `bin/harness`는 자신의 실제 경로(심볼릭 링크를 따라간 뒤)에서 엔진 루트를 찾고, python은 `$HARNESS_PYTHON`, `$ENGINE/.venv/bin/python`, `python3` 순으로 고른다. 스킬은 워크스페이스 루트에서 `bin/harness <command>`로 부른다.
+- 한 폴더에서 엔진과 데이터를 함께 쓰면 두 루트가 같은 폴더다. 사용자 워크스페이스(예: `~/career-workspaces/<slug>/`)는 엔진 루트(키트 폴더, 예: `~/career-agent-kit`)와 다르고, `bin/harness`, `bin/kit-python`, `tools/`, `.claude/skills`, `.claude/agents`가 엔진의 것으로 링크된다.
+- `bin/harness`는 자신의 실제 경로(심볼릭 링크를 따라간 뒤)에서 엔진 루트를 찾고, python은 `$HARNESS_PYTHON`, `$ENGINE/.venv/bin/python`, `python3` 순으로 고른다. 스킬은 워크스페이스 루트에서 `bin/harness <command>`로 부른다. `bin/kit-python <파일> [인자]`는 같은 순서로 고른 python으로 파일을 실행한다.
 
 ### 2.2 도구 (`tools/`)
 
-스킬이 워크스페이스 루트에서 `python tools/<script>`로 부른다. 종료 코드는 0 정상, 2 입력·환경 오류다. 쪽 번호는 1부터 센다. 노드 id, 파일 키, 쪽 번호는 스크립트에 들어 있지 않고 인자나 `profile/figma_map.yaml`(3.3)에서 온다.
+스킬이 워크스페이스 루트에서 `bin/kit-python tools/<script>`로 부른다 (키트의 python이라 pyyaml·pymupdf가 있다). 도구의 기본 입출력(`profile/`, `out/`)은 워크스페이스 루트 기준이고, 템플릿은 키트에서 읽는다. 종료 코드는 0 정상, 2 입력·환경 오류다. 쪽 번호는 1부터 센다. 노드 id, 파일 키, 쪽 번호는 스크립트에 들어 있지 않고 인자나 `profile/figma_map.yaml`(3.3)에서 온다.
 
 | 도구 | 사용 | 하는 일 |
 | --- | --- | --- |
@@ -272,7 +272,7 @@ warn 결과의 감점은 같은 severity 감점에 `scoring.yaml`의 `warn_penal
 
 `bin/harness targets [--resume FILE] [--out FILE] [--json] <unit.yaml>...`은 `research/targets/<unit>.yaml`의 공고 목록(`company, slug, role, url, checked, tier, location, years_min, years_max, language, domain_tags, verdict, chance, reasons, jd_file`)을 합치고, 지원한 회사를 빼고, 공고별 점수를 내 순위를 매긴다 (chance 상>중>하, verdict 적합>도전>낮음, 점수 내림차순). `jd_file`은 절대 경로, 작업 폴더 기준, 목록 파일 폴더 기준, 목록 파일의 두 단계 위 폴더 기준 순서로 찾는다.
 
-`bin/harness onboard <dest> --name "<이름>" [--template-dir DIR]`는 `templates/workspace/`로 사용자 워크스페이스를 만든다 (`CLAUDE.workspace.md` → `CLAUDE.md`, `gitignore` → `.gitignore`, `*.example.yaml` → 실제 이름, `bin/harness`·`.claude/skills`·`.claude/agents` 링크, `git init`).
+`bin/harness onboard <dest> --name "<이름>" [--template-dir DIR]`는 `templates/workspace/`로 사용자 워크스페이스를 만든다 (`CLAUDE.workspace.md` → `CLAUDE.md`, `gitignore` → `.gitignore`, `*.example.yaml` → 실제 이름, `bin/harness`·`bin/kit-python`·`tools/`·`.claude/skills`·`.claude/agents` 링크, `git init`).
 
 ## 4. 숫자 토큰 규칙 (claims 검사)
 
