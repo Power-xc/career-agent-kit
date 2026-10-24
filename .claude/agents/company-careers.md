@@ -34,16 +34,16 @@ model: sonnet
 - `location`, `ats`는 값만 쓴다. 공고에 없으면 `"공고에 없음"`, 판별 못 한 ATS는 `"unknown"`. 괄호 설명이나 회사 주소를 덧붙이지 않는다. 근거는 `## 요약`에 쓴다.
 - 본문은 `## Responsibilities`, `## Requirements`, `## Preferred` 순서이고 bullet은 공고 문구 그대로다. 공고에 없는 섹션은 제목 아래에 `- 공고에 없음`만 쓴다.
 
-완전한 예시 (회사와 내용은 가상이며 형식만 보여 준다. 직무는 대상 직무에 맞게 바꾼다):
+완전한 예시 (회사와 내용은 가상이며 형식만 보여 준다. 직무와 요건은 대상 직무에 맞게 바꾼다):
 
-### JD: Senior Product Designer
+### JD: Senior Backend Engineer
 
-저장 경로: jd/other/examplecorp__senior-product-designer.md
+저장 경로: jd/other/examplecorp__senior-backend-engineer.md
 
 ---
-company: "예시 컴퍼니 (ExampleCorp)"
+company: "예시회사 (ExampleCorp)"
 tier: "other"
-title: "Senior Product Designer"
+title: "Senior Backend Engineer"
 url: "https://careers.example.com/jobs/1234"
 accessed: "2026-01-15"
 status: "open"
@@ -55,13 +55,13 @@ language: "ko"
 
 ## Responsibilities
 
-- 핵심 제품의 사용자 경험을 설계해요
-- 데이터를 보고 가설을 세우고 검증해요
+- 예시회사 결제 서비스의 서버 API를 설계하고 운영해요
+- 장애 지표를 보고 원인을 찾아 개선해요
 
 ## Requirements
 
-- 제품 디자인 경력 5년 이상인 분
-- Figma로 협업해 본 경험이 있는 분
+- 백엔드 개발 경력 5년 이상인 분
+- 대용량 트래픽을 다뤄 본 경험이 있는 분
 
 ## Preferred
 

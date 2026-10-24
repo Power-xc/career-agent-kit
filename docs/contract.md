@@ -151,10 +151,16 @@ Figma에서 페이지를 복제하면 노드 id가 바뀐다. 복제 스크립�
 `taxonomy/job_families.yaml`
 
 ```yaml
+seniority_levels: { level: [직급어] } # intern, junior, mid, senior, lead
 families:
   - id: str
     target: bool # 지원 목표 직군이면 true
     labels: { ko: str, en: str }
+    group: str # 직군 묶음 (design, dev, data, planning, marketing, sales, hr, finance, ops, commerce). 없으면 id
+    portfolio_expected: bool # false면 포트폴리오 감사 감점을 점수에 반영하지 않는다 (없으면 true)
+    core_skills: [skill concept id] # skills.yaml 개념. 서류에 나오면 직군 신호에 가산 (scoring.yaml classification.core_skill_weight)
+    decisive_evidence: [{ label: str, terms: [str] }] # 이 직군 심사에서 결정적인 근거와 서류에서 찾을 용어
+    seniority_words: [str] # 이 직군 직함에서 쓰는 직급어 (공통 직급어는 최상위 seniority_levels)
     titles: [str] # 타이틀 정규화용 표기 (대소문자, 공백 무시)
     signals: [str] # 본문에서 이 직군을 암시하는 용어
     platform_labels:
@@ -221,7 +227,10 @@ YAML front matter: `company, tier, title, url, accessed (YYYY-MM-DD), status (op
 `hidden_text_none` 판정: 후보가 없으면 pass, 후보가 있으면 warn, 후보가 프롬프트 인젝션 패턴(`forbidden_patterns`)에 걸리거나 문단 길이(40자 이상)의 흰 글씨면 fail. 후보는 (쪽, 이유)별로 묶어 `items`에 낸다. 한 쪽에 초소형 글자가 20개 이상이면 이유는 `mockup_text`(축소된 화면 캡처)이고 권고는 "목업은 이미지로 평탄화하거나 화면 밖 텍스트를 지우세요"다. 숫자 주장(`claims_supported`)은 PDF에서 MuPDF 텍스트로 검사한다.
 warn 결과의 감점은 같은 severity 감점에 `scoring.yaml`의 `warn_penalty_factor`(0.5)를 곱한다.
 
-`scoring.yaml`: `weights: {parse, title, required, preferred, seniority, impact}` (합 100), `penalty_cap`, `bands: [{min, label}]`, 세부 계수.
+`scoring.yaml`: `weights: {parse, title, required, preferred, seniority, impact}` (합 100), `penalty_cap`, `bands: [{min, label}]`, 세부 계수, 그리고 아래 둘.
+
+- `family_weights: {<group>: {parse, title, required, preferred, seniority, impact}}`: 직군 묶음(taxonomy `group`)별 구성 점수 배분. 적힌 항목만 `weights`를 덮어쓰고, 덮어쓴 결과의 합은 `weights`의 합(100)과 같아야 한다(다르면 입력 오류, 종료 코드 2). 정의가 없는 묶음(현재 `design`)은 `weights` 그대로다.
+- `classification: {title_bonus, core_skill_weight, jd_fallback_min_score}`: 직군 신호 계산 계수. `title_bonus`는 헤드라인·최근 직함이 정규화된 직군에 더하는 점수, `core_skill_weight`는 직군 `core_skills` 개념이 서류에 하나 나올 때 더하는 점수, `jd_fallback_min_score`는 공고 제목이 직군으로 정규화되지 않을 때 본문 신호 점수가 이 이상이면 가장 높은 직군을 공고 직군(`jd.family`)으로 본다는 기준이다.
 `platforms.yaml`: `platforms: [{id, name, max_file_mb, types: [pdf, docx, ...], max_files?, notes, source}]`.
 `screener_rubrics.yaml`: 스크리너 3종(ats, llm, recruiter)의 관점, 체크 항목, 출력 스키마.
 
@@ -303,9 +312,36 @@ warn 결과의 감점은 같은 severity 감점에 `scoring.yaml`의 `warn_penal
       "suggestion": ""
     }
   ],
-  "suggestions": [{ "concept": "", "fact_ids": [], "hint": "" }]
+  "suggestions": [{ "concept": "", "fact_ids": [], "hint": "" }],
+  "family": {
+    "id": "",
+    "group": "",
+    "weights": { "parse": 0, "title": 0, "required": 0, "preferred": 0, "seniority": 0, "impact": 0 },
+    "portfolio_expected": true,
+    "portfolio_penalties_applied": false
+  },
+  "family_evidence": [{ "label": "", "found": [] }],
+  "note": ""
 }
 ```
+
+- `family.id`: 공고 직군(`jd.family`). 공고 직군을 모르면 서류에서 예측한 직군(`classify`의 `predicted`)이고, 둘 다 없으면 `null`이다. `group`은 그 직군의 묶음, `weights`는 실제 쓰인 구성 점수 배분(`family_weights` 반영 후)이다.
+- `family.portfolio_expected`는 taxonomy 값(직군을 모르면 true)이고, `portfolio_penalties_applied`는 포트폴리오를 받았고 `portfolio_expected`가 true라서 포트폴리오 감사 감점(`penalties`의 `portfolio:` 접두 `rule_id`)을 점수에 반영했는지다.
+- `family_evidence`: `family.id`의 `decisive_evidence` 항목마다 `label`과, 서류 텍스트에서 실제로 찾은 용어 `found`(최대 3개, 못 찾으면 빈 목록). 점수에 넣지 않고 알리기만 한다. 직군을 모르거나 `decisive_evidence`가 없으면 빈 목록이다.
+
+`run`이 쓰는 `report.json`의 최상위 키: `texts`, `jd`(`file, company, title, family, years_min, language, concepts`), `resume`, `portfolio`, `audit`, `portfolio_audit`, `family`, `claims`, `consistency`, `score`. 여기서 `family`는 서류 분류 결과(`family` 명령과 같은 형태)다.
+
+```json
+{
+  "headline": "", "headline_family": null,
+  "recent_title": "", "recent_family": null,
+  "ranking": [{ "id": "", "target": true, "score": 0, "share": 0.0, "signals": {} }],
+  "predicted": null,
+  "warnings": []
+}
+```
+
+직군 정보를 읽는 위치: 공고 직군 `jd.family`, 서류 분류 `family.predicted`·`family.ranking`, 점수에 쓰인 직군과 배분 `score.family`, 결정적 근거 `score.family_evidence`.
 
 ## 6. 스킬과 에이전트
 
@@ -319,11 +355,13 @@ warn 결과의 감점은 같은 severity 감점에 `scoring.yaml`의 `warn_penal
 | `company-research` | 회사명, 선택: 직무                                     | `companies/<slug>/{dossier.md,vocab.yaml,sources.md,meta.yaml}`, `jd/<tier>/<slug>__*.md`                                               |
 | `jd-intake`        | 공고 URL 또는 붙여 넣은 텍스트                         | `jd/<tier>/<slug>__<role>.md` + `bin/harness jd` 요약                                                                             |
 | `tailor`           | slug, 공고 파일                                        | `out/<slug>/resume_<lang>.yaml`, `out/<slug>/figma_text.yaml`, `out/<slug>/tailor_log.md` (claims strict 통과 필수, 점수 전후 비교) |
-| `screen`           | 이력서 파일, 공고 파일, 선택: 포트폴리오               | `out/<slug>/screening.md` (규칙 점수 + 스크리너 3종 판정 + 우선 수정 5개)                                                               |
+| `screen`           | 이력서 파일, 공고 파일, 선택: 포트폴리오               | `out/<slug>/screening.md` (규칙 점수 + 직군 핵심 근거 + 스크리너 3종 판정 + 우선 수정 5개)                                                               |
 | `figma-apply`      | `out/<slug>/figma_text.yaml`, `profile/figma_map.yaml` | Figma 새 페이지 "<회사명> 지원본 (YYYY-MM-DD)", 내보낸 PDF(이력서, 바꾼 쪽을 끼운 포트폴리오), 슬롯별 적용 로그                         |
 | `submit-pack`      | slug                                                   | `out/<slug>/pack/` (최종 PDF, 플랫폼 용량별 포트폴리오 선택, 자기소개서 초안, 체크리스트). 제출은 하지 않는다                           |
 
 `figma_text.yaml`: `slots: [{id: figma_map slot id, text: str, facts: [fact id], reason: str}]` — 이력서·포트폴리오 모두 텍스트 슬롯만 바꾼다. 바꿀 슬롯만 적는다.
+
+스크리너 3종은 경로 외에 공고 직군 입력(직군 id, 한글 이름, `decisive_evidence` label 목록)을 받고 그 직군의 결정적 근거로 판단한다. 포트폴리오는 `score.family.portfolio_expected`가 true이거나 PDF를 받았을 때만 넘긴다. 출력 형태는 직군과 무관하게 같다.
 
 스크리너 판정 JSON (세 에이전트 공통):
 

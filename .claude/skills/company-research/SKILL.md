@@ -26,7 +26,7 @@ description: "회사명(한글·영문, 선택: 직무) 하나로 채용 페이�
 | 에이전트                 | 쓰는 파일                                     |
 | ------------------------ | --------------------------------------------- |
 | `company-careers`        | `companies/<slug>/parts/company-careers.md`        |
-| `company-design-blog` (직무에 맞는 기술·디자인·브랜드 블로그) | `companies/<slug>/parts/company-design-blog.md`    |
+| `company-team-blog` (직무에 맞는 기술·디자인·브랜드 블로그) | `companies/<slug>/parts/company-team-blog.md`    |
 | `company-business`       | `companies/<slug>/parts/company-business.md`       |
 | `company-hiring-process` | `companies/<slug>/parts/company-hiring-process.md` |
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""엔진을 allowlist로 복사해 친구용 도우미 키트 폴더를 만든다 (개인 데이터 없음, 새 git 이력).
+"""엔진을 allowlist로 복사해 배포용 키트 폴더를 만든다 (개인 데이터 없음, 새 git 이력).
 
 사용: python tools/export_kit.py <dest> [--source <작업 폴더>]
 종료 코드: 0 정상, 1 개인 토큰 발견(경로:줄:토큰 출력), 2 입력 오류.
 
 내보내는 것: harness/ bin/ rules/ taxonomy/ templates/ tools/ tests/ .claude/skills .claude/agents AGENTS.md
-  pyproject.toml docs/contract.md docs/company-research.md, 그리고 README.kit.md→README.md,
+  pyproject.toml LICENSE docs/contract.md docs/company-research.md docs/assets, 그리고 README.kit.md→README.md,
   CLAUDE.kit.md→CLAUDE.md, gitignore.kit→.gitignore.
 내보내지 않는 것: profile/ jd/ companies/ out/ records/ research/ docs/research/ README.md CLAUDE.md, tests/personal/.
 
@@ -26,7 +26,7 @@ import yaml
 ENGINE_ROOT = Path(__file__).resolve().parents[1]
 EXIT_OK, EXIT_HITS, EXIT_INPUT = 0, 1, 2
 ALLOW_DIRS = ("harness", "bin", "rules", "taxonomy", "templates", "tools", "tests", ".claude/skills", ".claude/agents")
-ALLOW_FILES = ("AGENTS.md", "pyproject.toml", "docs/contract.md", "docs/company-research.md")
+ALLOW_FILES = ("AGENTS.md", "pyproject.toml", "LICENSE", "docs/contract.md", "docs/company-research.md", "docs/assets")
 EXCLUDE = ("tests/personal", "tools/figma", "tools/portfolio_replace.py", "tools/portfolio_subset.py",
            "__pycache__", ".pytest_cache", ".venv", ".DS_Store")
 RENAMES = {"README.kit.md": "README.md", "CLAUDE.kit.md": "CLAUDE.md", "gitignore.kit": ".gitignore"}
@@ -122,7 +122,7 @@ def export_kit(dest: Path, source: Path, engine: Path = ENGINE_ROOT) -> tuple[in
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="엔진 allowlist를 친구용 키트 폴더로 내보낸다")
+    parser = argparse.ArgumentParser(description="엔진 allowlist를 배포용 키트 폴더로 내보낸다")
     parser.add_argument("dest", type=Path)
     parser.add_argument("--source", type=Path, default=ENGINE_ROOT, help="개인 토큰을 읽을 작업 폴더 (기본: 엔진 루트)")
     args = parser.parse_args(argv)

@@ -11,7 +11,7 @@ Claude Code에서 `company-research` 스킬에 회사명(한글·영문)을 주�
 1. slug와 tier를 정한다 (소문자 ASCII).
 2. 에이전트 4종을 병렬로 호출한다. 각자 `companies/<slug>/parts/`에 조각을 쓴다.
    - `company-careers`: 채용 사이트, ATS 판별, 대상 직무의 열린 공고와 JD 원문
-   - `company-design-blog`: 직무에 맞는 기술·디자인·브랜드 블로그, 발표·인터뷰, 회사가 쓰는 용어
+   - `company-team-blog`: 직무에 맞는 기술·디자인·브랜드 블로그, 발표·인터뷰, 회사가 쓰는 용어
    - `company-business`: 개요, 제품, 최근 18개월 이슈, AI 전략, 인재상
    - `company-hiring-process`: 전형, 서류 형식·용량, 자기소개서, 과제·면접, AI 심사 공개 여부
 3. 조각을 `templates/dossier.md` 틀로 합쳐 `dossier.md`를 쓰고, `vocab.yaml`, `sources.md`, `meta.yaml`, `jd/<tier>/<slug>__*.md`를 만든다.

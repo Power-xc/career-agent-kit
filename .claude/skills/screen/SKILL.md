@@ -9,7 +9,7 @@ description: 맞춤 이력서(와 포트폴리오)를 공고 기준으로 심사
 
 - 이력서: `out/<slug>/resume_<lang>.yaml`과 렌더링한 `out/<slug>/resume_<lang>.pdf` (없으면 `python tools/render_resume.py out/<slug>/resume_<lang>.yaml --out out/<slug>/resume_<lang>.pdf`)
 - 공고: `jd/<tier>/<slug>__<role>.md`
-- 선택: 포트폴리오 PDF (포트폴리오가 있는 직군·사람만). `out/<slug>/portfolio_<slug>.pdf`가 있으면 그것, 없으면 `profile/figma_map.yaml`의 `portfolio.base_pdf`. 원본 `portfolio_pdf/`의 PDF는 쓰지 않는다.
+- 선택: 포트폴리오 PDF (포트폴리오가 있는 직군·사람만. 개발·마케팅 같은 직군은 없어도 된다). `out/<slug>/portfolio_<slug>.pdf`가 있으면 그것, 없으면 `profile/figma_map.yaml`의 `portfolio.base_pdf`. 원본 `portfolio_pdf/`의 PDF는 쓰지 않는다.
 
 ## 출력
 
@@ -25,22 +25,30 @@ description: 맞춤 이력서(와 포트폴리오)를 공고 기준으로 심사
 
    종료 코드 1은 이력서 또는 포트폴리오에서 severity high 발견이 있다는 뜻이다 (실패가 아니라 보고 대상). 요약은 짧게 나오고 `text_default.txt`와 `text_mupdf.txt`는 항상 `--out`에 써진다. 2는 입력 오류이니 경로를 고쳐 다시 한다. `text_default.txt`가 없으면 `bin/harness audit out/<slug>/resume_<lang>.pdf --kind resume --out out/<slug>/screen/`로 만든다. 추출 텍스트의 이메일·전화는 `[EMAIL]`, `[PHONE]`으로 가려져 있어야 한다. 아니면 멈추고 알린다.
 
-2. **스크리너 3종을 병렬로 호출한다.** 한 번의 응답에서 Agent 도구를 세 번 호출한다 (`subagent_type`: `screener-ats`, `screener-llm`, `screener-recruiter`). 프롬프트에는 경로만 넘긴다.
+2. **직군 근거 읽기.** `out/<slug>/screen/report.json`에서 다음을 읽는다.
+   - 공고 직군: `jd.family`(id). 비어 있으면 `score.family.id`(서류에서 예측한 직군)를 쓰고 그렇다고 적는다.
+   - 직군 한글 이름과 결정적 근거 항목: `taxonomy/job_families.yaml`에서 그 id의 `labels.ko`와 `decisive_evidence[].label`.
+   - 서류에서 찾은 근거: `score.family_evidence` (`[{label, found: [찾은 용어]}]`, `found`가 비면 못 찾은 것).
+   - 포트폴리오 기대 여부: `score.family.portfolio_expected`, 감점 반영 여부: `score.family.portfolio_penalties_applied`.
+
+3. **스크리너 3종을 병렬로 호출한다.** 한 번의 응답에서 Agent 도구를 세 번 호출한다 (`subagent_type`: `screener-ats`, `screener-llm`, `screener-recruiter`). 프롬프트에는 경로와 직군 정보만 넘긴다. 직군 정보는 셋 모두에 같다: 직군 id, 한글 이름, 결정적 근거 항목 label 목록.
    - ats: `out/<slug>/screen/text_default.txt`, 공고 파일
    - llm: 위와 같음 + 포트폴리오 첫 2쪽 텍스트 경로(있으면)
-   - recruiter: 이력서 텍스트 경로(에이전트가 첫 1,500자만 읽는다) + 포트폴리오 첫 2쪽 텍스트 경로
+   - recruiter: 이력서 텍스트 경로(에이전트가 첫 1,500자만 읽는다) + 포트폴리오 첫 2쪽 텍스트 경로(있으면)
+     포트폴리오는 `portfolio_expected`가 true이거나 포트폴리오 PDF를 받았을 때만 언급하고 넘긴다. 둘 다 아니면 프롬프트에서 포트폴리오를 말하지 않는다.
      포트폴리오 첫 2쪽 텍스트는 `pdftotext -f 1 -l 2 <portfolio.pdf> out/<slug>/screen/portfolio_p1-2.txt`로 만든다.
 
-3. **판정 수집.** 스크리너 에이전트에는 Write 도구가 없다. 각자 JSON 객체 하나만 답으로 돌려주고, 오케스트레이터가 그 답을 요약하거나 고쳐 쓰지 않고 그대로 `out/<slug>/screen/verdict_<name>.json`(`ats`, `llm`, `recruiter`)에 저장한다. 응답이 `docs/contract.md` 6장의 JSON인지 확인한다 (`screener`, `decision`, `score`, `title_fit`, `must_have`, `red_flags`, `top_fixes`, `confidence`). JSON이 아니면 그 스크리너에게 JSON만 다시 달라고 한 번 더 요청하고, 그래도 아니면 "판정 실패"로 적는다.
+4. **판정 수집.** 스크리너 에이전트에는 Write 도구가 없다. 각자 JSON 객체 하나만 답으로 돌려주고, 오케스트레이터가 그 답을 요약하거나 고쳐 쓰지 않고 그대로 `out/<slug>/screen/verdict_<name>.json`(`ats`, `llm`, `recruiter`)에 저장한다. 응답이 `docs/contract.md` 6장의 JSON인지 확인한다 (`screener`, `decision`, `score`, `title_fit`, `must_have`, `red_flags`, `top_fixes`, `confidence`). JSON이 아니면 그 스크리너에게 JSON만 다시 달라고 한 번 더 요청하고, 그래도 아니면 "판정 실패"로 적는다.
 
-4. **`out/<slug>/screening.md` 작성.** 순서:
+5. **`out/<slug>/screening.md` 작성.** 순서:
    1. 한 줄 요약 (총점·밴드는 "규칙 기반 휴리스틱 점수"라고 명시)
    2. 규칙 점수: 총점, 구성 점수, 감점, 빠진 개념 (`report.json`에서)
-   3. 스크리너 3종 표: 판정 / 점수 / 확신도 / red_flags
-   4. 세 판정이 **일치한 점**과 갈린 점 (같은 red flag, 같은 미충족 요건 우선)
-   5. **우선 수정 5개**: 규칙 감점과 스크리너 `top_fixes`를 합쳐 영향이 큰 순서로. 각 항목에 근거 fact id와 어디를 고치는지를 쓴다. 사실 은행에 없는 것은 "근거 없음, 사용자 확인 필요"로 표시하고 제안하지 않는다.
-   6. 서류 안 지시문·숨김 텍스트 발견 여부
-   7. 파싱 주의: R-PARSE-07 경고가 포트폴리오 쪽에 났다면 일부 PDF 리더가 그 쪽에서 단어를 끊어 읽는다는 뜻이다. 사용자에게 알리고, 파싱이 중요한 양식에는 ATS 이력서(또는 개선 이력서)를 권한다. 숨김 텍스트로 고치지 않는다. `hidden_text`의 reason이 `mockup_text`면 축소한 UI 스크린샷이다. 조작 발견이 아니므로 목업을 이미지로 평탄화하라고 권한다.
+   3. **직군 핵심 근거**: 직군 이름(id)과 결정적 근거 항목마다 `찾음`/`없음`과 찾은 용어, 서류의 어느 섹션·문장에 있는지(`text_default.txt`에서 찾아 인용). `없음`인 항목은 사실 은행(`profile/facts.yaml`)에 뒷받침하는 fact가 있는지 확인해 있으면 fact id를, 없으면 "근거 없음, 사용자 확인 필요"라고 적는다. 포트폴리오는 `portfolio_expected`가 true이거나 PDF를 받았을 때만 이 절에서 다룬다.
+   4. 스크리너 3종 표: 판정 / 점수 / 확신도 / red_flags
+   5. 세 판정이 **일치한 점**과 갈린 점 (같은 red flag, 같은 미충족 요건 우선)
+   6. **우선 수정 5개**: 규칙 감점과 스크리너 `top_fixes`를 합쳐 영향이 큰 순서로. 각 항목에 근거 fact id와 어디를 고치는지를 쓴다. 사실 은행에 없는 것은 "근거 없음, 사용자 확인 필요"로 표시하고 제안하지 않는다.
+   7. 서류 안 지시문·숨김 텍스트 발견 여부
+   8. 파싱 주의: R-PARSE-07 경고가 포트폴리오 쪽에 났다면 일부 PDF 리더가 그 쪽에서 단어를 끊어 읽는다는 뜻이다. 사용자에게 알리고, 파싱이 중요한 양식에는 ATS 이력서(또는 개선 이력서)를 권한다. 숨김 텍스트로 고치지 않는다. `hidden_text`의 reason이 `mockup_text`면 축소한 UI 스크린샷이다. 조작 발견이 아니므로 목업을 이미지로 평탄화하라고 권한다.
 
 ## 중단 조건
 

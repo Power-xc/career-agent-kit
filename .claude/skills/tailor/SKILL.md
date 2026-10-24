@@ -49,21 +49,23 @@ description: 회사 조사 결과(companies/<slug>/)와 선택한 공고로 사�
 
 3. **복사.** `profile/resume_master_<lang>.yaml`이 있으면 그것을, 없으면 `profile/resume_base.yaml`을 `out/<slug>/resume_<lang>.yaml`로 복사하고 `meta.variant: <slug>`, `meta.target: {company, title, jd}`, `meta.created`를 채운다. 공고 `language`가 `en`이면 `meta.lang: en`으로 하고 fact의 `en` 문장과 `display.en`을 기준으로 쓴다.
 
-4. **헤드라인과 직함.** 공고 직군(`jd` 출력의 family, 예: 백엔드 개발, 데이터 분석, 프로덕트 매니저, 프로덕트 디자인, 마케팅)에 맞춰 `header.title`을 `taxonomy/job_families.yaml`의 `titles` 중 사실과 맞는 것으로 정한다. 최근 두 경력의 `title_display`는 `experience.title`/`title_aliases` 안에서 고른다. `header.tagline`은 한 줄, 공고 직무와 맞는 사실 기반 문장으로 쓰거나 null로 둔다.
+4. **직군 결정적 근거.** 공고 직군의 `taxonomy/job_families.yaml` `decisive_evidence`(label + terms)를 읽는다. `profile/facts.yaml`에서 각 항목을 충족하는 fact를 찾아 표로 적어 둔다 (항목 / fact id / 없음). 5~7번에서 헤드라인, 요약 첫 줄, 경력 위쪽 bullet은 이 fact를 먼저 쓴다. 충족하는 fact가 없는 항목은 만들지 않고 `tailor_log.md`에 "근거 없음"으로 남긴다. 직군 고유 링크(개발의 GitHub, 디자인의 포트폴리오, 마케팅의 캠페인 사례 등)는 facts.yaml의 `person.links`에 있고 `public: true`일 때만 `header.links`에 넣는다.
 
-5. **요약 3줄.** 누구인가 (연차는 `years_stated`, 직군) / 증거 (숫자는 fact의 값 그대로) / 이 회사·직무와의 접점. 각 줄에 `facts`를 단다. 길어도 두 문장이다.
+5. **헤드라인과 직함.** 공고 직군(`jd` 출력의 family, 예: 백엔드 개발, 데이터 분석, 프로덕트 매니저, 프로덕트 디자인, 마케팅)에 맞춰 `header.title`을 `taxonomy/job_families.yaml`의 `titles` 중 사실과 맞는 것으로 정한다. 최근 두 경력의 `title_display`는 `experience.title`/`title_aliases` 안에서 고른다. `header.tagline`은 한 줄, 공고 직무와 맞는 사실 기반 문장으로 쓰거나 null로 둔다.
 
-6. **경력 bullet.** 공고 Requirements·Preferred와 회사 `vocab.yaml` 용어에 맞는 fact를 위쪽으로 올린다. bullet 문구는 base의 문장을 바탕으로 하고, 새 문장을 쓸 때도 fact의 `ko`/`en` 기준 문장과 `numbers` 안에서만 쓴다. 관련이 약한 bullet은 뒤로 보내거나 줄인다. 2쪽을 넘기지 않는다.
+6. **요약 3줄.** 누구인가 (연차는 `years_stated`, 직군) / 증거 (직군 결정적 근거 fact의 숫자를 그 값 그대로) / 이 회사·직무와의 접점. 각 줄에 `facts`를 단다. 길어도 두 문장이다.
 
-7. **스킬·자격·수상.** `skills.items`는 facts.yaml의 `display`/`aliases` 값만 쓴다. 공고와 맞는 그룹을 앞에 둔다. 자격은 `status: planned`면 "취득 예정"으로만 표시되며 렌더러가 처리한다.
+7. **경력 bullet.** 직군 결정적 근거를 충족하는 fact를 가장 위로, 그다음 공고 Requirements·Preferred와 회사 `vocab.yaml` 용어에 맞는 fact를 올린다. bullet 문구는 base의 문장을 바탕으로 하고, 새 문장을 쓸 때도 fact의 `ko`/`en` 기준 문장과 `numbers` 안에서만 쓴다. 관련이 약한 bullet은 뒤로 보내거나 줄인다. 2쪽을 넘기지 않는다.
 
-8. **Figma 슬롯 (선택).** Figma 이력서가 있는 사람만 해당한다. `profile/figma_map.yaml`이 없거나 `slots`가 비어 있으면 이 단계를 건너뛰고 로그에 "슬롯 없음"이라고 적는다. 있으면 슬롯마다 `base`(현재 Figma 문구)를 이 회사·공고에 맞게 바꿀지 정하고, 바꿀 슬롯만 `figma_text.yaml`에 쓴다 (`doc: resume`과 `doc: portfolio` 모두).
+8. **스킬·자격·수상.** `skills.items`는 facts.yaml의 `display`/`aliases` 값만 쓴다. 공고와 맞는 그룹을 앞에 둔다. 자격은 `status: planned`면 "취득 예정"으로만 표시되며 렌더러가 처리한다.
+
+9. **Figma 슬롯 (선택).** Figma 이력서가 있는 사람만 해당한다. `profile/figma_map.yaml`이 없거나 `slots`가 비어 있으면 이 단계를 건너뛰고 로그에 "슬롯 없음"이라고 적는다. 있으면 슬롯마다 `base`(현재 Figma 문구)를 이 회사·공고에 맞게 바꿀지 정하고, 바꿀 슬롯만 `figma_text.yaml`에 쓴다 (`doc: resume`과 `doc: portfolio` 모두).
    - 우선순위: `resume.header.title`, `resume.about.lead`, `resume.motivation.*`(지원 동기는 dossier의 접점으로), 경력 라벨(`*.track`), 스킬 묶음, `portfolio.cover.role`, `portfolio.competency.*`. 바꿀 이유가 없으면 그대로 둔다.
    - 각 항목에 `facts`와 `reason`을 단다. 숫자는 그 fact의 `numbers` 값만 쓴다 (원문 표기 그대로).
-   - `max_chars`와 `lines`를 넘기지 않는다. 직접 세지 말고 9번의 `figma-check`로 확인한다. 줄 구성은 `base`를 따른다: 줄바꿈 위치와 첫 줄 묶음 이름(스킬)은 유지한다. 하이픈 단어(Human-in-the-Loop)는 줄 끝에 두지 않는다.
+   - `max_chars`와 `lines`를 넘기지 않는다. 직접 세지 말고 10번의 `figma-check`로 확인한다. 줄 구성은 `base`를 따른다: 줄바꿈 위치와 첫 줄 묶음 이름(스킬)은 유지한다. 하이픈 단어(Human-in-the-Loop)는 줄 끝에 두지 않는다.
    - 디자인(레이아웃, 폰트, 색, 이미지)은 바꾸지 않는다.
 
-9. **검증 (필수).**
+10. **검증 (필수).**
 
    ```bash
    bin/harness claims out/<slug>/resume_ko.yaml --strict      # 종료 코드 0이어야 한다
@@ -73,9 +75,9 @@ description: 회사 조사 결과(companies/<slug>/)와 선택한 공고로 사�
 
    claims나 figma-check가 종료 코드 1이면 보고된 숫자·fact id·금지 항목·슬롯 id·글자 수·줄 수·줄 끝 하이픈을 고치고 다시 한다. 종료 코드 2는 입력 파일을 고친다. 통과 전에는 다음 단계로 가지 않는다.
 
-10. **반복 (최대 3회).** 점수가 오르는 동안만 `report.md`의 `gaps`/`suggestions` 중 근거 있는 것을 반영해 9번을 반복한다. 점수가 오르지 않으면 직전 버전으로 돌아가 멈춘다. 근거 없는 요건은 채우지 않고 `tailor_log.md`에 "근거 없음"으로 남긴다.
+11. **반복 (최대 3회).** 점수가 오르는 동안만 `report.md`의 `gaps`/`suggestions`와 `report.json`의 `score.family_evidence`에서 빠진 항목 중 근거 있는 것을 반영해 10번을 반복한다. 점수가 오르지 않으면 직전 버전으로 돌아가 멈춘다. 근거 없는 요건은 채우지 않고 `tailor_log.md`에 "근거 없음"으로 남긴다.
 
-11. **로그.** `out/<slug>/tailor_log.md`에 변경마다 `위치 | 전 → 후 | 이유(공고 항목, fact id) | 점수 전/후`를 적는다. 마지막에 점수 세 개(base, master, tailored)와 맞춤 효과(tailored − master), 총 개선(tailored − base), 남은 격차, 사용자 확인이 필요한 항목을 쓴다.
+12. **로그.** `out/<slug>/tailor_log.md`에 변경마다 `위치 | 전 → 후 | 이유(공고 항목, fact id) | 점수 전/후`를 적는다. 마지막에 점수 세 개(base, master, tailored)와 맞춤 효과(tailored − master), 총 개선(tailored − base), 남은 격차, 사용자 확인이 필요한 항목을 쓴다.
 
 ## 중단 조건
 
