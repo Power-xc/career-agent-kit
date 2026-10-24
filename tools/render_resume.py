@@ -347,8 +347,9 @@ def workspace_root() -> Path:
     """워크스페이스 루트: 현재 폴더에서 위로 올라가 profile/facts.yaml이 있는 첫 폴더."""
     try:
         return find_root(Path.cwd())
-    except InputError as exc:
-        sys.exit(str(exc))
+    except InputError:
+        sys.exit("워크스페이스(profile/facts.yaml이 있는 폴더)를 찾을 수 없습니다. "
+                 "워크스페이스 폴더에서 실행하거나 --facts, --contact, --out을 모두 지정하세요.")
 
 
 def default_out(root: Path, resume: dict) -> Path:

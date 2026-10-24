@@ -33,8 +33,8 @@
 ## 수신 서버 (PDF 내보내기)
 
 ```bash
-python tools/figma/recv_server.py --dir out/<slug>          # 별도 터미널에서 실행, Ctrl+C로 종료
-python tools/figma/recv_server.py --merge out/<slug>/resume_ko.pdf out/<slug>/resume_ko_p1.pdf out/<slug>/resume_ko_p2.pdf
+bin/kit-python tools/figma/recv_server.py --dir out/<slug>          # 별도 터미널에서 실행, Ctrl+C로 종료
+bin/kit-python tools/figma/recv_server.py --merge out/<slug>/resume_ko.pdf out/<slug>/resume_ko_p1.pdf out/<slug>/resume_ko_p2.pdf
 ```
 
 Figma 탭의 CSP가 `127.0.0.1` 요청을 막으면 `export_pdf.js`가 자동으로 `~/Downloads`에 다운로드한다. 그 파일을 `out/<slug>/`로 옮긴다. 큰 PDF가 막히면 프레임 단위로 나눠 내보낸다.
