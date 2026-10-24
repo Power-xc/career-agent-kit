@@ -18,6 +18,7 @@ title:
   exact_family: 1.0 # 같은 직군
   target_family: 0.7 # 다른 목표 직군 (예: 공고 UX Designer, 서류 Product Designer)
   adjacent_family: 0.4
+  cross_group: 0.2 # 직군 묶음이 다름 (예: 공고 백엔드, 서류 프로덕트 디자이너)
   off_target: 0.0
 impact:
   min_quantified_ratio_for_full: 0.6
@@ -33,3 +34,18 @@ bands:
   - { min: 65, label: "경쟁권" }
   - { min: 50, label: "보완 필요" }
   - { min: 0, label: "낮음" }
+classification:
+  title_bonus: 5 # 헤드라인·최근 직함이 정규화된 직군에 주는 신호 가중
+  core_skill_weight: 1 # 직군 core_skills 개념이 서류에 하나 나올 때 그 직군 신호에 더하는 점수
+  jd_fallback_min_score: 3 # 공고 제목이 직군으로 정규화되지 않을 때, 본문 신호 점수가 이 이상이면 가장 높은 직군을 공고 직군으로 본다
+# 직군 묶음(taxonomy group)별 구성 점수 배분. 적힌 항목만 weights를 덮어쓰고 합은 100이어야 한다. 없는 묶음(design)은 weights 그대로.
+family_weights:
+  dev: { parse: 15, title: 15, required: 40, preferred: 10, seniority: 10, impact: 10 }
+  data: { parse: 10, title: 10, required: 40, preferred: 10, seniority: 10, impact: 20 }
+  planning: { parse: 10, title: 15, required: 35, preferred: 10, seniority: 10, impact: 20 }
+  marketing: { parse: 10, title: 10, required: 30, preferred: 10, seniority: 10, impact: 30 }
+  sales: { parse: 10, title: 10, required: 25, preferred: 5, seniority: 10, impact: 40 }
+  hr: { parse: 10, title: 15, required: 35, preferred: 10, seniority: 10, impact: 20 }
+  finance: { parse: 15, title: 15, required: 40, preferred: 10, seniority: 10, impact: 10 }
+  ops: { parse: 10, title: 10, required: 35, preferred: 10, seniority: 10, impact: 25 }
+  commerce: { parse: 10, title: 10, required: 30, preferred: 10, seniority: 10, impact: 30 }

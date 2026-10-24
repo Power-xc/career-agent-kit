@@ -1,11 +1,28 @@
 # 직군(job family) 택소노미
-# titles: 타이틀 정규화용 표기 (대소문자·공백 무시)
+# group: 직군 묶음 (design, dev, data, planning, marketing, sales, hr, finance, ops, commerce). rules/scoring.yaml의 family_weights가 묶음 단위로 점수 배분을 바꾼다
+# titles: 타이틀 정규화용 표기이자 별칭 (대소문자·공백 무시). labels는 대표 이름(ko/en)
+# seniority_words: 이 직군 직함에서 쓰이는 직급어 (공통 직급어는 seniority_levels)
 # signals: 본문에서 그 직군을 암시하는 용어. family 명령이 비중을 계산한다
+# core_skills: skills.yaml 개념 id. 서류에 나오면 직군 신호에 가산된다 (rules/scoring.yaml classification.core_skill_weight)
+# decisive_evidence: 이 직군 심사에서 결정적인 근거. 서류에 있는지 score 결과의 family_evidence로 알린다 (label + 찾을 용어)
+# portfolio_expected: false면 포트폴리오 감사 감점을 점수에 반영하지 않는다 (없으면 true)
 # platform_labels: 채용 플랫폼의 직무 분류 이름 (조사 결과로 채운다. null = 미확인)
+seniority_levels:
+  intern: ["Intern", "인턴"]
+  junior: ["Junior", "Jr.", "주니어", "신입", "사원"]
+  mid: ["Mid-level", "미들", "대리", "주임"]
+  senior: ["Senior", "Sr.", "시니어", "과장", "차장", "책임"]
+  lead: ["Lead", "Staff", "Principal", "Manager", "Head", "Director", "VP", "리드", "팀장", "파트장", "매니저", "수석", "부장", "실장", "본부장"]
 families:
   - id: product_designer
     target: true
     labels: { ko: "프로덕트 디자이너", en: "Product Designer" }
+    group: design
+    portfolio_expected: true
+    decisive_evidence:
+      - { label: "포트폴리오 링크·첨부", terms: ["포트폴리오", "Portfolio", "Behance", "Notion", "Dribbble"] }
+      - { label: "제품·디자인 성과 수치", terms: ["전환율", "이탈률", "사용성", "리텐션", "개선"] }
+      - { label: "디자인 도구", terms: ["Figma", "디자인 시스템"] }
     titles:
       - "Product Designer"
       - "Senior Product Designer"
@@ -48,6 +65,12 @@ families:
   - id: ai_product_designer
     target: true
     labels: { ko: "AI 프로덕트 디자이너", en: "AI Product Designer" }
+    group: design
+    portfolio_expected: true
+    decisive_evidence:
+      - { label: "포트폴리오 링크·첨부", terms: ["포트폴리오", "Portfolio", "Behance", "Notion", "Dribbble"] }
+      - { label: "AI 제품 설계 경험", terms: ["LLM", "AI", "에이전트", "프롬프트"] }
+      - { label: "제품·디자인 성과 수치", terms: ["전환율", "이탈률", "사용성", "리텐션", "개선"] }
     titles:
       - "AI Product Designer"
       - "AI UX Designer"
@@ -80,6 +103,12 @@ families:
   - id: ux_designer
     target: true
     labels: { ko: "UX 디자이너", en: "UX Designer" }
+    group: design
+    portfolio_expected: true
+    decisive_evidence:
+      - { label: "포트폴리오 링크·첨부", terms: ["포트폴리오", "Portfolio", "Behance", "Notion", "Dribbble"] }
+      - { label: "리서치·사용성 검증", terms: ["사용성 테스트", "인터뷰", "UT", "프로토타입"] }
+      - { label: "제품·디자인 성과 수치", terms: ["전환율", "이탈률", "사용성", "리텐션", "개선"] }
     titles:
       - "UX Designer"
       - "UX/UI Designer"
@@ -122,6 +151,12 @@ families:
   - id: ux_lead
     target: true
     labels: { ko: "디자인 리드", en: "Design Lead" }
+    group: design
+    portfolio_expected: true
+    decisive_evidence:
+      - { label: "포트폴리오 링크·첨부", terms: ["포트폴리오", "Portfolio", "Behance", "Notion", "Dribbble"] }
+      - { label: "팀 리딩·멘토링", terms: ["팀장", "리드", "멘토링", "크리틱"] }
+      - { label: "제품·디자인 성과 수치", terms: ["전환율", "이탈률", "사용성", "리텐션", "개선"] }
     titles:
       - "Design Lead"
       - "Product Design Lead"
@@ -157,6 +192,12 @@ families:
   - id: service_designer
     target: true
     labels: { ko: "서비스 디자이너", en: "Service Designer" }
+    group: design
+    portfolio_expected: true
+    decisive_evidence:
+      - { label: "포트폴리오 링크·첨부", terms: ["포트폴리오", "Portfolio", "Behance", "Notion", "Dribbble"] }
+      - { label: "서비스 블루프린트·워크숍", terms: ["블루프린트", "고객 여정", "워크숍"] }
+      - { label: "제품·디자인 성과 수치", terms: ["전환율", "이탈률", "사용성", "리텐션", "개선"] }
     titles:
       - "Service Designer"
       - "서비스 디자이너"
@@ -182,6 +223,11 @@ families:
   - id: ux_researcher
     target: false
     labels: { ko: "UX 리서처", en: "UX Researcher" }
+    group: design
+    portfolio_expected: true
+    decisive_evidence:
+      - { label: "리서치 사례·보고서", terms: ["리서치", "인터뷰", "설문", "보고서", "포트폴리오"] }
+      - { label: "방법론 폭", terms: ["정성", "정량", "카드소팅", "FGI"] }
     titles:
       [
         "UX Researcher",
@@ -213,14 +259,18 @@ families:
   - id: design_engineer
     target: false
     labels: { ko: "디자인 엔지니어", en: "Design Engineer" }
+    group: dev
+    portfolio_expected: false
+    decisive_evidence:
+      - { label: "GitHub·코드 저장소", terms: ["GitHub", "GitLab", "깃허브"] }
+      - { label: "컴포넌트·배포 URL", terms: ["Storybook", "Vercel", "배포"] }
+      - { label: "포트폴리오 링크·첨부", terms: ["포트폴리오", "Portfolio", "Behance", "Notion", "Dribbble"] }
     titles:
       [
         "Design Engineer",
         "Design Technologist",
         "UX Engineer",
         "UX 엔지니어",
-        "프론트엔드 개발자",
-        "Frontend Engineer",
       ]
     signals:
       [
@@ -244,16 +294,20 @@ families:
         jobkorea: null,
       }
   - id: product_manager
-    target: false
-    labels: { ko: "PM · 서비스 기획", en: "Product Manager" }
+    target: true
+    labels: { ko: "PM · PO", en: "Product Manager / Owner" }
+    group: planning
+    portfolio_expected: false
+    decisive_evidence:
+      - { label: "출시 성과 지표", terms: ["전환율", "리텐션", "MAU", "매출", "KPI"] }
+      - { label: "기획 산출물", terms: ["PRD", "로드맵", "백로그", "기획서"] }
+      - { label: "개발·디자인 협업", terms: ["개발팀", "디자이너", "스프린트"] }
     titles:
       [
         "Product Manager",
         "Product Owner",
         "PM",
         "PO",
-        "서비스 기획자",
-        "서비스기획자",
         "프로덕트 매니저",
         "프로덕트 오너",
       ]
@@ -276,9 +330,15 @@ families:
         saramin: null,
         jobkorea: null,
       }
+    core_skills: ["roadmap_planning", "requirements_spec", "backlog_sprint", "okr_goal", "product_strategy", "pm", "problem_definition", "stakeholder_management"]
   - id: ui_gui_designer
     target: false
     labels: { ko: "UI·GUI 디자이너", en: "UI/GUI Designer" }
+    group: design
+    portfolio_expected: true
+    decisive_evidence:
+      - { label: "포트폴리오 링크·첨부", terms: ["포트폴리오", "Portfolio", "Behance", "Notion", "Dribbble"] }
+      - { label: "비주얼 산출물 도구", terms: ["Photoshop", "Illustrator", "Figma"] }
     titles:
       [
         "UI Designer",
@@ -318,6 +378,11 @@ families:
   - id: web_publisher
     target: false
     labels: { ko: "웹 퍼블리셔", en: "Web Publisher" }
+    group: design
+    portfolio_expected: true
+    decisive_evidence:
+      - { label: "퍼블리싱 결과물 링크", terms: ["GitHub", "포트폴리오", "배포"] }
+      - { label: "마크업 기술", terms: ["HTML", "CSS", "웹표준", "크로스브라우징"] }
     titles:
       [
         "Web Publisher",
@@ -345,8 +410,14 @@ families:
         jobkorea: null,
       }
   - id: visual_brand_designer
-    target: false
+    target: true
     labels: { ko: "그래픽·브랜드 디자이너", en: "Graphic / Brand Designer" }
+    group: design
+    portfolio_expected: true
+    decisive_evidence:
+      - { label: "포트폴리오 링크·첨부", terms: ["포트폴리오", "Portfolio", "Behance", "Notion", "Dribbble"] }
+      - { label: "브랜드·편집 산출물", terms: ["BI", "BX", "편집", "패키지", "캠페인"] }
+      - { label: "사용 툴", terms: ["Photoshop", "Illustrator", "InDesign", "Figma"] }
     titles:
       [
         "Graphic Designer",
@@ -378,3 +449,276 @@ families:
         saramin: null,
         jobkorea: null,
       }
+  - id: backend_engineer
+    group: dev
+    target: true
+    labels: { ko: "백엔드 개발자", en: "Backend Engineer" }
+    portfolio_expected: false
+    titles: ["Backend Engineer", "Backend Developer", "Back-end Engineer", "Server Engineer", "Server Developer", "Software Engineer (Backend)", "백엔드 개발자", "백엔드 엔지니어", "서버 개발자", "서버 엔지니어", "Java 개발자", "Python 백엔드 개발자", "Node.js 개발자", "Spring 개발자"]
+    seniority_words: ["CTO", "테크 리드", "Tech Lead", "파트장"]
+    signals: ["백엔드", "Backend", "서버", "API", "트래픽", "데이터베이스", "쿼리 최적화", "레이턴시", "처리량", "장애", "배치"]
+    core_skills: ["python", "java", "kotlin", "spring", "nodejs", "golang", "django_fastapi", "rdbms", "nosql_cache", "api_design", "backend_arch", "microservices", "system_design", "message_queue", "unit_testing", "aws"]
+    decisive_evidence:
+      - { label: "GitHub·코드 저장소", terms: ["GitHub", "GitLab", "Bitbucket", "깃허브"] }
+      - { label: "시스템 설계 경험", terms: ["시스템 설계", "아키텍처 설계", "system design", "MSA", "마이크로서비스"] }
+      - { label: "규모·성능 수치", terms: ["TPS", "QPS", "레이턴시", "latency", "트래픽", "요청"] }
+  - id: frontend_engineer
+    group: dev
+    target: true
+    labels: { ko: "프론트엔드 개발자", en: "Frontend Engineer" }
+    portfolio_expected: false
+    titles: ["Frontend Engineer", "Frontend Developer", "Front-end Engineer", "Front-end Developer", "Web Frontend Engineer", "Software Engineer (Frontend)", "프론트엔드 개발자", "프론트엔드 엔지니어", "프론트 개발자", "웹 프론트엔드 개발자", "React 개발자", "웹 개발자"]
+    seniority_words: ["Tech Lead", "테크 리드", "파트장"]
+    signals: ["프론트엔드", "Frontend", "컴포넌트", "렌더링", "번들", "SSR", "접근성", "브라우저", "웹 성능"]
+    core_skills: ["react", "nextjs", "vue", "typescript", "javascript", "html_css", "frontend", "state_management", "web_performance", "unit_testing"]
+    decisive_evidence:
+      - { label: "GitHub·코드 저장소", terms: ["GitHub", "GitLab", "깃허브"] }
+      - { label: "배포된 서비스 URL", terms: ["배포 URL", "라이브 서비스", "Vercel", "서비스 링크"] }
+      - { label: "성능 지표", terms: ["Lighthouse", "LCP", "Core Web Vitals", "번들 크기"] }
+  - id: mobile_engineer
+    group: dev
+    target: true
+    labels: { ko: "모바일 앱 개발자 (iOS·Android)", en: "Mobile Engineer (iOS/Android)" }
+    portfolio_expected: false
+    titles: ["iOS Engineer", "iOS Developer", "Android Engineer", "Android Developer", "Mobile Engineer", "Mobile Developer", "Mobile App Developer", "Flutter Developer", "React Native Developer", "iOS 개발자", "iOS 엔지니어", "안드로이드 개발자", "안드로이드 엔지니어", "모바일 앱 개발자", "모바일 개발자", "앱 개발자", "Software Engineer (Mobile)"]
+    seniority_words: ["Tech Lead", "테크 리드", "파트장"]
+    signals: ["모바일", "Mobile", "앱 출시", "스토어", "크래시", "Crash-free", "푸시", "딥링크", "MAU"]
+    core_skills: ["ios_dev", "android_dev", "cross_platform_app", "app_release", "kotlin", "unit_testing"]
+    decisive_evidence:
+      - { label: "출시 앱 링크", terms: ["App Store", "Google Play", "앱스토어", "플레이스토어"] }
+      - { label: "GitHub·코드 저장소", terms: ["GitHub", "GitLab", "깃허브"] }
+      - { label: "안정성·사용자 지표", terms: ["Crash-free", "크래시", "MAU", "다운로드"] }
+  - id: fullstack_engineer
+    group: dev
+    target: true
+    labels: { ko: "풀스택 개발자", en: "Full-Stack Engineer" }
+    portfolio_expected: false
+    titles: ["Full-Stack Engineer", "Fullstack Engineer", "Full Stack Developer", "Fullstack Developer", "Software Engineer", "Software Developer", "풀스택 개발자", "풀스택 엔지니어", "소프트웨어 엔지니어", "SW 엔지니어", "SW 개발자", "웹 서비스 개발자"]
+    seniority_words: ["CTO", "Tech Lead", "테크 리드"]
+    signals: ["풀스택", "Full-stack", "End-to-End 개발", "프론트엔드와 백엔드", "MVP", "사이드 프로젝트"]
+    core_skills: ["react", "nextjs", "nodejs", "typescript", "javascript", "python", "rdbms", "api_design", "aws", "docker"]
+    decisive_evidence:
+      - { label: "GitHub·코드 저장소", terms: ["GitHub", "GitLab", "깃허브"] }
+      - { label: "배포된 서비스 URL", terms: ["배포 URL", "라이브 서비스", "Vercel", "서비스 링크"] }
+      - { label: "시스템 설계 경험", terms: ["시스템 설계", "아키텍처 설계", "system design"] }
+  - id: devops_sre_engineer
+    group: dev
+    target: true
+    labels: { ko: "DevOps·SRE·인프라 엔지니어", en: "DevOps / SRE / Infrastructure Engineer" }
+    portfolio_expected: false
+    titles: ["DevOps Engineer", "Site Reliability Engineer", "SRE", "Platform Engineer", "Infrastructure Engineer", "Cloud Engineer", "Cloud Infrastructure Engineer", "Systems Engineer", "DevOps 엔지니어", "인프라 엔지니어", "클라우드 엔지니어", "클라우드 인프라 엔지니어", "시스템 엔지니어", "SRE 엔지니어", "플랫폼 엔지니어"]
+    seniority_words: ["Tech Lead", "테크 리드", "파트장"]
+    signals: ["인프라", "클라우드", "배포", "자동화", "가용성", "장애 대응", "모니터링", "온콜", "비용 최적화"]
+    core_skills: ["aws", "gcp_azure", "docker", "kubernetes", "iac", "ci_cd", "devops", "sre_monitoring", "linux_network", "cloud_infra"]
+    decisive_evidence:
+      - { label: "가용성·장애 지표", terms: ["가용성", "SLA", "SLO", "MTTR", "uptime", "장애 복구"] }
+      - { label: "자동화 성과 수치", terms: ["배포 시간", "배포 주기", "deployment frequency", "비용 절감"] }
+      - { label: "자격증", terms: ["AWS Certified", "CKA", "CKAD", "Terraform Associate"] }
+  - id: qa_engineer
+    group: dev
+    target: true
+    labels: { ko: "QA 엔지니어", en: "QA Engineer" }
+    portfolio_expected: false
+    titles: ["QA Engineer", "QA Analyst", "Quality Assurance Engineer", "SDET", "Test Engineer", "Software Test Engineer", "Test Automation Engineer", "QA 엔지니어", "QA 담당자", "QA 테스터", "테스트 엔지니어", "테스트 자동화 엔지니어", "품질 보증 엔지니어"]
+    seniority_words: ["QA Lead", "QA 리드", "파트장"]
+    signals: ["QA", "품질", "테스트 케이스", "결함", "회귀 테스트", "릴리즈 검증", "테스트 시나리오", "버그 리포트"]
+    core_skills: ["qa_testing", "qa_automation", "unit_testing", "jira"]
+    decisive_evidence:
+      - { label: "테스트 자동화 코드", terms: ["Selenium", "Cypress", "Playwright", "Appium", "자동화 스크립트"] }
+      - { label: "결함·커버리지 지표", terms: ["결함", "버그 검출", "커버리지", "coverage", "회귀 테스트"] }
+      - { label: "자격증", terms: ["ISTQB", "CSTS"] }
+  - id: data_analyst
+    group: data
+    target: true
+    labels: { ko: "데이터 분석가", en: "Data Analyst" }
+    portfolio_expected: true
+    titles: ["Data Analyst", "Business Analyst", "Product Analyst", "BI Analyst", "Marketing Analyst", "Business Intelligence Analyst", "Analytics Analyst", "데이터 분석가", "데이터 애널리스트", "BI 애널리스트", "비즈니스 애널리스트", "프로덕트 애널리스트", "그로스 애널리스트", "데이터 분석 담당자"]
+    seniority_words: ["Analytics Lead", "분석 리드", "파트장"]
+    signals: ["분석", "인사이트", "대시보드", "지표 정의", "코호트", "전환율", "리텐션", "쿼리", "SQL"]
+    core_skills: ["sql", "statistics", "data_analysis_py", "bi_tools", "cohort_analysis", "ab_testing", "ga4", "mixpanel", "amplitude", "data_visualization", "metrics_kpi", "funnel_analysis", "excel_advanced"]
+    decisive_evidence:
+      - { label: "분석으로 바뀐 의사결정·비즈니스 성과", terms: ["의사결정", "인사이트", "개선", "매출", "전환율"] }
+      - { label: "쿼리·분석 도구 능력", terms: ["SQL", "Python", "Tableau", "Looker", "대시보드"] }
+      - { label: "분석 포트폴리오·리포트 링크", terms: ["분석 리포트", "포트폴리오", "Notion", "GitHub"] }
+  - id: data_engineer
+    group: data
+    target: true
+    labels: { ko: "데이터 엔지니어", en: "Data Engineer" }
+    portfolio_expected: false
+    titles: ["Data Engineer", "Analytics Engineer", "Big Data Engineer", "Data Platform Engineer", "ETL Developer", "Data Warehouse Engineer", "데이터 엔지니어", "데이터 플랫폼 엔지니어", "빅데이터 엔지니어", "데이터 파이프라인 엔지니어", "DW 엔지니어"]
+    seniority_words: ["Tech Lead", "테크 리드", "파트장"]
+    signals: ["데이터 파이프라인", "적재", "배치", "스트리밍", "데이터 레이크", "데이터 마트", "스키마", "워크플로우", "ETL"]
+    core_skills: ["etl_pipeline", "big_data", "data_warehouse", "data_governance", "sql", "python", "message_queue", "aws", "gcp_azure", "rdbms"]
+    decisive_evidence:
+      - { label: "파이프라인 규모 수치", terms: ["TB", "PB", "일 처리량", "건/일", "처리 시간"] }
+      - { label: "GitHub·코드 저장소", terms: ["GitHub", "GitLab", "깃허브"] }
+      - { label: "데이터 품질·SLA 지표", terms: ["데이터 품질", "SLA", "지연", "신선도"] }
+  - id: ml_ai_engineer
+    group: data
+    target: true
+    labels: { ko: "ML·AI 엔지니어 / 리서처", en: "ML / AI Engineer & Researcher" }
+    portfolio_expected: true
+    titles: ["Machine Learning Engineer", "ML Engineer", "AI Engineer", "Applied Scientist", "Research Scientist", "AI Researcher", "Data Scientist", "Deep Learning Engineer", "NLP Engineer", "LLM Engineer", "MLOps Engineer", "Computer Vision Engineer", "머신러닝 엔지니어", "ML 엔지니어", "AI 엔지니어", "AI 리서처", "AI 연구원", "데이터 사이언티스트", "딥러닝 엔지니어", "NLP 엔지니어", "연구원 (AI)"]
+    seniority_words: ["Principal Scientist", "수석 연구원", "책임 연구원", "선임 연구원"]
+    signals: ["모델", "학습", "추론", "정확도", "벤치마크", "파인튜닝", "임베딩", "논문", "실험", "MLOps"]
+    core_skills: ["ml_modeling", "deep_learning", "nlp", "computer_vision", "recsys_search", "mlops", "rag_finetuning", "model_evaluation", "paper_research", "python", "llm", "statistics"]
+    decisive_evidence:
+      - { label: "논문·학회 발표", terms: ["논문", "NeurIPS", "ICML", "ACL", "CVPR", "ICLR", "arXiv"] }
+      - { label: "모델 성능 수치", terms: ["정확도", "F1", "AUC", "precision", "recall", "벤치마크"] }
+      - { label: "GitHub·코드 저장소", terms: ["GitHub", "Hugging Face", "Kaggle", "깃허브"] }
+  - id: service_planner
+    group: planning
+    target: true
+    labels: { ko: "서비스 기획자", en: "Service Planner" }
+    portfolio_expected: true
+    titles: ["서비스 기획자", "서비스기획자", "서비스 기획", "웹 기획자", "앱 기획자", "플랫폼 기획자", "UX 기획자", "Service Planner", "Service Planning Manager", "Web Planner", "Business Analyst (IT)", "IT 기획자"]
+    seniority_words: ["팀장", "파트장", "실장"]
+    signals: ["서비스 기획", "기획서", "화면 정의서", "스토리보드", "요구사항 정의", "정책 기획", "기능 명세", "QA 일정"]
+    core_skills: ["service_planning", "requirements_spec", "backlog_sprint", "wireframing", "documentation", "jira", "confluence", "cross_functional", "developer_collaboration"]
+    decisive_evidence:
+      - { label: "기획 산출물 샘플", terms: ["기획서", "화면 정의서", "스토리보드", "PRD"] }
+      - { label: "출시 성과 지표", terms: ["전환율", "리텐션", "MAU", "매출", "출시"] }
+      - { label: "개발·디자인 협업 경험", terms: ["개발팀", "디자이너", "협업", "스프린트"] }
+  - id: biz_strategist
+    group: planning
+    target: true
+    labels: { ko: "사업 기획·전략", en: "Business Planning / Strategy" }
+    portfolio_expected: false
+    titles: ["사업 기획자", "사업기획", "사업 기획", "전략 기획", "경영 기획", "경영기획", "신사업 기획", "사업개발 매니저", "Business Planner", "Business Strategy", "Corporate Strategy", "Strategy Manager", "Strategy Consultant", "Business Development Planner", "Chief of Staff", "사업전략 담당자"]
+    seniority_words: ["팀장", "실장", "파트장", "임원"]
+    signals: ["사업 전략", "신사업", "사업계획", "시장 분석", "손익", "재무 모델", "투자 심사", "전략 과제", "경영 보고"]
+    core_skills: ["business_planning", "bm_design", "pricing_strategy", "strategy_analysis", "market_analysis", "financial_modeling", "okr_goal", "executive_presentation", "excel_advanced", "stakeholder_management"]
+    decisive_evidence:
+      - { label: "전략 수립이 만든 사업 성과", terms: ["매출", "수익", "손익", "신사업", "사업성"] }
+      - { label: "분석·보고 산출물", terms: ["사업계획서", "시장 분석", "경영 보고", "전략 보고서"] }
+      - { label: "재무 모델링 능력", terms: ["재무 모델링", "손익 분석", "Excel", "BM"] }
+  - id: motion_designer
+    group: design
+    target: true
+    labels: { ko: "모션·영상 디자이너", en: "Motion / Video Designer" }
+    portfolio_expected: true
+    titles: ["Motion Designer", "Motion Graphics Designer", "Video Editor", "Video Designer", "Video Producer", "Animator", "2D Animator", "3D Motion Designer", "Motion Graphic Artist", "모션 디자이너", "모션그래픽 디자이너", "모션 그래픽 디자이너", "영상 디자이너", "영상 편집자", "영상 에디터", "영상 PD", "영상 제작자"]
+    seniority_words: ["아트 디렉터", "Art Director", "팀장"]
+    signals: ["모션", "영상", "애니메이션", "렌더링", "편집", "컷", "타임라인", "릴", "숏폼"]
+    core_skills: ["motion_graphics", "video_editing", "three_d", "motion_design", "adobe_cc", "illustration"]
+    decisive_evidence:
+      - { label: "데모릴·영상 포트폴리오", terms: ["릴", "Reel", "Vimeo", "YouTube", "유튜브", "포트폴리오"] }
+      - { label: "사용 툴", terms: ["After Effects", "Premiere", "Cinema 4D", "Blender"] }
+      - { label: "제작 성과·조회 지표", terms: ["조회수", "조회", "CTR", "제작 편수"] }
+  - id: performance_marketer
+    group: marketing
+    target: true
+    labels: { ko: "퍼포먼스 마케터", en: "Performance Marketer" }
+    portfolio_expected: false
+    titles: ["Performance Marketer", "Performance Marketing Manager", "Paid Media Manager", "Paid Acquisition Manager", "Digital Marketer", "Digital Marketing Manager", "Ad Operations Manager", "Media Buyer", "SEM Specialist", "퍼포먼스 마케터", "퍼포먼스 마케팅 담당자", "디지털 마케터", "광고 운영 담당자", "매체 운영 담당자", "마케팅 담당자 (퍼포먼스)", "검색광고 운영자"]
+    seniority_words: ["팀장", "파트장", "리드"]
+    signals: ["퍼포먼스", "광고 효율", "매체", "소재 테스트", "입찰", "타겟팅", "ROAS", "CPA", "전환"]
+    core_skills: ["performance_marketing", "ad_platforms", "ad_metrics", "mmp_attribution", "ga4", "ab_testing", "campaign_management", "excel_advanced", "growth_marketing"]
+    decisive_evidence:
+      - { label: "캠페인 성과 수치", terms: ["ROAS", "CPA", "CAC", "CTR", "전환율", "광고비"] }
+      - { label: "운영 광고 예산 규모", terms: ["광고비", "예산", "월 집행"] }
+      - { label: "광고 플랫폼 운영 경험", terms: ["Meta Ads", "Google Ads", "네이버 검색광고", "카카오모먼트"] }
+  - id: content_brand_marketer
+    group: marketing
+    target: true
+    labels: { ko: "콘텐츠·브랜드 마케터", en: "Content / Brand Marketer" }
+    portfolio_expected: true
+    titles: ["Content Marketer", "Content Marketing Manager", "Brand Marketer", "Brand Marketing Manager", "Brand Manager", "Social Media Manager", "Content Strategist", "Copywriter", "Community Manager", "Marketing Communications Manager", "콘텐츠 마케터", "콘텐츠 마케팅 담당자", "브랜드 마케터", "브랜드 매니저", "SNS 마케터", "SNS 운영 담당자", "카피라이터", "콘텐츠 에디터", "홍보 담당자", "마케팅 커뮤니케이션 담당자"]
+    seniority_words: ["팀장", "파트장", "리드"]
+    signals: ["콘텐츠", "브랜드", "캠페인", "채널 운영", "팔로워", "도달", "인게이지먼트", "브랜드 메시지", "바이럴"]
+    core_skills: ["content_marketing", "sns_marketing", "brand_marketing", "seo_marketing", "copywriting", "campaign_management", "brand_bx", "persona"]
+    decisive_evidence:
+      - { label: "캠페인·콘텐츠 포트폴리오", terms: ["포트폴리오", "캠페인 사례", "콘텐츠 링크", "블로그", "뉴스레터"] }
+      - { label: "도달·인게이지먼트 수치", terms: ["조회수", "도달", "인게이지먼트", "팔로워", "구독자", "유입"] }
+      - { label: "브랜드 성과", terms: ["브랜드 인지도", "검색량", "바이럴"] }
+  - id: growth_marketer
+    group: marketing
+    target: true
+    labels: { ko: "그로스 마케터", en: "Growth Marketer" }
+    portfolio_expected: false
+    titles: ["Growth Marketer", "Growth Marketing Manager", "Growth Manager", "Growth Hacker", "Growth Product Marketer", "Lifecycle Growth", "User Acquisition Manager", "UA Manager", "그로스 마케터", "그로스 매니저", "그로스 해커", "그로스 마케팅 담당자", "UA 마케터"]
+    seniority_words: ["팀장", "리드", "헤드"]
+    signals: ["그로스", "실험", "퍼널", "획득", "활성화", "리텐션", "가설", "AARRR", "북극성 지표"]
+    core_skills: ["growth_marketing", "ab_testing", "funnel_analysis", "retention", "cohort_analysis", "ga4", "mixpanel", "amplitude", "sql", "mmp_attribution", "performance_marketing", "okr_goal"]
+    decisive_evidence:
+      - { label: "실험 설계·결과 수치", terms: ["A/B 테스트", "실험", "가설", "전환율 개선", "리프트"] }
+      - { label: "퍼널·리텐션 지표", terms: ["퍼널", "리텐션", "활성화", "MAU", "CAC", "LTV"] }
+      - { label: "분석 도구 능력", terms: ["GA4", "Amplitude", "Mixpanel", "SQL"] }
+  - id: crm_marketer
+    group: marketing
+    target: true
+    labels: { ko: "CRM 마케터", en: "CRM Marketer" }
+    portfolio_expected: false
+    titles: ["CRM Marketer", "CRM Marketing Manager", "CRM Manager", "Lifecycle Marketer", "Lifecycle Marketing Manager", "Retention Marketer", "Marketing Automation Specialist", "Email Marketing Manager", "CRM 마케터", "CRM 마케팅 담당자", "CRM 매니저", "리텐션 마케터", "앱 푸시 마케터", "이메일 마케터", "마케팅 자동화 담당자"]
+    seniority_words: ["팀장", "리드", "파트장"]
+    signals: ["CRM", "고객 세그먼트", "리텐션", "재구매", "휴면 고객", "푸시", "메시지 발송", "오픈율", "재방문"]
+    core_skills: ["crm_marketing", "marketing_automation", "cohort_analysis", "ab_testing", "sql", "ga4", "mixpanel", "amplitude", "campaign_management", "retention"]
+    decisive_evidence:
+      - { label: "CRM 캠페인 성과 수치", terms: ["재구매율", "재방문율", "오픈율", "클릭률", "CTR", "리텐션"] }
+      - { label: "세그먼트·자동화 설계", terms: ["세그먼트", "시나리오", "자동화", "Braze", "브레이즈"] }
+      - { label: "고객 지표", terms: ["LTV", "휴면", "이탈"] }
+  - id: sales_bd
+    group: sales
+    target: true
+    labels: { ko: "영업 · BD", en: "Sales / Business Development" }
+    portfolio_expected: false
+    titles: ["Sales Representative", "Sales Manager", "Account Executive", "Account Manager", "Business Development Manager", "Business Development Representative", "Sales Development Representative", "SDR", "BDR", "Enterprise Sales", "Inside Sales", "Solutions Engineer", "Sales Engineer", "Key Account Manager", "영업 담당자", "영업 사원", "영업 관리자", "기업 영업", "법인 영업", "B2B 영업", "영업 매니저", "세일즈 매니저", "BD 매니저", "사업개발 담당자", "제휴 담당자", "제휴 매니저", "어카운트 매니저", "파트너십 매니저", "고객 성공 매니저"]
+    seniority_words: ["팀장", "파트장", "본부장", "Head of Sales", "Director", "VP"]
+    signals: ["영업", "매출 목표", "수주", "고객사", "제안", "계약", "파이프라인", "신규 개척", "제휴"]
+    core_skills: ["b2b_sales", "solution_sales", "account_management", "pipeline_management", "quota_attainment", "sales_crm", "negotiation", "partnership_bd"]
+    decisive_evidence:
+      - { label: "목표 대비 달성률", terms: ["달성률", "목표 대비", "quota", "attainment", "초과 달성"] }
+      - { label: "매출·수주 규모", terms: ["매출", "수주", "계약 금액", "ARR", "MRR", "억원"] }
+      - { label: "고객·거래처 수", terms: ["고객사", "거래처", "신규 계약", "파트너사"] }
+  - id: hr_recruiter
+    group: hr
+    target: true
+    labels: { ko: "인사 · HR · 리크루터", en: "HR / Recruiter" }
+    portfolio_expected: false
+    titles: ["Recruiter", "Technical Recruiter", "Talent Acquisition Specialist", "Talent Acquisition Manager", "HR Manager", "HR Generalist", "HR Business Partner", "HRBP", "People Operations", "People Partner", "Compensation and Benefits Specialist", "리크루터", "채용 담당자", "채용 매니저", "인사 담당자", "인사 매니저", "HR 담당자", "HR 매니저", "HRBP 매니저", "인사 총무", "피플 매니저", "피플팀", "조직문화 담당자", "노무 담당자", "급여 담당자"]
+    seniority_words: ["팀장", "파트장", "실장", "Head of People"]
+    signals: ["채용", "인사", "입사", "온보딩", "평가 제도", "보상", "조직문화", "노무", "급여", "리크루팅"]
+    core_skills: ["recruiting", "ats_tool", "employer_branding", "hr_operations", "payroll_labor", "compensation_benefits", "talent_development", "excel_advanced"]
+    decisive_evidence:
+      - { label: "채용·인사 운영 성과 수치", terms: ["채용 완료", "채용 리드타임", "time-to-hire", "입사율", "이직률", "온보딩"] }
+      - { label: "제도 설계·운영 사례", terms: ["인사 제도", "평가 제도", "보상 체계", "조직문화"] }
+      - { label: "법·규정 지식", terms: ["근로기준법", "노무", "4대보험", "취업규칙"] }
+  - id: finance_accountant
+    group: finance
+    target: true
+    labels: { ko: "재무 · 회계", en: "Finance / Accounting" }
+    portfolio_expected: false
+    titles: ["Accountant", "Senior Accountant", "Financial Analyst", "Finance Manager", "FP&A Analyst", "FP&A Manager", "Controller", "Tax Accountant", "Treasury Analyst", "Auditor", "Staff Accountant", "회계 담당자", "회계사", "재무 담당자", "재무 분석가", "재무회계 담당자", "세무 담당자", "자금 담당자", "경영 지원 (재무·회계)", "결산 담당자", "회계 매니저", "재무 매니저"]
+    seniority_words: ["팀장", "파트장", "회계팀장", "재무팀장", "CFO", "Controller"]
+    signals: ["결산", "재무제표", "전표", "세무", "예산", "손익", "자금", "정산", "내부 통제", "감사"]
+    core_skills: ["accounting", "financial_reporting", "tax_accounting", "fpa_budgeting", "financial_modeling", "treasury_funding", "audit_internal_control", "erp_tools", "excel_advanced", "settlement_ops"]
+    decisive_evidence:
+      - { label: "자격증", terms: ["공인회계사", "CPA", "세무사", "USCPA", "전산회계", "재경관리사", "AICPA"] }
+      - { label: "결산·재무 규모 수치", terms: ["매출", "자산", "예산", "억원", "결산 일정", "마감 단축"] }
+      - { label: "ERP·회계 시스템", terms: ["ERP", "SAP", "더존", "NetSuite"] }
+  - id: operations_cs
+    group: ops
+    target: true
+    labels: { ko: "운영 · CS", en: "Operations / Customer Support" }
+    portfolio_expected: false
+    titles: ["Operations Manager", "Operations Specialist", "Service Operations Manager", "Customer Support Specialist", "Customer Service Representative", "Customer Experience Manager", "Customer Success Manager", "Support Engineer", "CS Manager", "CX Manager", "Business Operations", "Logistics Coordinator", "Supply Chain Analyst", "운영 매니저", "운영 담당자", "서비스 운영자", "서비스 운영 담당자", "고객 상담원", "CS 담당자", "CS 매니저", "고객지원 담당자", "고객 경험 매니저", "고객 만족 담당자", "물류 담당자", "SCM 담당자", "구매 담당자", "운영 지원"]
+    seniority_words: ["팀장", "파트장", "센터장", "실장"]
+    signals: ["운영", "CS", "고객 응대", "VOC", "SLA", "프로세스 개선", "상담 품질", "물류", "재고", "정책 운영"]
+    core_skills: ["cs_support", "cs_tools", "voc_management", "ops_process", "ops_management", "logistics_scm", "quality_sla", "excel_advanced", "jira"]
+    decisive_evidence:
+      - { label: "운영 지표 개선 수치", terms: ["SLA", "CSAT", "NPS", "응대 시간", "처리 시간", "해결률"] }
+      - { label: "프로세스 개선 사례", terms: ["프로세스 개선", "매뉴얼", "자동화", "효율화"] }
+      - { label: "처리량·규모", terms: ["문의 건수", "처리 건수", "건/일", "센터"] }
+  - id: md_commerce
+    group: commerce
+    target: true
+    labels: { ko: "MD · 커머스", en: "Merchandiser / E-commerce" }
+    portfolio_expected: false
+    titles: ["Merchandiser", "Buyer", "Category Manager", "E-commerce Manager", "Commerce Manager", "Product Sourcing Manager", "Marketplace Manager", "Retail Planner", "Online MD", "상품 MD", "MD (상품기획)", "상품기획자", "머천다이저", "바이어", "카테고리 매니저", "이커머스 MD", "온라인 MD", "커머스 운영 매니저", "쇼핑몰 운영자", "스토어 운영 담당자", "소싱 담당자", "구매 MD"]
+    seniority_words: ["팀장", "파트장", "파트 리더", "Director"]
+    signals: ["MD", "상품 기획", "입점", "소싱", "기획전", "마진", "재고", "카테고리", "프로모션", "매출 성장"]
+    core_skills: ["merchandising", "sourcing_vendor", "category_pricing", "marketplace_ops", "sales_analysis", "logistics_scm", "negotiation", "excel_advanced"]
+    decisive_evidence:
+      - { label: "카테고리 매출·마진 성과", terms: ["GMV", "매출", "마진", "영업이익", "매출 성장", "객단가"] }
+      - { label: "상품·협력사 규모", terms: ["SKU", "입점", "협력사", "브랜드", "소싱"] }
+      - { label: "프로모션 성과", terms: ["기획전", "프로모션", "할인", "전환율"] }

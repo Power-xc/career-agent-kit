@@ -66,25 +66,15 @@ rules:
 
   # ---------- 분류 ----------
   - id: R-CLASS-01
-    title: "헤드라인과 최근 직함이 목표 직군으로 정규화된다"
+    title: "헤드라인과 최근 직함이 목표 직군(직군 택소노미 전체)으로 정규화된다"
     type: title_alignment
-    params:
-      {
-        target_families:
-          [
-            product_designer,
-            ai_product_designer,
-            ux_designer,
-            ux_lead,
-            service_designer,
-          ],
-      }
+    params: {} # target_families를 생략하면 taxonomy/job_families.yaml의 target: true 직군 전체
     severity: high
     applies_to: [resume]
     source: "orchestrator v0 (원티드 AI 리뷰 '적합 직무 UI,GUI 98%')"
     confidence: 상
   - id: R-CLASS-02
-    title: "비목표 직군(UI·GUI, 퍼블리셔, 그래픽) 신호 비중이 낮다"
+    title: "비목표 직군(UI·GUI, 퍼블리셔, 그래픽) 신호 비중이 낮다. 본인 직함이 그 직군이면 제외"
     type: family_balance
     params:
       {

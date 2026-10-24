@@ -1172,3 +1172,124 @@ concepts:
       terms: { ko: ["Confluence", "컨플루언스"], en: ["Confluence"] },
       related: [],
     }
+
+  # ---------- 직군 확장 (개발·데이터·기획·마케팅·영업·HR·재무·운영·커머스·디자인 보강) ----------
+  - {"id": "python", "category": "build", "terms": {"ko": ["파이썬"], "en": ["Python"]}, "related": ["django_fastapi", "data_analysis_py"]}
+  - {"id": "java", "category": "build", "terms": {"ko": ["자바 개발"], "en": ["Java", "JVM"]}, "related": ["spring"]}
+  - {"id": "kotlin", "category": "build", "terms": {"ko": ["코틀린"], "en": ["Kotlin"]}, "related": ["android_dev"]}
+  - {"id": "spring", "category": "build", "terms": {"ko": ["스프링", "스프링부트", "스프링 부트"], "en": ["Spring", "Spring Boot"]}, "related": ["java"]}
+  - {"id": "nodejs", "category": "build", "terms": {"ko": ["노드js", "노드 JS"], "en": ["Node.js", "NestJS"]}, "related": ["javascript"]}
+  - {"id": "golang", "category": "build", "terms": {"ko": ["고랭", "Go언어"], "en": ["Golang"]}, "related": []}
+  - {"id": "django_fastapi", "category": "build", "terms": {"ko": ["장고"], "en": ["Django", "FastAPI", "Flask"]}, "related": ["python"]}
+  - {"id": "cpp", "category": "build", "terms": {"ko": ["C++ 개발"], "en": ["C++"]}, "related": []}
+  - {"id": "rdbms", "category": "data", "terms": {"ko": ["관계형 DB", "관계형 데이터베이스"], "en": ["MySQL", "PostgreSQL", "Oracle", "MariaDB"]}, "related": ["sql"]}
+  - {"id": "nosql_cache", "category": "data", "terms": {"ko": ["캐시 서버"], "en": ["Redis", "MongoDB", "DynamoDB", "Elasticsearch"]}, "related": ["rdbms"]}
+  - {"id": "api_design", "category": "build", "terms": {"ko": ["API 설계", "API 개발", "REST API", "API 서버"], "en": ["REST", "RESTful", "GraphQL", "gRPC", "OpenAPI"]}, "related": ["backend_arch"]}
+  - {"id": "backend_arch", "category": "build", "terms": {"ko": ["서버 개발", "백엔드 개발", "서버 아키텍처", "대용량 트래픽", "트래픽 처리"], "en": ["backend development", "server-side", "scalable systems"]}, "related": ["api_design", "microservices"]}
+  - {"id": "microservices", "category": "build", "terms": {"ko": ["마이크로서비스", "MSA"], "en": ["microservices"]}, "related": ["backend_arch"]}
+  - {"id": "system_design", "category": "build", "terms": {"ko": ["시스템 설계", "아키텍처 설계", "시스템 아키텍처"], "en": ["system design", "software architecture"]}, "related": ["backend_arch"]}
+  - {"id": "message_queue", "category": "build", "terms": {"ko": ["메시지 큐", "이벤트 기반"], "en": ["Kafka", "RabbitMQ", "SQS", "Pub/Sub"]}, "related": ["backend_arch"]}
+  - {"id": "unit_testing", "category": "build", "terms": {"ko": ["단위 테스트", "테스트 코드", "테스트 자동화", "TDD"], "en": ["unit test", "unit testing", "test automation"]}, "related": ["qa_automation"]}
+  - {"id": "code_review", "category": "collab", "terms": {"ko": ["코드 리뷰"], "en": ["code review"]}, "related": []}
+  - {"id": "web_performance", "category": "build", "terms": {"ko": ["웹 성능", "렌더링 최적화", "성능 최적화"], "en": ["web performance", "Core Web Vitals", "Lighthouse"]}, "related": ["frontend"]}
+  - {"id": "vue", "category": "build", "terms": {"ko": ["뷰 JS"], "en": ["Vue", "Vue.js", "Nuxt"]}, "related": ["frontend"]}
+  - {"id": "state_management", "category": "build", "terms": {"ko": ["상태 관리"], "en": ["Redux", "Zustand", "Recoil", "React Query"]}, "related": ["react"]}
+  - {"id": "ios_dev", "category": "build", "terms": {"ko": ["iOS 개발", "아이폰 앱 개발"], "en": ["iOS", "Swift", "SwiftUI", "UIKit", "Objective-C"]}, "related": ["android_dev"]}
+  - {"id": "android_dev", "category": "build", "terms": {"ko": ["안드로이드 개발", "안드로이드 앱 개발"], "en": ["Android", "Jetpack Compose", "Android SDK"]}, "related": ["ios_dev", "kotlin"]}
+  - {"id": "cross_platform_app", "category": "build", "terms": {"ko": ["크로스플랫폼 앱"], "en": ["Flutter", "React Native", "Dart"]}, "related": ["ios_dev", "android_dev"]}
+  - {"id": "app_release", "category": "process", "terms": {"ko": ["앱 배포", "스토어 배포", "앱 출시"], "en": ["App Store", "Google Play", "TestFlight", "Firebase"]}, "related": ["ios_dev", "android_dev"]}
+  - {"id": "aws", "category": "tool", "terms": {"ko": ["아마존 웹 서비스"], "en": ["AWS", "EC2", "S3", "Lambda", "CloudFront"]}, "related": ["cloud_infra"]}
+  - {"id": "gcp_azure", "category": "tool", "terms": {"ko": ["구글 클라우드"], "en": ["GCP", "Google Cloud", "Azure"]}, "related": ["cloud_infra"]}
+  - {"id": "docker", "category": "tool", "terms": {"ko": ["도커"], "en": ["Docker", "container", "Docker Compose"]}, "related": ["kubernetes"]}
+  - {"id": "kubernetes", "category": "tool", "terms": {"ko": ["쿠버네티스"], "en": ["Kubernetes", "K8s", "EKS", "Helm"]}, "related": ["docker"]}
+  - {"id": "iac", "category": "tool", "terms": {"ko": ["인프라 코드", "코드형 인프라"], "en": ["Terraform", "Ansible", "CloudFormation", "Pulumi", "IaC"]}, "related": ["cloud_infra"]}
+  - {"id": "ci_cd", "category": "process", "terms": {"ko": ["배포 자동화", "파이프라인 구축", "지속적 통합"], "en": ["CI/CD", "GitHub Actions", "Jenkins", "GitLab CI", "ArgoCD"]}, "related": ["devops"]}
+  - {"id": "devops", "category": "process", "terms": {"ko": ["데브옵스", "운영 자동화"], "en": ["DevOps", "platform engineering"]}, "related": ["ci_cd", "sre_monitoring"]}
+  - {"id": "sre_monitoring", "category": "process", "terms": {"ko": ["장애 대응", "모니터링", "가용성", "온콜"], "en": ["SRE", "observability", "Prometheus", "Grafana", "Datadog", "SLO", "incident response"]}, "related": ["devops"]}
+  - {"id": "linux_network", "category": "build", "terms": {"ko": ["리눅스", "네트워크 운영"], "en": ["Linux", "networking", "Nginx"]}, "related": ["devops"]}
+  - {"id": "security_basic", "category": "build", "terms": {"ko": ["정보 보안", "보안 점검", "취약점 점검"], "en": ["security", "OWASP", "vulnerability"]}, "related": []}
+  - {"id": "qa_testing", "category": "process", "terms": {"ko": ["QA", "품질 보증", "테스트 케이스", "테스트 시나리오", "결함 관리", "회귀 테스트"], "en": ["quality assurance", "test case", "test plan", "regression testing", "bug tracking"]}, "related": ["qa_automation"]}
+  - {"id": "qa_automation", "category": "process", "terms": {"ko": ["QA 자동화"], "en": ["Selenium", "Cypress", "Playwright", "Appium", "Postman", "JMeter", "k6"]}, "related": ["qa_testing", "unit_testing"]}
+  - {"id": "statistics", "category": "data", "terms": {"ko": ["통계", "통계 분석", "가설 검정", "회귀 분석"], "en": ["statistics", "statistical analysis", "hypothesis testing", "regression"]}, "related": ["ab_testing"]}
+  - {"id": "data_analysis_py", "category": "data", "terms": {"ko": ["데이터 분석"], "en": ["pandas", "NumPy", "Jupyter", "data analysis", "exploratory analysis"]}, "related": ["statistics", "sql"]}
+  - {"id": "bi_tools", "category": "tool", "terms": {"ko": ["대시보드 구축", "BI 구축"], "en": ["Tableau", "Looker", "Power BI", "Redash", "Metabase", "Looker Studio", "Superset"]}, "related": ["data_visualization"]}
+  - {"id": "cohort_analysis", "category": "data", "terms": {"ko": ["코호트 분석", "사용자 세그먼트", "세그멘테이션"], "en": ["cohort analysis", "segmentation", "RFM"]}, "related": ["retention"]}
+  - {"id": "etl_pipeline", "category": "data", "terms": {"ko": ["데이터 파이프라인", "데이터 수집 파이프라인", "배치 처리"], "en": ["ETL", "ELT", "data pipeline", "Airflow", "dbt", "batch processing"]}, "related": ["data_warehouse"]}
+  - {"id": "big_data", "category": "data", "terms": {"ko": ["대용량 데이터", "빅데이터", "분산 처리"], "en": ["Spark", "PySpark", "Hadoop", "Flink", "Hive"]}, "related": ["etl_pipeline"]}
+  - {"id": "data_warehouse", "category": "data", "terms": {"ko": ["데이터 웨어하우스", "데이터 마트", "데이터 모델링"], "en": ["data warehouse", "BigQuery", "Snowflake", "Redshift", "data modeling"]}, "related": ["etl_pipeline"]}
+  - {"id": "data_governance", "category": "data", "terms": {"ko": ["데이터 품질", "데이터 거버넌스", "데이터 카탈로그"], "en": ["data quality", "data governance", "data catalog"]}, "related": ["data_warehouse"]}
+  - {"id": "ml_modeling", "category": "data", "terms": {"ko": ["머신러닝", "기계학습", "모델 학습", "예측 모델"], "en": ["machine learning", "scikit-learn", "XGBoost", "LightGBM", "model training"]}, "related": ["deep_learning"]}
+  - {"id": "deep_learning", "category": "data", "terms": {"ko": ["딥러닝", "신경망"], "en": ["deep learning", "PyTorch", "TensorFlow", "Keras", "CNN", "Transformer"]}, "related": ["ml_modeling"]}
+  - {"id": "nlp", "category": "data", "terms": {"ko": ["자연어 처리", "자연어처리", "텍스트 분석"], "en": ["NLP", "natural language processing", "text mining"]}, "related": ["llm"]}
+  - {"id": "computer_vision", "category": "data", "terms": {"ko": ["컴퓨터 비전", "이미지 인식", "영상 인식"], "en": ["computer vision", "object detection", "OpenCV"]}, "related": ["deep_learning"]}
+  - {"id": "recsys_search", "category": "data", "terms": {"ko": ["추천 시스템", "추천 모델", "검색 랭킹"], "en": ["recommender system", "ranking", "information retrieval", "learning to rank"]}, "related": ["ml_modeling"]}
+  - {"id": "mlops", "category": "process", "terms": {"ko": ["모델 서빙", "모델 배포", "ML 파이프라인"], "en": ["MLOps", "MLflow", "Kubeflow", "model serving", "feature store"]}, "related": ["ml_modeling"]}
+  - {"id": "rag_finetuning", "category": "data", "terms": {"ko": ["검색 증강 생성", "파인튜닝", "임베딩"], "en": ["RAG", "retrieval-augmented generation", "fine-tuning", "embedding", "vector database", "LoRA"]}, "related": ["llm"]}
+  - {"id": "model_evaluation", "category": "data", "terms": {"ko": ["모델 평가", "성능 평가"], "en": ["model evaluation", "benchmark", "offline evaluation", "precision", "recall"]}, "related": ["ml_modeling"]}
+  - {"id": "paper_research", "category": "research", "terms": {"ko": ["논문", "연구 개발", "학회"], "en": ["paper", "publication", "NeurIPS", "ICML", "ACL", "CVPR"]}, "related": ["ml_modeling"]}
+  - {"id": "roadmap_planning", "category": "process", "terms": {"ko": ["로드맵 수립", "로드맵 기획", "제품 로드맵"], "en": ["roadmap", "product roadmap"]}, "related": ["product_strategy"]}
+  - {"id": "requirements_spec", "category": "process", "terms": {"ko": ["요구사항 정의", "요구사항 정의서", "기능 명세", "기획서", "화면 정의서", "스토리보드"], "en": ["PRD", "requirements", "functional spec", "user story", "acceptance criteria"]}, "related": ["documentation"]}
+  - {"id": "service_planning", "category": "process", "terms": {"ko": ["서비스 기획", "서비스 개선", "신규 서비스 기획", "기능 기획"], "en": ["service planning", "feature planning"]}, "related": ["requirements_spec"]}
+  - {"id": "backlog_sprint", "category": "process", "terms": {"ko": ["백로그", "스프린트 운영", "스크럼"], "en": ["backlog", "sprint planning", "scrum", "Kanban"]}, "related": ["agile"]}
+  - {"id": "okr_goal", "category": "process", "terms": {"ko": ["목표 설정", "성과 지표 설계"], "en": ["OKR", "north star metric"]}, "related": ["metrics_kpi"]}
+  - {"id": "market_analysis", "category": "research", "terms": {"ko": ["시장 조사", "시장 분석", "경쟁사 분석"], "en": ["market research", "market analysis", "competitive landscape"]}, "related": ["competitive_analysis"]}
+  - {"id": "business_planning", "category": "process", "terms": {"ko": ["사업 기획", "사업 계획", "사업계획서", "사업 전략"], "en": ["business planning", "business plan", "business strategy"]}, "related": ["bm_design"]}
+  - {"id": "bm_design", "category": "process", "terms": {"ko": ["비즈니스 모델", "수익 모델", "BM 설계", "신사업"], "en": ["business model", "revenue model", "new business"]}, "related": ["business_planning"]}
+  - {"id": "pricing_strategy", "category": "process", "terms": {"ko": ["가격 정책", "가격 전략", "요금제 설계"], "en": ["pricing strategy", "pricing model"]}, "related": ["bm_design"]}
+  - {"id": "strategy_analysis", "category": "process", "terms": {"ko": ["전략 수립", "중장기 전략", "재무 모델링 기반 전략", "사업성 분석"], "en": ["strategy", "corporate strategy", "feasibility study", "unit economics"]}, "related": ["business_planning"]}
+  - {"id": "performance_marketing", "category": "marketing", "terms": {"ko": ["퍼포먼스 마케팅", "광고 운영", "광고 집행", "매체 운영", "광고 효율"], "en": ["performance marketing", "paid media", "paid acquisition", "ad operations"]}, "related": ["ad_metrics"]}
+  - {"id": "ad_platforms", "category": "tool", "terms": {"ko": ["메타 광고", "구글 광고", "네이버 검색광고", "카카오모먼트", "검색광고", "디스플레이 광고"], "en": ["Meta Ads", "Google Ads", "Facebook Ads", "TikTok Ads", "Naver SA", "Kakao Moment"]}, "related": ["performance_marketing"]}
+  - {"id": "ad_metrics", "category": "marketing", "terms": {"ko": ["광고 수익률", "전환당 비용", "클릭률"], "en": ["ROAS", "CPA", "CPC", "CTR", "CAC", "LTV"]}, "related": ["performance_marketing"]}
+  - {"id": "mmp_attribution", "category": "tool", "terms": {"ko": ["어트리뷰션", "유입 경로 분석", "전환 추적"], "en": ["AppsFlyer", "attribution", "UTM"]}, "related": ["ga4"]}
+  - {"id": "content_marketing", "category": "marketing", "terms": {"ko": ["콘텐츠 마케팅", "콘텐츠 기획", "콘텐츠 제작", "블로그 운영", "뉴스레터"], "en": ["content marketing", "content strategy", "editorial"]}, "related": ["brand_marketing"]}
+  - {"id": "sns_marketing", "category": "marketing", "terms": {"ko": ["SNS 마케팅", "소셜 미디어 운영", "인스타그램 운영", "유튜브 운영", "인플루언서 마케팅"], "en": ["social media marketing", "influencer marketing", "community management"]}, "related": ["content_marketing"]}
+  - {"id": "brand_marketing", "category": "marketing", "terms": {"ko": ["브랜드 마케팅", "브랜드 전략", "브랜딩", "캠페인 기획", "브랜드 캠페인"], "en": ["brand marketing", "brand strategy", "brand campaign"]}, "related": ["content_marketing"]}
+  - {"id": "seo_marketing", "category": "marketing", "terms": {"ko": ["검색 최적화", "검색엔진 최적화", "키워드 분석"], "en": ["SEO", "SEM", "keyword research", "search engine optimization"]}, "related": ["content_marketing"]}
+  - {"id": "copywriting", "category": "marketing", "terms": {"ko": ["카피라이팅", "광고 문구", "카피 작성"], "en": ["copywriting", "copywriter"]}, "related": ["content_marketing"]}
+  - {"id": "growth_marketing", "category": "marketing", "terms": {"ko": ["그로스 마케팅", "그로스 해킹", "그로스 실험", "퍼널 최적화"], "en": ["growth marketing", "growth hacking", "growth experiments", "funnel optimization"]}, "related": ["ab_testing"]}
+  - {"id": "crm_marketing", "category": "marketing", "terms": {"ko": ["CRM 마케팅", "리텐션 마케팅", "고객 세그먼트 타겟팅", "푸시 마케팅", "앱 푸시", "이메일 마케팅", "고객 생애주기"], "en": ["CRM marketing", "lifecycle marketing", "retention marketing", "email marketing", "push notification"]}, "related": ["marketing_automation"]}
+  - {"id": "marketing_automation", "category": "tool", "terms": {"ko": ["마케팅 자동화", "캠페인 자동화"], "en": ["Braze", "Salesforce Marketing Cloud", "HubSpot", "Mailchimp", "Stibee", "Iterable", "Customer.io"]}, "related": ["crm_marketing"]}
+  - {"id": "campaign_management", "category": "marketing", "terms": {"ko": ["캠페인 운영", "프로모션 기획", "이벤트 기획", "마케팅 예산"], "en": ["campaign management", "promotion", "marketing budget"]}, "related": ["brand_marketing"]}
+  - {"id": "b2b_sales", "category": "sales", "terms": {"ko": ["B2B 영업", "기업 영업", "법인 영업", "신규 고객 개척", "영업 활동"], "en": ["B2B sales", "enterprise sales", "outbound sales", "inside sales", "field sales"]}, "related": ["pipeline_management"]}
+  - {"id": "solution_sales", "category": "sales", "terms": {"ko": ["솔루션 영업", "기술 영업", "프리세일즈", "제안서 작성", "제안 발표"], "en": ["solution sales", "pre-sales", "solutions engineer", "RFP", "proposal"]}, "related": ["b2b_sales"]}
+  - {"id": "account_management", "category": "sales", "terms": {"ko": ["고객사 관리", "기존 고객 관리", "고객 성공", "어카운트 관리", "리뉴얼", "업셀링"], "en": ["account management", "customer success", "renewal", "upsell", "cross-sell"]}, "related": ["b2b_sales"]}
+  - {"id": "pipeline_management", "category": "sales", "terms": {"ko": ["파이프라인 관리", "영업 파이프라인", "리드 관리", "리드 발굴"], "en": ["sales pipeline", "lead generation", "lead qualification", "prospecting"]}, "related": ["b2b_sales"]}
+  - {"id": "quota_attainment", "category": "sales", "terms": {"ko": ["매출 목표 달성", "목표 달성률", "영업 실적", "수주", "계약 체결"], "en": ["quota attainment", "quota", "closed-won", "revenue target", "bookings"]}, "related": ["b2b_sales"]}
+  - {"id": "sales_crm", "category": "tool", "terms": {"ko": ["영업 관리 툴"], "en": ["Salesforce", "HubSpot CRM", "Pipedrive", "Zoho"]}, "related": ["pipeline_management"]}
+  - {"id": "negotiation", "category": "collab", "terms": {"ko": ["협상", "계약 협상", "가격 협상"], "en": ["negotiation", "contract negotiation"]}, "related": ["b2b_sales"]}
+  - {"id": "partnership_bd", "category": "sales", "terms": {"ko": ["사업 제휴", "제휴 영업", "파트너십", "파트너 발굴", "채널 영업"], "en": ["business development", "partnership", "alliance", "channel sales", "BD"]}, "related": ["b2b_sales"]}
+  - {"id": "recruiting", "category": "hr", "terms": {"ko": ["인재 채용", "채용 업무", "채용 프로세스", "리크루팅", "서류 검토", "면접 진행", "인재 소싱", "헤드헌팅"], "en": ["recruiting", "recruitment", "talent acquisition", "sourcing", "interviewing", "headhunting"]}, "related": ["ats_tool"]}
+  - {"id": "ats_tool", "category": "tool", "terms": {"ko": ["채용 시스템"], "en": ["Greenhouse", "Workday", "그리팅"]}, "related": ["recruiting"]}
+  - {"id": "employer_branding", "category": "hr", "terms": {"ko": ["채용 브랜딩", "채용 마케팅", "인재상"], "en": ["employer branding", "recruitment marketing"]}, "related": ["recruiting"]}
+  - {"id": "hr_operations", "category": "hr", "terms": {"ko": ["인사 운영", "인사 관리", "입퇴사 관리", "인사 제도", "근태 관리", "인사 평가"], "en": ["HR operations", "HRBP", "HRIS", "onboarding", "offboarding"]}, "related": ["payroll_labor"]}
+  - {"id": "payroll_labor", "category": "hr", "terms": {"ko": ["급여 계산", "급여 관리", "4대보험", "노무 관리", "근로기준법", "취업규칙"], "en": ["payroll", "labor law", "employee relations"]}, "related": ["hr_operations"]}
+  - {"id": "compensation_benefits", "category": "hr", "terms": {"ko": ["보상 설계", "복리후생", "연봉 체계", "성과 보상"], "en": ["compensation", "benefits", "total rewards"]}, "related": ["hr_operations"]}
+  - {"id": "talent_development", "category": "hr", "terms": {"ko": ["교육 운영", "인재 육성", "리더십 교육", "조직 개발", "조직 문화"], "en": ["learning and development", "talent development", "organizational development", "culture"]}, "related": ["hr_operations"]}
+  - {"id": "accounting", "category": "finance", "terms": {"ko": ["회계", "결산", "전표 처리", "장부 관리", "재무제표 작성", "회계 처리"], "en": ["accounting", "bookkeeping", "month-end close", "general ledger"]}, "related": ["financial_reporting"]}
+  - {"id": "financial_reporting", "category": "finance", "terms": {"ko": ["재무제표", "재무 보고", "연결 결산", "공시"], "en": ["financial statements", "financial reporting", "IFRS", "K-IFRS", "GAAP"]}, "related": ["accounting"]}
+  - {"id": "tax_accounting", "category": "finance", "terms": {"ko": ["세무", "부가세", "법인세", "세금계산서", "원천세", "세무조정"], "en": ["tax", "VAT", "corporate tax", "tax filing"]}, "related": ["accounting"]}
+  - {"id": "fpa_budgeting", "category": "finance", "terms": {"ko": ["예산 수립", "예산 관리", "손익 분석", "경영 분석", "재무 분석", "사업계획 수립"], "en": ["FP&A", "budgeting", "forecasting", "variance analysis", "financial planning"]}, "related": ["financial_modeling"]}
+  - {"id": "financial_modeling", "category": "finance", "terms": {"ko": ["재무 모델링", "밸류에이션", "투자 심사"], "en": ["financial modeling", "valuation", "DCF"]}, "related": ["fpa_budgeting"]}
+  - {"id": "treasury_funding", "category": "finance", "terms": {"ko": ["자금 관리", "자금 운용", "투자 유치", "자금 조달", "현금흐름"], "en": ["treasury", "cash management", "fundraising", "cash flow"]}, "related": ["fpa_budgeting"]}
+  - {"id": "audit_internal_control", "category": "finance", "terms": {"ko": ["회계 감사", "내부 통제", "내부 감사"], "en": ["audit", "internal control", "SOX", "compliance"]}, "related": ["accounting"]}
+  - {"id": "erp_tools", "category": "tool", "terms": {"ko": ["더존", "ERP 운영"], "en": ["ERP", "SAP", "Oracle ERP", "NetSuite", "Douzone"]}, "related": ["accounting"]}
+  - {"id": "excel_advanced", "category": "tool", "terms": {"ko": ["엑셀", "고급 엑셀"], "en": ["Excel", "Google Sheets", "VLOOKUP", "pivot table", "macro"]}, "related": []}
+  - {"id": "settlement_ops", "category": "finance", "terms": {"ko": ["정산", "정산 업무", "매출 정산", "대금 지급"], "en": ["settlement", "reconciliation", "accounts payable", "accounts receivable"]}, "related": ["accounting"]}
+  - {"id": "cs_support", "category": "ops", "terms": {"ko": ["고객 응대", "고객 상담", "CS 운영", "고객 문의 처리", "상담 품질"], "en": ["customer support", "customer service", "customer care", "helpdesk"]}, "related": ["voc_management"]}
+  - {"id": "cs_tools", "category": "tool", "terms": {"ko": ["고객 상담 툴", "채널톡"], "en": ["Zendesk", "Freshdesk", "Intercom", "ChannelTalk", "Salesforce Service Cloud"]}, "related": ["cs_support"]}
+  - {"id": "voc_management", "category": "ops", "terms": {"ko": ["VOC 분석", "고객 불만 처리", "고객 피드백 관리", "클레임 처리"], "en": ["VOC", "voice of customer", "complaint handling", "CSAT", "NPS"]}, "related": ["cs_support"]}
+  - {"id": "ops_process", "category": "ops", "terms": {"ko": ["운영 프로세스", "프로세스 개선", "업무 효율화", "운영 정책", "운영 매뉴얼", "SOP"], "en": ["operations", "process improvement", "SOP", "operational excellence"]}, "related": ["ops_management"]}
+  - {"id": "ops_management", "category": "ops", "terms": {"ko": ["서비스 운영", "운영 관리", "현장 운영", "운영 총괄"], "en": ["service operations", "operations management", "workforce management"]}, "related": ["ops_process"]}
+  - {"id": "logistics_scm", "category": "ops", "terms": {"ko": ["물류", "재고 관리", "공급망", "배송 운영", "구매 발주"], "en": ["logistics", "supply chain", "SCM", "inventory management", "fulfillment", "procurement"]}, "related": ["merchandising"]}
+  - {"id": "quality_sla", "category": "ops", "terms": {"ko": ["서비스 품질", "SLA 관리", "응대 품질 관리"], "en": ["service level", "SLA", "quality assurance"]}, "related": ["cs_support"]}
+  - {"id": "merchandising", "category": "commerce", "terms": {"ko": ["상품 기획", "MD", "상품 구성", "카테고리 운영", "입점 업체 관리", "신상품 기획"], "en": ["merchandising", "merchandiser", "category management", "assortment planning", "buying"]}, "related": ["category_pricing"]}
+  - {"id": "sourcing_vendor", "category": "commerce", "terms": {"ko": ["소싱", "협력사 관리", "공급사 발굴", "벤더 관리", "매입"], "en": ["sourcing", "vendor management", "supplier management", "procurement"]}, "related": ["merchandising"]}
+  - {"id": "category_pricing", "category": "commerce", "terms": {"ko": ["가격 책정", "프로모션 운영", "할인 기획", "기획전", "마진 관리"], "en": ["pricing", "promotion planning", "margin management", "markdown"]}, "related": ["merchandising"]}
+  - {"id": "marketplace_ops", "category": "commerce", "terms": {"ko": ["스마트스토어", "쿠팡 입점", "오픈마켓 운영", "쇼핑몰 운영", "상세페이지 기획", "이커머스 운영"], "en": ["Smartstore", "Coupang", "marketplace", "Shopify", "Cafe24", "e-commerce operations"]}, "related": ["merchandising"]}
+  - {"id": "sales_analysis", "category": "commerce", "terms": {"ko": ["매출 분석", "판매 실적 분석", "재고 회전", "재고 분석"], "en": ["sales analysis", "sell-through", "inventory turnover"]}, "related": ["merchandising"]}
+  - {"id": "graphic_design", "category": "design", "terms": {"ko": ["그래픽 디자인", "편집 디자인", "인쇄물 디자인", "배너 디자인"], "en": ["graphic design", "editorial design", "print design"]}, "related": ["visual_design"]}
+  - {"id": "illustration", "category": "design", "terms": {"ko": ["일러스트", "캐릭터 디자인"], "en": ["illustration", "character design", "Procreate"]}, "related": ["graphic_design"]}
+  - {"id": "typography", "category": "design", "terms": {"ko": ["타이포그래피", "폰트 디자인", "레터링"], "en": ["typography", "lettering", "type design"]}, "related": ["graphic_design"]}
+  - {"id": "video_editing", "category": "design", "terms": {"ko": ["영상 편집", "영상 제작", "촬영", "후반 작업"], "en": ["video editing", "video production", "Premiere Pro", "Final Cut", "DaVinci Resolve", "color grading"]}, "related": ["motion_graphics"]}
+  - {"id": "motion_graphics", "category": "design", "terms": {"ko": ["모션그래픽", "모션 그래픽", "애니메이션 제작", "영상 모션"], "en": ["motion graphics", "After Effects", "animation", "Lottie", "Rive"]}, "related": ["motion_design"]}
+  - {"id": "three_d", "category": "design", "terms": {"ko": ["3D 모델링", "3D 디자인", "3D 렌더링"], "en": ["3D modeling", "Blender", "Cinema 4D", "Maya", "Unreal Engine"]}, "related": ["motion_graphics"]}
