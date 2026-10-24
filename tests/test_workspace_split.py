@@ -124,7 +124,7 @@ class TargetsTests(unittest.TestCase):
 def make_template(tmp: Path) -> Path:
     template = tmp / "template"
     (template / "profile").mkdir(parents=True)
-    (template / "CLAUDE.friend.md").write_text("# {{name}} 의 작업 폴더\n", encoding="utf-8")
+    (template / "CLAUDE.workspace.md").write_text("# {{name}} 의 작업 폴더\n", encoding="utf-8")
     (template / "gitignore").write_text("out/\n", encoding="utf-8")
     for name in ("facts.example.yaml", "resume_master_ko.example.yaml"):
         (template / "profile" / name).write_text("x: 1\n", encoding="utf-8")
@@ -140,7 +140,7 @@ class OnboardTests(unittest.TestCase):
             self.assertIn("다음 단계", out)
             self.assertEqual("# 테스터 의 작업 폴더\n", (dest / "CLAUDE.md").read_text(encoding="utf-8"))
             self.assertTrue((dest / ".gitignore").is_file() and (dest / "profile/facts.yaml").is_file())
-            self.assertFalse((dest / "CLAUDE.friend.md").exists() or (dest / "gitignore").exists())
+            self.assertFalse((dest / "CLAUDE.workspace.md").exists() or (dest / "gitignore").exists())
             for link in ("bin/harness", ".claude/skills", ".claude/agents"):
                 self.assertTrue((dest / link).is_symlink(), link)
                 self.assertTrue((dest / link).resolve().exists(), link)

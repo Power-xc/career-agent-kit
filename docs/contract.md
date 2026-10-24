@@ -36,7 +36,7 @@
 
 - **엔진 루트**: `harness/` 패키지가 있는 폴더 (`Path(harness.__file__).resolve().parents[1]`). `rules/`, `taxonomy/`, `templates/` 같은 엔진 자원은 여기서 읽는다.
 - **워크스페이스 루트**: 한 사람의 데이터(`profile/`, `jd/`, `companies/`, `out/`, `records/`, `research/`)가 있는 폴더. `--root`가 없으면 현재 폴더에서 위로 올라가 `profile/facts.yaml`이 있는 첫 폴더를 쓴다.
-- 내 에이전트 저장소에서는 두 루트가 같은 폴더다. 친구 워크스페이스(`~/orca/projects/career-friends/<slug>/`)는 엔진 루트(키트 폴더 `~/orca/projects/career-agent-kit`)와 다르고, `bin/harness`, `.claude/skills`, `.claude/agents`가 엔진의 것으로 링크된다.
+- 내 에이전트 저장소에서는 두 루트가 같은 폴더다. 사용자 워크스페이스(예: `~/career-workspaces/<slug>/`)는 엔진 루트(키트 폴더 `~/orca/projects/career-agent-kit`)와 다르고, `bin/harness`, `.claude/skills`, `.claude/agents`가 엔진의 것으로 링크된다.
 - `bin/harness`는 자신의 실제 경로(심볼릭 링크를 따라간 뒤)에서 엔진 루트를 찾고, python은 `$HARNESS_PYTHON`, `$ENGINE/.venv/bin/python`, `python3` 순으로 고른다. 스킬은 워크스페이스 루트에서 `bin/harness <command>`로 부른다.
 
 ## 3. 데이터 스키마
@@ -248,7 +248,7 @@ warn 결과의 감점은 같은 severity 감점에 `scoring.yaml`의 `warn_penal
 
 `bin/harness targets [--resume FILE] [--out FILE] [--json] <unit.yaml>...`은 `research/targets/<unit>.yaml`의 공고 목록(`company, slug, role, url, checked, tier, location, years_min, years_max, language, domain_tags, verdict, chance, reasons, jd_file`)을 합치고, 지원한 회사를 빼고, 공고별 점수를 내 순위를 매긴다 (chance 상>중>하, verdict 적합>도전>낮음, 점수 내림차순). `jd_file`은 절대 경로, 작업 폴더 기준, 목록 파일 폴더 기준, 목록 파일의 두 단계 위 폴더 기준 순서로 찾는다.
 
-`bin/harness onboard <dest> --name "<이름>" [--template-dir DIR]`는 `templates/workspace/`로 친구 워크스페이스를 만든다 (`CLAUDE.friend.md` → `CLAUDE.md`, `gitignore` → `.gitignore`, `*.example.yaml` → 실제 이름, `bin/harness`·`.claude/skills`·`.claude/agents` 링크, `git init`).
+`bin/harness onboard <dest> --name "<이름>" [--template-dir DIR]`는 `templates/workspace/`로 사용자 워크스페이스를 만든다 (`CLAUDE.workspace.md` → `CLAUDE.md`, `gitignore` → `.gitignore`, `*.example.yaml` → 실제 이름, `bin/harness`·`.claude/skills`·`.claude/agents` 링크, `git init`).
 
 ## 4. 숫자 토큰 규칙 (claims 검사)
 
@@ -273,7 +273,7 @@ warn 결과의 감점은 같은 severity 감점에 `scoring.yaml`의 `warn_penal
 | `score --jd <jd.md> --resume <file> [--portfolio <pdf>]`         | 공고+이력서                             | 총점, 구성 점수, 감점, 빠진 개념, 근거 있는 보완 제안                   |
 | `run --jd <jd.md> --resume <file> [--portfolio <pdf>] --out DIR` | 위 전부                                 | `report.md`, `report.json`                                              |
 | `targets [--resume FILE] [--out FILE] <unit.yaml>...` | 대상 공고 목록 YAML | 병합·제외·순위. 3.6 참조 |
-| `onboard <dest> --name NAME [--template-dir DIR]` | 대상 폴더, 이름 | 친구 워크스페이스. 3.6 참조 |
+| `onboard <dest> --name NAME [--template-dir DIR]` | 대상 폴더, 이름 | 사용자 워크스페이스. 3.6 참조 |
 | `figma-check <figma_text.yaml>`                                  | `out/<slug>/figma_text.yaml`            | 슬롯마다 점검: `figma_map.yaml`에 있는 id, 글자 수(줄바꿈 제외) ≤ `max_chars`, 줄 수(`\n`·U+2028) ≤ `lines`, 줄 끝 하이픈으로 끊긴 단어 없음, 나열한 `facts`가 사실 은행에 있고 `check`가 아님, 글의 숫자가 그 facts의 `numbers`에 있음(`claims --strict`와 같은 규칙). 종료 코드 0 통과, 1 위반(슬롯별 메시지), 2 입력 오류 |
 | `corpus --jd-dir DIR --resume <file>`                            | 공고 묶음                               | 공고별 점수표, 자주 빠지는 개념                                         |
 
@@ -314,7 +314,7 @@ warn 결과의 감점은 같은 severity 감점에 `scoring.yaml`의 `warn_penal
 | `targets`          | 회사 목록 또는 티어                                    | `research/targets/<unit>.{yaml,md}`, `research/targets/jd/<tier>/*.md`, `research/targets/{merged.json,report.md}`                       |
 | `log-application`  | 지원 확인 캡처, 메일, 또는 한 문장                     | `records/applications.yaml`에 항목 추가 (회사+직무 중복 없음, 연락처 복사 금지)                                                         |
 | `career-status`    | (없음, `records/` 읽기 전용)                           | 상태별 지원 현황, 답 기다리는 제안, 미결 사항, 다음 행동 제안                                                                           |
-| `onboard`          | 친구 이름, 이력서·포트폴리오 위치                      | `~/orca/projects/career-friends/<slug>/` 워크스페이스와 `profile/facts.yaml`, `profile/resume_master_ko.yaml`                          |
+| `onboard`          | 사용자 이름, 이력서·포트폴리오 위치                    | 사용자 워크스페이스(예: `~/career-workspaces/<slug>/`)와 `profile/facts.yaml`, `profile/resume_master_ko.yaml`                          |
 | `apply`            | 회사명, 선택: 직무, `--no-figma`                       | 아래 단계를 순서대로 실행하고 `out/<slug>/SUMMARY.md`                                                                                   |
 | `company-research` | 회사명, 선택: 직무                                     | `companies/<slug>/{dossier.md,vocab.yaml,sources.md,meta.yaml}`, `jd/<tier>/<slug>__*.md`                                               |
 | `jd-intake`        | 공고 URL 또는 붙여 넣은 텍스트                         | `jd/<tier>/<slug>__<role>.md` + `bin/harness jd` 요약                                                                             |

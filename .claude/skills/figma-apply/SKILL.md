@@ -1,9 +1,11 @@
 ---
 name: figma-apply
-description: 맞춤 Figma 문구(figma_text.yaml)를 Figma 파일의 새 페이지(AI 최적화 사본을 복제한 것)에 반영하고 PDF로 내보낸다. 원본 페이지는 건드리지 않는다. "Figma에 반영해 줘", "Figma 이력서도 이 회사용으로"에 쓴다.
+description: (선택, Figma 이력서가 있는 사람만) 맞춤 Figma 문구(figma_text.yaml)를 Figma 파일의 새 페이지(AI 최적화 사본을 복제한 것)에 반영하고 PDF로 내보낸다. 원본 페이지는 건드리지 않는다. "Figma에 반영해 줘", "Figma 이력서도 이 회사용으로"에 쓴다.
 ---
 
 # figma-apply: Figma 새 페이지에 텍스트 반영
+
+**선택 단계다.** 디자이너처럼 Figma로 만든 이력서·포트폴리오가 있는 사람만 쓴다. `profile/figma_map.yaml`이 없으면 이 스킬은 쓰지 않고 `apply`는 이 단계를 건너뛴다.
 
 Figma 파일 (키는 `profile/figma_map.yaml`의 `file_key`). **쓰기는 Claude in Chrome `javascript_tool`로 사용자의 열린 Figma 탭의 `window.figma`에서 한다.** Figma MCP `use_figma`는 쓰지 않는다 (로컬 폰트 Pretendard가 없어 `MISSING_FONT`로 실패한다). 읽기와 스크린샷은 Figma MCP(`create_session`, `get_metadata`, `get_screenshot`)를 쓴다. 스크립트와 실행법은 `tools/figma/README.md`.
 

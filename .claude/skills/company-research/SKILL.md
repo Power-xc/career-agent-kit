@@ -1,16 +1,16 @@
 ---
 name: company-research
-description: "회사명(한글·영문, 선택: 직무) 하나로 채용 페이지·공고·디자인 블로그·사업·채용 절차를 조사해 companies/<slug>/ 조사 파일과 jd/ 공고 파일을 만든다. \"회사 조사\", \"예시회사 조사해줘\", apply 1단계에서 사용한다."
+description: "회사명(한글·영문, 선택: 직무) 하나로 채용 페이지·공고·기술/디자인/브랜드 블로그·사업·채용 절차를 조사해 companies/<slug>/ 조사 파일과 jd/ 공고 파일을 만든다. \"회사 조사\", \"예시회사 조사해줘\", apply 1단계에서 사용한다."
 ---
 
 # company-research
 
-회사명 하나를 받아 공개 웹만 읽어 회사 문서 묶음을 만든다. 합격을 보장하지 않으며, 지원자 정보는 검색어와 에이전트 입력에 넣지 않는다.
+회사명 하나를 받아 공개 웹만 읽어 회사 문서 묶음을 만든다. 합격을 보장하지 않으며, 사용자의 개인 정보는 검색어와 에이전트 입력에 넣지 않는다.
 
 ## 입력
 
 - 회사명 (예: `예시회사`, `Example Co`, `샘플페이`)
-- 선택: 직무 (기본 `Product Designer`)
+- 선택: 직무 (예: `Backend Engineer`, `Data Analyst`, `Product Manager`, `Product Designer`, `Performance Marketer`). 없으면 `profile/facts.yaml`의 `target_titles` 첫 항목을 쓰고, 그것도 없으면 사용자에게 묻는다.
 
 ## 1. slug와 티어 정하기
 
@@ -26,7 +26,7 @@ description: "회사명(한글·영문, 선택: 직무) 하나로 채용 페이�
 | 에이전트                 | 쓰는 파일                                     |
 | ------------------------ | --------------------------------------------- |
 | `company-careers`        | `companies/<slug>/parts/company-careers.md`        |
-| `company-design-blog`    | `companies/<slug>/parts/company-design-blog.md`    |
+| `company-design-blog` (직무에 맞는 기술·디자인·브랜드 블로그) | `companies/<slug>/parts/company-design-blog.md`    |
 | `company-business`       | `companies/<slug>/parts/company-business.md`       |
 | `company-hiring-process` | `companies/<slug>/parts/company-hiring-process.md` |
 
@@ -34,7 +34,7 @@ description: "회사명(한글·영문, 선택: 직무) 하나로 채용 페이�
 
 ## 3. 병합
 
-`templates/dossier.md`를 틀로 `companies/<slug>/dossier.md`를 쓴다. 섹션은 contract 3.6 순서를 그대로 유지한다: 회사 개요 / 제품·서비스 / 디자인 조직과 일하는 방식 / 채용 절차·ATS·서류 형식·용량 제한 / 인재상·가치 키워드 / 최근 이슈 / 이 지원자와의 접점 / 리스크·주의 / 출처.
+`templates/dossier.md`를 틀로 `companies/<slug>/dossier.md`를 쓴다. 섹션은 contract 3.6 순서를 그대로 유지한다 (제목은 그대로 쓰고, 내용은 사용자의 직무 조직 기준으로 쓴다): 회사 개요 / 제품·서비스 / 디자인 조직과 일하는 방식 / 채용 절차·ATS·서류 형식·용량 제한 / 인재상·가치 키워드 / 최근 이슈 / 이 지원자와의 접점 / 리스크·주의 / 출처.
 
 - 파트 파일의 태그(`[확인]` `[보도]` `[추정]`)와 URL을 지우지 않는다. 파트끼리 모순되면 1차 출처를 따르고 모순을 "리스크·주의"에 적는다.
 - dossier의 모든 숫자(투자액, 매출, 인원 등)는 `sources.md`에 올린 출처 중 그 페이지에 해당 숫자가 적힌 것을 인용해야 한다. 뒷받침하는 출처가 없으면 숫자를 빼거나 `[미확인]`으로 표시한다.
@@ -48,7 +48,7 @@ description: "회사명(한글·영문, 선택: 직무) 하나로 채용 페이�
 - `meta.yaml`: `{company, slug, aliases, tier, careers_url, ats, researched, jd_files}`.
 - JD 파일: `company-careers` 파트의 `## JD 원문 블록`마다 `저장 경로:` 줄의 경로로, `---`로 시작하는 블록을 한 글자도 바꾸지 않고 저장한다 (contract 3.5 front matter 전체 키 + Responsibilities/Requirements/Preferred). role-slug는 소문자 ASCII 하이픈. 이미 있으면 덮어쓰기 전에 알린다. 저장할 때마다 `bin/harness jd <파일> --json`을 돌려 종료 코드 0을 확인한 뒤 다음으로 넘어간다. 실패하면 파일을 고치고 다시 돌린다. 공고 본문은 개인 키워드 분석용이므로 `jd/`를 외부에 공유하지 않는다.
 
-## 5. 이 지원자와의 접점
+## 5. 사용자와의 접점
 
 `profile/facts.yaml`과 `taxonomy/skills.yaml`을 읽는다.
 
@@ -119,7 +119,7 @@ PY
    for f in jd/*/$S__*.md; do bin/harness jd "$f" --json >/dev/null || echo "FAIL $f"; done
    ```
 
-6. **손으로 확인하는 항목.** 1차 채용 출처 1개 이상, `sources.md` 모든 행에 접근일, dossier 사실 주장마다 `[확인]`/`[보도]`/`[추정]`과 URL, dossier의 모든 숫자가 `sources.md` 출처에 실제로 적혀 있음, 검색어와 에이전트 입력에 지원자 정보 없음, 연봉·비공개 정보 없음, 인용은 한 문장 이하.
+6. **손으로 확인하는 항목.** 1차 채용 출처 1개 이상, `sources.md` 모든 행에 접근일, dossier 사실 주장마다 `[확인]`/`[보도]`/`[추정]`과 URL, dossier의 모든 숫자가 `sources.md` 출처에 실제로 적혀 있음, 검색어와 에이전트 입력에 사용자 정보 없음, 연봉·비공개 정보 없음, 인용은 한 문장 이하.
 
 ## 안전
 
