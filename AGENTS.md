@@ -1,4 +1,4 @@
-# ai-screening-harness: 작업 규칙 (모든 에이전트 공통)
+# career-agent-kit: 작업 규칙 (모든 에이전트 공통)
 
 구직자가 자기 지원 서류를 AI 1차 서류 심사(ATS 파싱, LLM 스크리닝, 리크루터 검색)에 맞춰 사실 그대로 점검하고, 회사별로 맞춤화하는 하네스다. 직군은 가리지 않는다 (개발, 데이터·AI, PM·기획, 디자인, 마케팅, 영업·BD, HR, 재무, 운영·CS, MD 등). 한 워크스페이스는 한 사람의 데이터만 다루고, 사용자는 `onboard` 스킬로 자기 워크스페이스를 만든다 (사람마다 따로 둘 수도 있다). 합격을 보장하지 않는다. 목표는 세 가지다.
 
@@ -36,8 +36,8 @@
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -e .   # .venv는 git 제외
 bin/harness --help
-.venv/bin/python -m unittest tests/test_harness.py
-bin/harness claims profile/resume_master_ko.yaml --strict   # 사실 은행 밖 숫자가 없어야 통과
+.venv/bin/python -m unittest discover -s tests
+bin/harness claims profile/resume_master_ko.yaml --strict   # 워크스페이스에서: 사실 은행 밖 숫자가 없어야 통과
 ```
 
 ## 코드 스타일
