@@ -5,19 +5,23 @@ set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"; OUT="$HERE/.."
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 shot() { # name width height
-  "$CHROME" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 \
-    --window-size="$2,$3" --virtual-time-budget=3000 --screenshot="$OUT/$1.png" "file://$HERE/$1.html" >/dev/null 2>&1
+  local prof; prof="$(mktemp -d)" # 쓰고 버리는 프로필: 실행 중인 내 Chrome을 건드리지 않는다
+  "$CHROME" --user-data-dir="$prof" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 \
+    --window-size="$2,$3" --virtual-time-budget=3000 --screenshot="$OUT/$1.png" "file://$HERE/$1.html" >/dev/null 2>&1 || true
+  rm -rf "$prof"
 }
 shot banner 1280 640; shot pipeline 1600 600
-shot before-after 1600 800
+shot before-after 1600 800; shot job-families 1600 1000
 # screening-sample.png 는 screening.html 에서 만든다 (파일명이 다름)
 cp "$HERE/screening.html" "$HERE/screening-sample.html"; shot screening-sample 1200 1500; rm "$HERE/screening-sample.html"
 # demo.gif
 TMP="$(mktemp -d)"; N=$(python3 "$HERE/demo.py" "$TMP")
 for f in "$TMP"/f*.html; do
   for try in 1 2 3; do # 가끔 헤드리스 크롬이 프레임을 건너뛰므로 재시도
-    "$CHROME" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 \
+    PROF="$(mktemp -d)"
+    "$CHROME" --user-data-dir="$PROF" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 \
       --window-size=960,540 --screenshot="${f%.html}.png" "file://$f" >/dev/null 2>&1 || true
+    rm -rf "$PROF"
     [ -s "${f%.html}.png" ] && break
   done
 done
