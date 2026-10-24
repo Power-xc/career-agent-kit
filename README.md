@@ -244,7 +244,7 @@ career-agent-kit/                 키트 (엔진과 스킬, 사람의 데이터 
 ├── research/targets/             지원처 탐색 결과
 ├── out/<slug>/                   산출물 (SUMMARY.md, 이력서, screening.md, pack/)
 ├── records/                      지원 기록, 제안, 미결 사항
-└── bin/harness, .claude/         키트로 연결된 링크
+└── bin/, tools/, .claude/        키트로 연결된 링크 (bin/harness, bin/kit-python)
 ```
 
 **에이전트**

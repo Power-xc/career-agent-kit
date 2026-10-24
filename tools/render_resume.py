@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """이력서 변형 YAML + 사실 은행 → ATS 친화 HTML → Chrome headless PDF.
 
-사용: python tools/render_resume.py profile/resume_base.yaml [--out out/base/resume_ko.pdf] [--with-phone]
+사용: bin/kit-python tools/render_resume.py profile/resume_base.yaml [--out out/base/resume_ko.pdf] [--with-phone]
 종료 코드: 0 정상, 2 입력·환경 오류. 이메일·전화번호는 콘솔에 출력하지 않는다.
 """
 from __future__ import annotations
@@ -10,6 +10,7 @@ import argparse
 import html
 import os
 import re
+import shutil
 import signal
 import subprocess
 import sys
@@ -22,8 +23,19 @@ try:
 except ImportError:
     sys.exit("pyyaml이 필요합니다: pip install pyyaml")
 
-ROOT = Path(__file__).resolve().parent.parent
-CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+ROOT = Path(__file__).resolve().parent.parent  # 키트 루트 (템플릿)
+sys.path.insert(0, str(ROOT))
+from harness.cli import find_root  # noqa: E402
+from harness.extract import InputError  # noqa: E402
+
+MAC_CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+CHROME_NAMES = ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "microsoft-edge", "msedge")
+WINDOWS_CHROME_PATHS = (
+    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+    r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+)
 CHROME_TIMEOUT_SEC = 60
 PDF_POLL_SEC = 0.2
 PDF_STABLE_SEC = 1.0  # PDF 크기가 이 시간 동안 같으면 다 쓴 것으로 본다
@@ -270,14 +282,32 @@ def stop_chrome(proc: subprocess.Popen) -> None:
             proc.wait()
 
 
+def find_chrome() -> str:
+    """$CHROME, macOS 앱, PATH, Windows 설치 경로 순으로 Chrome 계열 브라우저를 찾는다."""
+    env = os.environ.get("CHROME")
+    if env:
+        if Path(env).is_file():
+            return env
+        sys.exit(f"CHROME 환경 변수의 경로에 파일이 없습니다: {env}")
+    if Path(MAC_CHROME).is_file():
+        return MAC_CHROME
+    for name in CHROME_NAMES:
+        found = shutil.which(name)
+        if found:
+            return found
+    for path in WINDOWS_CHROME_PATHS:
+        if Path(path).is_file():
+            return path
+    sys.exit("Chrome을 찾을 수 없습니다. Chrome을 설치하거나 CHROME 환경 변수에 실행 파일 경로를 지정하세요.")
+
+
 def print_pdf(html_text: str, pdf_path: Path) -> None:
-    if not Path(CHROME).exists():
-        sys.exit(f"Chrome을 찾을 수 없습니다: {CHROME}")
+    chrome = find_chrome()
     pdf_path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="ash-render-") as tmp:
         src = Path(tmp) / "resume.html"
         src.write_text(html_text, encoding="utf-8")
-        cmd = [CHROME, "--headless=new", "--no-pdf-header-footer", "--disable-gpu",
+        cmd = [chrome, "--headless=new", "--no-pdf-header-footer", "--disable-gpu",
                f"--user-data-dir={tmp}/profile", f"--print-to-pdf={pdf_path}", src.as_uri()]
         pdf_path.unlink(missing_ok=True)
         # Chrome은 PDF를 쓴 뒤에도 종료가 늦어지므로, 파일이 완성되면 직접 종료한다
@@ -313,26 +343,37 @@ def set_metadata(pdf_path: Path, resume: dict, facts: dict) -> None:
     tmp.replace(pdf_path)
 
 
-def default_out(src: Path, resume: dict) -> Path:
+def workspace_root() -> Path:
+    """워크스페이스 루트: 현재 폴더에서 위로 올라가 profile/facts.yaml이 있는 첫 폴더."""
+    try:
+        return find_root(Path.cwd())
+    except InputError as exc:
+        sys.exit(str(exc))
+
+
+def default_out(root: Path, resume: dict) -> Path:
     meta = resume.get("meta", {})
-    return ROOT / "out" / str(meta.get("variant", "base")) / f"resume_{meta.get('lang', 'ko')}.pdf"
+    return root / "out" / str(meta.get("variant", "base")) / f"resume_{meta.get('lang', 'ko')}.pdf"
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="이력서 YAML을 ATS 친화 PDF로 렌더링합니다.")
     ap.add_argument("resume", type=Path, help="이력서 변형 YAML")
     ap.add_argument("--out", type=Path, help="출력 PDF (기본: out/<variant>/resume_<lang>.pdf)")
-    ap.add_argument("--facts", type=Path, default=ROOT / "profile" / "facts.yaml")
-    ap.add_argument("--contact", type=Path, default=ROOT / "profile" / "contact.local.yaml")
+    ap.add_argument("--facts", type=Path, help="사실 은행 (기본: <워크스페이스>/profile/facts.yaml)")
+    ap.add_argument("--contact", type=Path, help="연락처 (기본: <워크스페이스>/profile/contact.local.yaml)")
     ap.add_argument("--with-phone", action="store_true", help="전화번호를 넣는다 (공개용 PDF에는 쓰지 않는다)")
     ap.add_argument("--html-only", action="store_true", help="HTML만 출력 경로 옆에 저장한다")
     args = ap.parse_args()
 
-    resume, facts = load_yaml(args.resume), load_yaml(args.facts)
-    contact = load_yaml(args.contact) if args.contact.exists() else {}
+    root = workspace_root() if not (args.facts and args.contact and args.out) else None
+    facts_path = args.facts or root / "profile" / "facts.yaml"
+    contact_path = args.contact or root / "profile" / "contact.local.yaml"
+    resume, facts = load_yaml(args.resume), load_yaml(facts_path)
+    contact = load_yaml(contact_path) if contact_path.exists() else {}
     if not contact:
         print("안내: contact.local.yaml이 없어 이메일 없이 렌더링합니다.", file=sys.stderr)
-    out = args.out or default_out(args.resume, resume)
+    out = args.out or default_out(root, resume)
     html_text = build_html(resume, facts, contact, args.with_phone)
     if args.html_only:
         out.with_suffix(".html").parent.mkdir(parents=True, exist_ok=True)

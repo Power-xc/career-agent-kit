@@ -38,7 +38,7 @@ description: 회사명 하나로 조사 → 공고 선택 → 맞춤 이력서 �
    비대화형 실행은 이 순서대로 고르고 이유를 `out/<slug>/tailor_log.md`에 적는다. 대화형 실행은 순위 목록을 보여 주고 사용자에게 고르게 한다. 후보가 하나뿐이면 묻지 않는다.
 
 4. **tailor.** `tailor` 스킬을 `slug`와 고른 공고 파일로 실행한다. strict claims 통과가 안 되면 여기서 멈춘다.
-5. **PDF.** `python tools/render_resume.py out/<slug>/resume_<lang>.yaml` (기본 경로 `out/<slug>/resume_<lang>.pdf`). `pdftotext`로 읽기 순서를 훑는다.
+5. **PDF.** `bin/kit-python tools/render_resume.py out/<slug>/resume_<lang>.yaml` (기본 경로 `out/<slug>/resume_<lang>.pdf`). `pdftotext`로 읽기 순서를 훑는다.
 6. **screen.** `screen` 스킬을 실행한다. 우선 수정 5개 중 사실 은행 안에서 고칠 수 있는 것이 있고 점수가 오를 것 같으면 `tailor`로 한 번만 돌아가 반영하고 `screen`을 다시 한다 (총 2회까지).
 7. **Figma (선택).** Figma 이력서가 있는 사람만 해당한다. `--no-figma`가 아니고 `profile/figma_map.yaml`이 있으면 `figma-apply` 스킬을 실행한다. `profile/figma_map.yaml`에 슬롯이 없거나 Figma 탭이 준비되지 않았으면 이 단계는 건너뛰고 SUMMARY에 "Figma 미적용: 이유"를 적는다 (나머지 단계는 계속한다).
 8. **submit-pack.** `submit-pack` 스킬을 실행한다. 플랫폼은 dossier의 ATS·지원 경로에서 정하고, 모르면 `default`.

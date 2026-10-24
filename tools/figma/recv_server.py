@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Figma 탭에서 보낸 파일 바이트를 받아 out/ 아래에 저장하는 localhost 수신 서버.
 
-사용: python tools/figma/recv_server.py --dir out/<slug> [--port 8765]
-      python tools/figma/recv_server.py --merge out/<slug>/resume_ko.pdf out/<slug>/resume_ko_p1.pdf out/<slug>/resume_ko_p2.pdf
+사용: bin/kit-python tools/figma/recv_server.py --dir out/<slug> [--port 8765]
+      bin/kit-python tools/figma/recv_server.py --merge out/<slug>/resume_ko.pdf out/<slug>/resume_ko_p1.pdf out/<slug>/resume_ko_p2.pdf
 127.0.0.1에만 열고, 저장 위치는 현재 폴더(워크스페이스 루트)의 out/ 안으로 제한한다. Origin이 있으면 figma.com 계열만 받는다.
 """
 from __future__ import annotations

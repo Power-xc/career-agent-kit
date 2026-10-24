@@ -9,6 +9,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from harness.cli import main as cli_main
+
 try:
     import pymupdf
 except ImportError:  # pragma: no cover
@@ -16,6 +18,7 @@ except ImportError:  # pragma: no cover
 
 TOOLS = Path(__file__).resolve().parents[1] / "tools"
 sys.path.insert(0, str(TOOLS / "figma"))
+sys.path.insert(0, str(TOOLS))
 
 
 def make_pdf(path: Path, pages: int, label: str = "Page") -> None:
@@ -90,3 +93,40 @@ class PortfolioToolsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RenderResumeWorkspaceTests(unittest.TestCase):
+    def test_html_only_reads_profile_of_the_workspace_made_by_onboard(self):
+        import os
+        import shutil
+        fixture = Path(__file__).resolve().parent / "fixtures" / "workspace" / "profile"
+        with tempfile.TemporaryDirectory() as tmp:
+            ws = Path(tmp) / "ws"
+            self.assertEqual(0, cli_main(["onboard", str(ws), "--name", "Sample Person"]))
+            for name in ("facts.yaml", "resume_master_ko.yaml"):
+                shutil.copy(fixture / name, ws / "profile" / name)
+            env = {**os.environ, "HARNESS_PYTHON": sys.executable}
+            proc = subprocess.run(["bin/kit-python", "tools/render_resume.py", "profile/resume_master_ko.yaml", "--html-only"],
+                                  cwd=ws, env=env, capture_output=True, text=True)
+            self.assertEqual(0, proc.returncode, proc.stderr)
+            html_files = list((ws / "out").rglob("*.html"))
+            self.assertEqual(1, len(html_files), proc.stdout)
+            self.assertIn("가나다", html_files[0].read_text(encoding="utf-8"))
+
+    def test_chrome_env_var_overrides_lookup(self):
+        import os
+        import render_resume
+        with tempfile.TemporaryDirectory() as tmp:
+            fake = Path(tmp) / "chrome"
+            fake.write_text("", encoding="utf-8")
+            old = os.environ.get("CHROME")
+            os.environ["CHROME"] = str(fake)
+            try:
+                self.assertEqual(str(fake), render_resume.find_chrome())
+                os.environ["CHROME"] = str(fake) + "-missing"
+                with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                    render_resume.find_chrome()
+            finally:
+                os.environ.pop("CHROME", None)
+                if old is not None:
+                    os.environ["CHROME"] = old

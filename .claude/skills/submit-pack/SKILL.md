@@ -26,7 +26,7 @@ description: 지원에 필요한 파일을 out/<slug>/pack/에 모은다. 최종
 1. **이력서 PDF 결정.** Figma에서 내보낸 PDF가 있으면 그것을, 없으면 렌더링한다.
 
    ```bash
-   python tools/render_resume.py out/<slug>/resume_<lang>.yaml --out out/<slug>/pack/resume_<lang>.pdf
+   bin/kit-python tools/render_resume.py out/<slug>/resume_<lang>.yaml --out out/<slug>/pack/resume_<lang>.pdf
    ```
 
    Figma PDF를 쓰면 `out/<slug>/resume_<lang>_figma.pdf`를 `pack/resume_<lang>.pdf`로 복사한다.
@@ -34,7 +34,7 @@ description: 지원에 필요한 파일을 out/<slug>/pack/에 모은다. 최종
 2. **포트폴리오 선택.** 한도는 이 순서로 정한다. 먼저 `companies/<slug>/dossier.md`가 업로드 용량 제한을 적고 있으면 그 값을 `<한도>`로 쓰고 아래 `audit`(4번)과 `portfolio_subset.py`에 모두 `--max-mb <한도>`로 넘긴다. 없으면 `rules/platforms.yaml`에서 플랫폼의 `max_file_mb`를 읽고, `null`이면 `observed_ok_mb`, 그것도 없으면 `default`의 10 MB를 쓴다 (이때는 `--max-mb`를 audit에 넘기지 않는다). 어떤 한도를 썼는지(값과 출처: dossier 또는 platforms.yaml)를 `pack/README.md`에 적는다. 입력의 포트폴리오 PDF 크기를 `ls -l`/`pdfinfo`로 재서 한도 이하면 그대로 복사한다. 넘으면 lite를 만든다.
 
    ```bash
-   python tools/portfolio_subset.py <입력 포트폴리오 PDF> --pages <공고에 맞는 쪽 범위> --out out/<slug>/pack/portfolio.pdf --max-mb <한도>
+   bin/kit-python tools/portfolio_subset.py <입력 포트폴리오 PDF> --pages <공고에 맞는 쪽 범위> --out out/<slug>/pack/portfolio.pdf --max-mb <한도>
    ```
 
    포트폴리오가 없는 직군이면 이 단계를 건너뛴다. 쪽 선택은 공고 직무와 맞는 프로젝트 위주로 앞 2쪽(표지·소개)을 포함한다. 확신이 없으면 `--pages`를 생략해 기본 표본으로 만들고 어떤 쪽이 들어갔는지 체크리스트에 적는다. 한도를 넘으면 쪽을 줄여 다시 한다.

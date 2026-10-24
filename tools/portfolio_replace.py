@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """전체 포트폴리오 PDF에서 몇 쪽만 새로 내보낸 PDF로 바꿔 끼운다 (Figma 슬롯을 고친 슬라이드만 다시 내보낸 경우).
 
-사용: python tools/portfolio_replace.py --base <기준 전체 포트폴리오.pdf> \\
+사용: bin/kit-python tools/portfolio_replace.py --base <기준 전체 포트폴리오.pdf> \\
           --page 1=out/example-co/portfolio_s01.pdf --page 2=out/example-co/portfolio_s02.pdf --out out/example-co/portfolio_example-co.pdf
 --base는 profile/figma_map.yaml의 portfolio.base_pdf 값을 쓴다. --page 쪽 번호는 portfolio.replaces 값이다.
 바꿔 끼운 쪽의 링크는 지운다 (기준 PDF를 만들 때처럼 슬라이드 링크는 남기지 않는다). 다른 쪽과 메타데이터는 그대로 둔다.
