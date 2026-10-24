@@ -1,0 +1,28 @@
+# Figma 텍스트 슬롯 지도 (예시). figma_map.yaml로 복사해 본인 파일의 값으로 채운다.
+# Figma를 쓰지 않으면 이 파일은 필요 없다. 스키마는 docs/contract.md 3.3.
+file_key: "EXAMPLEFILEKEY"          # figma.com/design/<file_key>/... 의 키
+resume:
+  page: "0:1"                       # AI 최적화 사본 (복제 기준)
+  frames: ["0:2", "0:3"]            # 이력서 1·2쪽 프레임
+  original_page: "0:4"              # 읽기 전용 원본
+portfolio:
+  page: "0:5"                       # 슬롯이 있는 슬라이드의 사본
+  frames: ["0:6"]
+  original_page: "0:7"              # 전체 원본 (읽기 전용)
+  base_pdf: "documents/portfolio_full.pdf"   # 기준 전체 포트폴리오 PDF
+  replaces: { "0:6": 1 }            # 사본 프레임 → 전체 PDF의 쪽 번호
+slots:
+  - id: resume.header.title
+    node: "0:8"
+    doc: resume
+    max_chars: 30
+    lines: 1
+    base: "Product Designer"
+    yaml_path: header.title
+    note: 예시 슬롯
+  - id: portfolio.cover.role
+    node: "0:9"
+    doc: portfolio
+    max_chars: 40
+    lines: 2
+    base: "Product Designer\n예시회사 프로젝트"

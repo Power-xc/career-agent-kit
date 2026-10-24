@@ -9,10 +9,9 @@
   CLAUDE.kit.md→CLAUDE.md, gitignore.kit→.gitignore.
 내보내지 않는 것: profile/ jd/ companies/ out/ records/ research/ docs/research/ README.md CLAUDE.md, tests/personal/.
 
-tools/ 에서 뺀 개인용 스크립트:
-  tools/figma/ ......... 소유자의 Figma 파일(file key)과 슬롯 지도에 묶인 스크립트와 수신 서버
-  tools/portfolio_replace.py ... 소유자의 포트폴리오 PDF 쪽을 바꿔 끼우는 스크립트
-  tools/portfolio_subset.py .... 소유자의 포트폴리오 PDF에서 쪽을 뽑는 스크립트
+tools/ 에서 뺀 개인용 사본: tools/figma/, tools/portfolio_replace.py, tools/portfolio_subset.py.
+  키트는 같은 이름의 범용 버전을 따로 싣는다. 범용 버전은 파일 키와 노드 id를 profile/figma_map.yaml과
+  명령줄 인자(ARGS)에서 읽는다.
 """
 from __future__ import annotations
 
