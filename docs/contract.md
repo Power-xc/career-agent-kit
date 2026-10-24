@@ -7,37 +7,52 @@
 1. **기본 서류 최적화 (GEO for hiring AI).** 이력서 내용과 포트폴리오의 텍스트 슬롯(스티키 메시지, 타이틀, 키워드 줄)을 사실 은행과 조사 근거로 다듬는다. 포트폴리오 디자인(레이아웃, 폰트, 색, 이미지)은 바꾸지 않는다.
 2. **회사명 하나로 맞춤 지원.** `apply <회사명>` → 회사 조사(채용 페이지, 공고, 디자인·기술 블로그, 제품·뉴스, 채용 절차·ATS) → 공고 저장 → 맞춤 이력서(YAML → PDF) → 심사 시뮬레이션(규칙 점수 + 스크리너 에이전트 3종) → Figma 새 페이지에 이력서·포트폴리오 텍스트 반영 → 지원 패키지.
 
-## 1. 폴더와 소유
+## 1. 폴더 지도
 
-| 경로                                                                                                                                                                                                                                         | 내용                                                                       | 소유         |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------ |
-| `AGENTS.md`, `CLAUDE.md`, `docs/contract.md`, `docs/rules.md`                                                                                                                                                                                | 규칙, 계약                                                                 | orchestrator |
-| `profile/`                                                                                                                                                                                                                                   | `facts.yaml`, `resume_base.yaml`, `figma_map.yaml`, `contact.example.yaml` | orchestrator |
-| `taxonomy/`                                                                                                                                                                                                                                  | `job_families.yaml`, `skills.yaml`                                         | orchestrator |
-| `rules/`                                                                                                                                                                                                                                     | `rules.yaml`, `scoring.yaml`, `platforms.yaml`, `screener_rubrics.yaml`    | orchestrator |
-| `docs/research/`                                                                                                                                                                                                                             | 조사 보고서 사본                                                           | orchestrator |
-| `pyproject.toml`, `harness/`, `tests/test_harness.py`                                                                                                                                                                                        | Python 코어                                                                | W-core       |
-| `.claude/skills/company-research/`, `.claude/skills/jd-intake/`, `.claude/agents/company-*.md`, `templates/dossier.md`, `companies/README.md`, `jd/README.md`, `docs/company-research.md`                                                    | 회사 조사 파이프라인                                                       | W-research   |
-| `.claude/skills/{apply,tailor,screen,figma-apply,submit-pack}/`, `.claude/agents/screener-*.md`, `templates/resume_ats.html`, `templates/resume_ats.css`, `tools/render_resume.py`, `tools/portfolio_subset.py`, `tools/figma/`, `README.md` | 맞춤화·출력·Figma                                                          | W-tailor     |
-| `jd/<tier>/*.md`                                                                                                                                                                                                                             | 공고 파일 (런타임에 스킬이 추가)                                           | 데이터       |
-| `companies/<slug>/`                                                                                                                                                                                                                          | 회사 조사 결과 (런타임)                                                    | 데이터       |
-| `out/`                                                                                                                                                                                                                                       | 산출물, git 제외                                                           | 런타임       |
-
-작업자는 자기 소유 경로만 만들거나 고친다. 다른 경로가 필요하면 escalation으로 묻는다.
+| 경로 | 내용 |
+| --- | --- |
+| `AGENTS.md`, `CLAUDE.md`, `docs/contract.md` | 규칙, 계약 |
+| `harness/`, `bin/harness`, `pyproject.toml` | Python 코어와 CLI |
+| `rules/` | `rules.yaml`, `scoring.yaml`, `platforms.yaml`, `screener_rubrics.yaml` |
+| `taxonomy/` | `job_families.yaml`, `skills.yaml` |
+| `templates/` | 이력서 HTML/CSS, 회사 조사서, 새 워크스페이스 템플릿 (`templates/workspace/`) |
+| `tools/` | 이력서 렌더, 포트폴리오 쪽 편집, Figma 스니펫과 수신 서버 (2.2 참고) |
+| `.claude/skills/`, `.claude/agents/` | 스킬과 스크리너·조사 에이전트 |
+| `docs/company-research.md` | 회사 조사 파이프라인 설명 |
+| `tests/` | 단위 테스트 (가짜 인물만 사용) |
+| `profile/` | 한 사람의 사실 은행과 이력서 원본: `facts.yaml`, `resume_base.yaml`, `figma_map.yaml`, `contact.local.yaml` (워크스페이스) |
+| `jd/<tier>/*.md` | 공고 파일 (워크스페이스, 런타임에 스킬이 추가) |
+| `companies/<slug>/` | 회사 조사 결과 (워크스페이스, 런타임) |
+| `records/` | 지원 기록 (워크스페이스) |
+| `out/` | 산출물, git 제외 (워크스페이스) |
 
 ## 2. 실행 환경
 
-- Python 3.11+ (이 맥은 3.14). 의존성: `pyyaml>=6`, `pymupdf>=1.24`(선택 기능: 숨김 텍스트, 링크, 폰트 정보). pymupdf가 없으면 해당 검사는 `skipped`로 보고하고 나머지는 동작한다.
-- 외부 도구: poppler `pdftotext`, `pdfinfo` (`/opt/homebrew/bin`). 없으면 pymupdf 텍스트로 대체한다.
-- PDF 렌더: Google Chrome headless (`/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --headless=new --no-pdf-header-footer --print-to-pdf=<out> <html>`). 폰트 Pretendard는 사용자 맥에 설치돼 있다.
+- Python 3.11+. 의존성: `pyyaml>=6`, `pymupdf>=1.24`(선택 기능: 숨김 텍스트, 링크, 폰트 정보, `tools/`의 PDF 도구). pymupdf가 없으면 해당 검사는 `skipped`로 보고하고 나머지는 동작한다.
+- 외부 도구(선택): poppler `pdftotext`, `pdfinfo`. `PATH`에서 찾고, 없으면 pymupdf 텍스트로 대체한다.
+- PDF 렌더: Google Chrome headless (`--headless=new --no-pdf-header-footer --print-to-pdf=<out> <html>`). 폰트는 Pretendard를 권장한다 (없으면 시스템 기본 폰트로 대체된다).
 - 네트워크: 코어(`harness/`)는 네트워크를 쓰지 않는다. 회사 조사 스킬만 공개 웹을 읽는다 (WebSearch, WebFetch).
 
 ### 2.1 엔진 루트와 워크스페이스 루트
 
 - **엔진 루트**: `harness/` 패키지가 있는 폴더 (`Path(harness.__file__).resolve().parents[1]`). `rules/`, `taxonomy/`, `templates/` 같은 엔진 자원은 여기서 읽는다.
 - **워크스페이스 루트**: 한 사람의 데이터(`profile/`, `jd/`, `companies/`, `out/`, `records/`, `research/`)가 있는 폴더. `--root`가 없으면 현재 폴더에서 위로 올라가 `profile/facts.yaml`이 있는 첫 폴더를 쓴다.
-- 내 에이전트 저장소에서는 두 루트가 같은 폴더다. 사용자 워크스페이스(예: `~/career-workspaces/<slug>/`)는 엔진 루트(키트 폴더 `~/orca/projects/career-agent-kit`)와 다르고, `bin/harness`, `.claude/skills`, `.claude/agents`가 엔진의 것으로 링크된다.
+- 한 폴더에서 엔진과 데이터를 함께 쓰면 두 루트가 같은 폴더다. 사용자 워크스페이스(예: `~/career-workspaces/<slug>/`)는 엔진 루트(키트 폴더, 예: `~/career-agent-kit`)와 다르고, `bin/harness`, `.claude/skills`, `.claude/agents`가 엔진의 것으로 링크된다.
 - `bin/harness`는 자신의 실제 경로(심볼릭 링크를 따라간 뒤)에서 엔진 루트를 찾고, python은 `$HARNESS_PYTHON`, `$ENGINE/.venv/bin/python`, `python3` 순으로 고른다. 스킬은 워크스페이스 루트에서 `bin/harness <command>`로 부른다.
+
+### 2.2 도구 (`tools/`)
+
+스킬이 워크스페이스 루트에서 `python tools/<script>`로 부른다. 종료 코드는 0 정상, 2 입력·환경 오류다. 쪽 번호는 1부터 센다. 노드 id, 파일 키, 쪽 번호는 스크립트에 들어 있지 않고 인자나 `profile/figma_map.yaml`(3.3)에서 온다.
+
+| 도구 | 사용 | 하는 일 |
+| --- | --- | --- |
+| `render_resume.py` | `<resume.yaml> --out <pdf>` | 이력서 YAML을 ATS용 PDF로 렌더 |
+| `portfolio_subset.py` | `<full.pdf> [--pages 1-3,8] --out <pdf> [--max-mb N] [--title T]` | 지정한 쪽만 뽑은 lite PDF (링크 유지). `--pages`를 생략하면 앞 2쪽 + 균등 표본. `--max-mb`(기본 10)를 넘으면 경고만 하고 종료 코드는 0 |
+| `portfolio_replace.py` | `--base <full.pdf> --page N=<한 쪽 pdf> ... --out <pdf>` | 전체 PDF의 N쪽을 새로 내보낸 한 쪽 PDF로 교체 (교체한 쪽의 링크는 지움) |
+| `figma/recv_server.py` | `--dir out/<slug> [--port 8765]` / `--merge <out.pdf> <part.pdf>...` | Figma 탭이 보낸 PDF를 `out/` 안에 저장하는 127.0.0.1 서버 / PDF 합치기 |
+| `figma/*.js` | Claude in Chrome `javascript_tool`로 Figma 탭에서 실행 | 복원 지점(`save_version.js`), 복제(`clone_frames.js`), 텍스트 나열(`inspect_texts.js`), 구간 편집(`apply_text.js`), PDF 내보내기(`export_pdf.js`). 맨 위 `ARGS`만 바꾼다. 자세한 내용은 `tools/figma/README.md` |
+| `figma/check_textdiff.mjs` | `node tools/figma/check_textdiff.mjs` | 텍스트 diff 논리 검사 |
+| `export_kit.py` | `<dest> [--source <폴더>]` | 엔진을 allowlist로 복사해 키트 폴더를 만듦 |
 
 ## 3. 데이터 스키마
 
