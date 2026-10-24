@@ -8,6 +8,7 @@
 [![Claude Code](https://img.shields.io/badge/Claude_Code-skills-FFD84D?style=flat-square&labelColor=16140F)](https://docs.claude.com/en/docs/claude-code/overview)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-FFD84D?style=flat-square&labelColor=16140F)](https://www.python.org/downloads/)
 [![32개 직군](https://img.shields.io/badge/직군-32개-FFD84D?style=flat-square&labelColor=16140F)](#지원-직군)
+[![tests](https://img.shields.io/github/actions/workflow/status/Power-xc/career-agent-kit/test.yml?branch=main&style=flat-square&label=tests&labelColor=16140F)](https://github.com/Power-xc/career-agent-kit/actions/workflows/test.yml)
 
 [빠른 시작](#빠른-시작) · [사용법](#사용법) · [무엇이 달라지나](#무엇이-달라지나) · [왜 필요한가](#왜-필요한가) · [원칙](#원칙-정직한-geo) · [지원 직군](#지원-직군) · [작동 방식](#작동-방식) · [FAQ](#faq)
 
@@ -23,7 +24,7 @@
 
 - [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) (공식 문서에 설치 방법이 있어요)
 - Python 3.11 이상
-- 있으면 좋아요: `poppler` (PDF 글자 추출이 더 정확해져요. macOS는 `brew install poppler`), Google Chrome (이력서 PDF를 만들 때 써요)
+- 있으면 좋아요: `poppler` (PDF 글자 추출이 더 정확해져요. macOS는 `brew install poppler`, Ubuntu·WSL은 `sudo apt install poppler-utils`), Google Chrome (이력서 PDF를 만들 때 써요)
 
 ### 3단계로 시작해요
 
@@ -64,7 +65,7 @@ Claude가 물어보는 것은 세 가지예요.
 <details>
 <summary><b>처음이라면 (개발자가 아니어도 돼요)</b></summary>
 
-1. **터미널을 열어요.** macOS는 `Terminal` 앱, Windows는 `PowerShell`이에요.
+1. **터미널을 열어요.** macOS는 `Terminal` 앱이에요. Windows는 [WSL](https://learn.microsoft.com/windows/wsl/install)로 Ubuntu를 설치한 뒤 그 터미널에서 해요 (명령이 macOS·Linux 기준이에요).
 2. **Claude Code를 설치해요.** [공식 문서](https://docs.claude.com/en/docs/claude-code/overview)의 설치 안내를 그대로 따라 하면 돼요. 설치 후 터미널에 `claude`를 치면 시작돼요.
 3. **Python 3.11 이상**이 없다면 [python.org](https://www.python.org/downloads/)에서 설치해요. 터미널에서 `python3 --version`으로 확인해요.
 4. 위의 **1~3단계**를 순서대로 해요. 터미널에서 `cd 폴더이름`으로 폴더를 옮기고, `claude`를 치면 Claude Code가 그 폴더에서 열려요.
@@ -248,7 +249,7 @@ career-agent-kit/                 키트 (엔진과 스킬, 사람의 데이터 
 
 **에이전트**
 
-- 조사 에이전트 4종이 회사를 동시에 조사해요: `company-careers`(채용 페이지와 공고), `company-design-blog`(팀 블로그), `company-business`(사업), `company-hiring-process`(채용 절차).
+- 조사 에이전트 4종이 회사를 동시에 조사해요: `company-careers`(채용 페이지와 공고), `company-team-blog`(팀 블로그), `company-business`(사업), `company-hiring-process`(채용 절차).
 - 스크리너 3종이 서류를 각자의 눈으로 읽어요: `screener-ats`, `screener-llm`, `screener-recruiter`.
 
 폴더 구조, 데이터 스키마, CLI, 스킬 입출력의 기준은 [`docs/contract.md`](docs/contract.md)예요.
