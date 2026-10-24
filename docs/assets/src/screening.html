@@ -1,0 +1,65 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="shared.css"><style>
+body{width:1200px;height:1500px;padding:56px 64px}
+.hd{display:flex;justify-content:space-between;align-items:flex-start}
+.eye{font-family:Inter;font-size:15px;font-weight:600;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+h1{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+.meta{color:var(--muted);font-size:18px;margin-top:10px}
+.ex{border:1px dashed var(--accent);color:var(--accent);font-size:16px;font-weight:600;padding:6px 14px;border-radius:999px;white-space:nowrap}
+.card{background:var(--card);border:1px solid var(--line2);border-radius:22px;padding:28px 32px;margin-top:24px}
+h3{font-size:15px;font-weight:700;color:var(--muted);letter-spacing:.04em;margin-bottom:18px}
+.score{display:flex;gap:40px;align-items:center}
+.big{font-family:Inter;font-size:104px;font-weight:800;line-height:1;color:var(--accent);letter-spacing:-.04em}
+.big small{font-size:28px;color:var(--muted);font-weight:600;letter-spacing:0}
+.band{display:inline-block;background:var(--accent);color:#16140F;font-weight:800;font-size:18px;padding:4px 12px;border-radius:8px;margin-bottom:10px}
+.bars{flex:1;display:grid;grid-template-columns:70px 1fr 70px;gap:9px 14px;align-items:center;font-size:17px}
+.bars b{font-family:Inter;text-align:right;font-weight:600;color:var(--muted)}
+.bar{height:10px;border-radius:5px;background:#16140F;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent)}
+.note{color:var(--muted);font-size:14px;margin-top:16px}
+.vs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.v{background:#16140F;border-radius:16px;padding:20px}
+.v h4{font-size:19px;font-weight:700;margin-bottom:12px}
+.pill{display:inline-block;font-size:14px;font-weight:700;padding:3px 10px;border-radius:6px;margin-right:6px}
+.adv{background:#8FD69426;color:var(--ok)}.hold{background:#FFB04D26;color:var(--warn)}
+.sc{font-family:Inter;font-weight:700;font-size:16px;color:var(--muted)}
+.v p{font-size:16px;line-height:1.55;color:var(--text);margin-top:12px}
+ol{list-style:none;counter-reset:f}
+li{counter-increment:f;display:flex;gap:16px;padding:13px 0;border-top:1px solid var(--line2);font-size:18px;line-height:1.5}
+li:first-child{border:0;padding-top:0}
+li:before{content:counter(f);flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#16140F;font-family:Inter;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+code{font-family:"SF Mono",Menlo,monospace;font-size:15px;color:var(--accent);background:#16140F;padding:2px 7px;border-radius:6px}
+.rules{font-size:17px;line-height:1.55}
+.rules div{display:flex;gap:12px;padding:5px 0}.tg{flex:none;font-size:13px;font-weight:700;padding:2px 8px;border-radius:5px;height:24px;margin-top:2px}
+.w{background:#FFB04D26;color:var(--warn)}.f{background:#FF7A6B26;color:var(--bad)}
+.ft{margin-top:22px;color:var(--muted);font-size:14px;line-height:1.5}
+</style></head><body>
+<div class="hd"><div><div class="eye">screening.md</div><h1>서류 심사 시뮬레이션 보고서: 가상의 회사</h1>
+<div class="meta">김하네스 · 백엔드 엔지니어 · 최소 연차 3년 (직군 dev)</div></div><div class="ex">예시 (가상 지원자)</div></div>
+
+<div class="card"><h3>규칙 점수</h3><div class="score">
+<div><div class="band">경쟁권</div><div class="big">72<small> / 100</small></div></div>
+<div class="bars"><span>파싱</span><div class="bar"><i style="width:93%"></i></div><b>14 / 15</b>
+<span>직함</span><div class="bar"><i style="width:100%"></i></div><b>15 / 15</b>
+<span>필수</span><div class="bar"><i style="width:69%"></i></div><b>24 / 35</b>
+<span>우대</span><div class="bar"><i style="width:40%"></i></div><b>4 / 10</b>
+<span>연차</span><div class="bar"><i style="width:100%"></i></div><b>10 / 10</b>
+<span>성과</span><div class="bar"><i style="width:33%"></i></div><b>5 / 15</b></div></div>
+<div class="note">이 점수는 휴리스틱입니다. 합격 확률이 아닙니다.</div></div>
+
+<div class="card"><h3>3중 심사 판정</h3><div class="vs">
+<div class="v"><h4>ATS 파서</h4><span class="pill adv">advance</span><span class="sc">78점</span><p>섹션과 날짜를 모두 읽었다. 필수 요건 6개 중 5개 충족, <b>Kafka</b>는 스킬 목록에만 있다.</p></div>
+<div class="v"><h4>LLM 스크리너</h4><span class="pill adv">advance</span><span class="sc">74점</span><p>결제 서버 개편 경험이 공고와 맞는다. 성능 개선의 수치 근거가 한 곳뿐이다.</p></div>
+<div class="v"><h4>리크루터</h4><span class="pill hold">hold</span><span class="sc">61점</span><p>첫 화면에 직함은 보이지만 대표 성과 숫자가 없어 5초 안에 판단하기 어렵다.</p></div></div></div>
+
+<div class="card"><h3>우선 수정 5개</h3><ol>
+<li><span>R-CLASS-03: 첫 페이지 상단에 직함과 대표 성과 숫자를 텍스트로 넣는다</span></li>
+<li><span>필수 ‘<code>메시지 큐</code>’를 사실 <code>F-07</code> 근거로 경력 문장에 반영</span></li>
+<li><span>R-IMPACT-01: 경력 bullet 중 결과 숫자가 있는 비율을 높인다 (현재 33%)</span></li>
+<li><span>일관성: 날짜 ‘2021/03’ → ‘2021.03’</span></li>
+<li><span>필수 ‘Kubernetes 운영’: 사실 은행에 근거 없음, 쓰지 말고 지원 전 사실 확인</span></li></ol></div>
+
+<div class="card"><h3>규칙 결과 (통과 제외)</h3><div class="rules">
+<div><span class="tg w">주의</span><span>R-PARSE-04 날짜를 한 가지 형식(YYYY.MM)으로 쓴다</span></div>
+<div><span class="tg w">주의</span><span>R-IMPACT-01 경력 bullet의 절반 이상에 결과 숫자가 있다</span></div>
+<div><span class="tg f">실패</span><span>R-CLASS-03 첫 페이지에 직함·연차·대표 성과 숫자가 텍스트로 있다</span></div></div></div>
+<div class="ft">진실성 검사 통과 · 사실 은행 밖 숫자 0건 · 위 내용은 구조를 보여 주기 위한 가상의 예시입니다.</div>
+</body></html>

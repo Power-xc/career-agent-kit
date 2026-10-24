@@ -1,0 +1,42 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="shared.css"><style>
+body{width:1600px;height:800px;padding:48px 56px;display:flex;gap:28px;position:relative}
+.col{flex:1;border-radius:24px;padding:30px 34px;border:1px solid var(--line2);background:var(--card);display:flex;flex-direction:column}
+.col.good{border-color:var(--accent)}
+.lab{display:flex;align-items:center;gap:12px;font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:22px}
+.lab i{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:20px;font-weight:800;font-family:Inter}
+.bad .lab i{background:var(--bad);color:#16140F}.good .lab i{background:var(--accent);color:#16140F}
+.row{display:flex;gap:22px;flex:1}
+.doc{width:270px;flex:none;align-self:flex-start;height:600px;background:#F3EEE4;border-radius:8px;padding:18px;position:relative;color:#16140F}
+.doc .nm{height:12px;width:60%;background:#16140F;border-radius:3px;margin-bottom:6px}.doc .ti{height:7px;width:40%;background:#9C968A;border-radius:3px;margin-bottom:14px}
+.two{display:flex;gap:10px}.two>div{flex:1}
+.ln{height:6px;background:#9C968A;border-radius:3px;margin-bottom:7px;opacity:.7}.ln.s{width:70%}.ln.h{height:8px;background:#16140F;opacity:.85;width:50%;margin-top:6px}
+.fill{margin-top:8px;height:330px;opacity:.55;background:repeating-linear-gradient(#9C968A 0 6px,transparent 6px 15px)}.fill.h2{margin-top:14px}
+.num{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--bad);color:#16140F;font:800 12px Inter;display:flex;align-items:center;justify-content:center}
+.pt{flex:1;display:flex;flex-direction:column;gap:14px;font-size:21px;line-height:1.5}
+.pt h5{font-size:14px;margin-top:10px;color:var(--muted);font-weight:700;letter-spacing:.06em;margin-bottom:-4px}
+.txt{background:#16140F;border-radius:12px;padding:14px 16px;font-family:"SF Mono",Menlo,monospace;font-size:16px;line-height:1.7;color:var(--muted)}
+.txt b{color:var(--bad);font-weight:600}.good .txt b{color:var(--ok)}
+.ok{color:var(--ok)}.no{color:var(--bad)}
+.chk div{display:flex;gap:10px;margin-bottom:8px;color:var(--text)}.chk span{flex:none;font-weight:800}
+.mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:var(--accent);color:#16140F;font-size:30px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px var(--bg)}
+mark{background:#FFD84D33;color:var(--accent);padding:0 3px;border-radius:3px}
+</style></head><body>
+<div class="col bad"><div class="lab"><i>✕</i>AI가 잘못 읽는 이력서</div><div class="row">
+<div class="doc"><div class="nm"></div><div class="ti"></div><div class="two"><div><div class="ln h"></div><div class="ln"></div><div class="ln s"></div><div class="ln h"></div><div class="ln"></div><div class="ln s"></div><div class="ln"></div><div class="fill"></div></div><div><div class="ln h"></div><div class="ln"></div><div class="ln s"></div><div class="ln"></div><div class="ln h"></div><div class="ln s"></div><div class="ln"></div><div class="fill"></div></div></div>
+<div class="num" style="left:-8px;top:60px">1</div><div class="num" style="right:-8px;top:60px">3</div><div class="num" style="left:-8px;top:140px">2</div><div class="num" style="right:-8px;top:140px">4</div></div>
+<div class="pt"><div class="chk">
+<div><span class="no">✕</span><em style="font-style:normal">2단 디자인 PDF, 읽는 순서가 뒤섞임</em></div>
+<div><span class="no">✕</span><em style="font-style:normal">직함이 ‘Ninja Dev’라 직군으로 인식 안 됨</em></div>
+<div><span class="no">✕</span><em style="font-style:normal">공고의 ‘결제 시스템’이 ‘페이먼트 플로우’로 다르게 적힘</em></div>
+<div><span class="no">✕</span><em style="font-style:normal">성과 숫자가 마지막 쪽 끝에</em></div></div>
+<h5>추출된 텍스트</h5><div class="txt">경력 2021.03 – 현재<br>기술 스택 <b>Java 서비스 개발자</b><br>Ninja Dev @ 가상의 회사<br><b>페이먼트 플로우</b> 개편 …</div></div></div></div>
+<div class="col good"><div class="lab"><i>✓</i>AI가 잘 읽는 이력서</div><div class="row">
+<div class="doc"><div class="nm"></div><div class="ti"></div><div><div class="ln h"></div><div class="ln"></div><div class="ln s"></div><div class="ln"></div><div class="ln h"></div><div class="ln"></div><div class="ln s"></div><div class="ln"></div><div class="ln h"></div><div class="ln s"></div><div class="fill"></div></div>
+<div style="position:absolute;left:10px;right:10px;top:42px;height:62px;border:2px solid #E0B500;border-radius:6px"></div></div>
+<div class="pt"><div class="chk">
+<div><span class="ok">✓</span><em style="font-style:normal">한 단 구성, 텍스트 층이 그대로 읽힘</em></div>
+<div><span class="ok">✓</span><em style="font-style:normal">직함 ‘백엔드 엔지니어’로 바로 분류</em></div>
+<div><span class="ok">✓</span><em style="font-style:normal">공고와 같은 단어를 <mark>경험 문장 안에서</mark> 사용</em></div>
+<div><span class="ok">✓</span><em style="font-style:normal">핵심 근거가 첫 3분의 1 안에 있음</em></div></div>
+<h5>추출된 텍스트</h5><div class="txt">백엔드 엔지니어 · 경력 4년<br>2021.03 – 현재<br><b>결제 시스템</b> 개편, 처리 지연 감소 …</div></div></div></div>
+<div class="mid">→</div></body></html>

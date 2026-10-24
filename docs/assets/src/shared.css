@@ -1,0 +1,7 @@
+:root{--accent:#FFD84D;--bg:#16140F;--card:#221F19;--text:#F3EEE4;--muted:#9C968A;--line:#34302680;--line2:#3A362C;--ok:#8FD694;--warn:#FFB04D;--bad:#FF7A6B}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:Pretendard,Inter,sans-serif;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+.mono{font-family:"SF Mono",Menlo,Monaco,monospace}
+.en{font-family:Inter,Pretendard,sans-serif}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;border:1px solid var(--line2);background:var(--card);color:var(--text);font-weight:500}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--accent);display:block}
