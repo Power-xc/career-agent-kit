@@ -25,8 +25,9 @@ import yaml
 
 ENGINE_ROOT = Path(__file__).resolve().parents[1]
 EXIT_OK, EXIT_HITS, EXIT_INPUT = 0, 1, 2
-ALLOW_DIRS = ("harness", "bin", "rules", "taxonomy", "templates", "tools", "tests", ".claude/skills", ".claude/agents")
-ALLOW_FILES = ("AGENTS.md", "pyproject.toml", "LICENSE", "docs/contract.md", "docs/company-research.md", "docs/assets")
+ALLOW_DIRS = ("harness", "bin", "rules", "taxonomy", "templates", "tools", "tests", ".claude/skills", ".claude/agents",
+              "docs/assets")
+ALLOW_FILES = ("AGENTS.md", "pyproject.toml", "LICENSE", "docs/contract.md", "docs/company-research.md")
 EXCLUDE = ("tests/personal", "tools/figma", "tools/portfolio_replace.py", "tools/portfolio_subset.py",
            "__pycache__", ".pytest_cache", ".venv", ".DS_Store")
 RENAMES = {"README.kit.md": "README.md", "CLAUDE.kit.md": "CLAUDE.md", "gitignore.kit": ".gitignore"}

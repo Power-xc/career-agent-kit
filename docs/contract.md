@@ -191,7 +191,7 @@ YAML front matter: `company, tier, title, url, accessed (YYYY-MM-DD), status (op
 
 ### 3.6 회사 조사 결과 (`companies/<slug>/`)
 
-- `dossier.md`: 회사 개요 / 제품·서비스 / 디자인 조직과 일하는 방식(블로그 근거) / 채용 절차·ATS·서류 형식·용량 제한 / 인재상·가치 키워드 / 최근 이슈(최근 18개월) / 이 지원자와의 접점(fact id 매핑) / 리스크·주의 / 출처. 모든 주장에 `[확인]`·`[보도]`·`[추정]`.
+- `dossier.md`: 회사 개요 / 제품·서비스 / 직무 조직과 일하는 방식(팀 블로그 근거) / 채용 절차·ATS·서류 형식·용량 제한 / 인재상·가치 키워드 / 최근 이슈(최근 18개월) / 이 지원자와의 접점(fact id 매핑) / 리스크·주의 / 출처. 모든 주장에 `[확인]`·`[보도]`·`[추정]`.
 - `vocab.yaml`: `terms: [{term: str, concept: concept id | null, evidence_url: str, note: str?}]` 회사가 실제로 쓰는 용어.
 - `sources.md`: URL, 접근일, 1차/2차.
 - `meta.yaml`: `{company: str, slug: str, aliases: [str], tier: str, careers_url: str?, ats: str?, researched: "YYYY-MM-DD", jd_files: [path]}`
